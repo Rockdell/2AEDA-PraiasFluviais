@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# I don't need this
+.settings/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific (C/C++ Development Tooling)
+.cproject
+.project
