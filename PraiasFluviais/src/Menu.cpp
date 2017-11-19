@@ -29,7 +29,6 @@ int printMenu() {
 
 void MainMenu() {
 
-
 	std::cout << " - Main Menu - " << std::endl << std::endl;
 	std::cout << " [1] Add Menu " << std::endl;
 	std::cout << " [2] Remove Menu" << std::endl;
@@ -172,16 +171,30 @@ void RemoveMenu() {
 
 void EditMenu() {
 
-
 	std::cout << " - Edit Menu - " << std::endl << std::endl;
 	std::cout << " [1] Editar Praia " << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
+	again:
+	char input = std::cin.get();
 
+	switch (input) {
+		case '0': {
+			sendEvent('0');
+			break;
+		}
+		case '1': {
+			break;
+		}
+		default: {
+			std::cout << " Escolha uma das opções! " << std::endl;
+			std::cin.ignore();
+			goto again;
+		}
+	}
 }
 
 void WatchMenu() {
-
 
 	std::cout << " - Watch Menu - " << std::endl << std::endl;
 	std::cout << " [1] Ver praias " << std::endl;
@@ -204,8 +217,6 @@ void WatchMenu() {
 			goto again;
 		}
 	}
-
-
 }
 
 int sendEvent(char c) {
