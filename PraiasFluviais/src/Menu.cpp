@@ -49,9 +49,85 @@ void MainMenu() {
 void AddMenu() {
 
 	std::cout << " - Add Menu - " << std::endl << std::endl;
-	std::cout << " [1] Adicionar praia " << std::endl;
-	std::cout << " [2] Adicionar data de outra database " << std::endl;
+	std::cout << " [1] Adicionar praia - Rio " << std::endl;
+	std::cout << " [2] Adicionar praia - Albufeira " << std::endl;
+	//std::cout << " [3] Adicionar data de outra database " << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
+
+	again:
+	char input = std::cin.get();
+
+	switch (input) {
+		case '0': {
+			sendEvent('0');
+			break;
+		}
+		case '1': {
+			std::string nome, concelho;
+			double lat, lon;
+			float largura, caudal, profundidade;
+
+			std::cout << " Nome da praia: ";
+			std::cin >> nome;
+			std::cout << " Nome do concelho: ";
+			std::cin >> concelho;
+			std::cout << " Latitude: ";
+			std::cin >> lat;
+			std::cout << " Longitude: ";
+			std::cin >> lon;
+			std::cout << " Largura: ";
+			std::cin >> largura;
+			std::cout << " Caudal: ";
+			std::cin >> caudal;
+			std::cout << " Profundidade: ";
+			std::cin >> profundidade;
+
+			Gps g = Gps(lat, lon);
+			PRio p = PRio(nome, concelho, true, g, largura, caudal, profundidade);
+
+			if(db.existPraia(&p))
+				throw PraiaAlreadyExists(nome);
+			else
+				db.addPraia(&p);
+
+			std::cout << " Praia adicionada com sucesso. " << std::endl;
+
+			break;
+		}
+		case '2': {
+			std::string nome, concelho;
+			double lat, lon;
+			float area;
+
+			std::cout << " Nome da praia: ";
+			std::cin >> nome;
+			std::cout << " Nome do concelho: ";
+			std::cin >> concelho;
+			std::cout << " Latitude: ";
+			std::cin >> lat;
+			std::cout << " Longitude: ";
+			std::cin >> lon;
+			std::cout << " Area: ";
+			std::cin >> area;
+
+			Gps g = Gps(lat, lon);
+			PAlbufeira p = PAlbufeira(nome, concelho, true, g, area);
+
+			if(db.existPraia(&p))
+				throw PraiaAlreadyExists(nome);
+			else
+				db.addPraia(&p);
+
+			std::cout << " Praia adicionada com sucesso. " << std::endl;
+
+			break;
+		}
+		default: {
+			std::cout << " Escolha uma das opções! " << std::endl;
+			std::cin.ignore();
+			goto again;
+		}
+	}
 
 }
 
@@ -111,7 +187,7 @@ int sendEvent(char c) {
 			break;
 		}
 		default:
-			std::cout << "Please select one of the options." << std::endl;
+			std::cout << " Escolha uma das opções! " << std::endl;
 			return 0;
 	}
 
