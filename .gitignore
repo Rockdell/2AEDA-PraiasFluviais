@@ -36,7 +36,3 @@
 
 # Locally stored "Eclipse launch configurations"
 *.launch
-
-# CDT-specific (C/C++ Development Tooling)
-.cproject
-.project
