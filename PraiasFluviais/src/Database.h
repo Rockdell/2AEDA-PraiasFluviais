@@ -26,7 +26,11 @@ public:
 
 	void addPraia(Praia* p);
 	void removePraia(Praia* p);
+
+	//Só chama esta se houver certezas que praia existe em i
+	void removePraia(int i);
 	int searchPraia(Praia* p);
+	int searchPraia(std::string n);
 	bool existPraia(Praia* p);
 
 	void orderPraiasNome();

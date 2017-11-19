@@ -46,10 +46,24 @@ void Database::removePraia(Praia* p) {
 		praias.erase(praias.begin() + i);
 }
 
+void Database::removePraia(int i) {
+	praias.erase(praias.begin() + i);
+}
+
 int Database::searchPraia(Praia* p) {
 	for(size_t i = 0; i < praias.size(); i++)
 	{
 		if(*p == praias[i])
+			return i;
+	}
+
+	return -1;
+}
+
+int Database::searchPraia(std::string n) {
+	for(size_t i = 0; i < praias.size(); i++)
+	{
+		if(n == praias[i]->getNome())
 			return i;
 	}
 

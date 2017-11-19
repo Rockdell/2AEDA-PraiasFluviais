@@ -51,7 +51,6 @@ void AddMenu() {
 	std::cout << " - Add Menu - " << std::endl << std::endl;
 	std::cout << " [1] Adicionar praia - Rio " << std::endl;
 	std::cout << " [2] Adicionar praia - Albufeira " << std::endl;
-	//std::cout << " [3] Adicionar data de outra database " << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
 	again:
@@ -137,6 +136,38 @@ void RemoveMenu() {
 	std::cout << " [1] Remover Praia " << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
+	again:
+	char input = std::cin.get();
+
+	switch (input) {
+		case '0': {
+			sendEvent('0');
+			break;
+		}
+		case '1': {
+			std::string nome;
+
+			std::cout << " Nome da praia que pretende eliminar: ";
+			std::cin >> nome;
+
+			int i = db.searchPraia(nome);
+
+			if(i != -1) {
+				db.removePraia(i);
+				std::cout << " Praia removida com sucesso. ";
+			}
+			else
+				std::cout << " Não existe uma praia com esse nome. " << std::endl;
+
+			break;
+		}
+		default: {
+			std::cout << " Escolha uma das opções! " << std::endl;
+			std::cin.ignore();
+			goto again;
+		}
+	}
+
 }
 
 void EditMenu() {
@@ -155,6 +186,24 @@ void WatchMenu() {
 	std::cout << " - Watch Menu - " << std::endl << std::endl;
 	std::cout << " [1] Ver praias " << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
+
+	again:
+	char input = std::cin.get();
+
+	switch (input) {
+		case '0': {
+			sendEvent('0');
+			break;
+		}
+		case '1': {
+			break;
+		}
+		default: {
+			std::cout << " Escolha uma das opções! " << std::endl;
+			std::cin.ignore();
+			goto again;
+		}
+	}
 
 
 }

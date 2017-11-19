@@ -2,6 +2,9 @@
 #include "Gps.h"
 #include "Globals.h"
 
+//Global database variable
+Database db;
+
 int main() {
 	/*
 	* No sentido de fomentar o turismo do tipo â€œvÃ¡ para fora cÃ¡ dentroâ€�, a AssociaÃ§Ã£o Nacional de MunicÃ­pios
@@ -41,8 +44,6 @@ int main() {
 	 * global namespace
 	 * c
 	 */
-
-	Database db;
 
 	//db.load("listaPraias.txt");
 
