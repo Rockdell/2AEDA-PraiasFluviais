@@ -186,7 +186,7 @@ void Database::processLine(std::string l) {
 		std::istringstream ss6(tmp6);
 		ss3 >> profundidade;
 
-		p = new PRio(nome, concelho, bandeira, gps, largura, caudal, profundidade);
+		p = new PRio(nome, concelho, servicos, bandeira, gps, largura, caudal, profundidade);
 	}
 	else {
 
@@ -196,7 +196,7 @@ void Database::processLine(std::string l) {
 		std::istringstream ss4(tmp4);
 		ss3 >> area;
 
-		p = new PAlbufeira(nome, concelho, bandeira, gps,area);
+		p = new PAlbufeira(nome, concelho, servicos, bandeira, gps,area);
 	}
 
 	addPraia(p);

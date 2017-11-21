@@ -15,7 +15,8 @@ class Praia {
 public:
 	Praia();
 	Praia(std::string n, std::string c, bool bA, Gps cd);
-	Praia(std::string n, std::string c, bool bA);
+	Praia(std::string n, std::string c, std::vector<std::string> s, bool bA, Gps cd);
+	//Praia(std::string n, std::string c, bool bA);
 	virtual ~Praia() {};
 
 	std::string getNome() const;

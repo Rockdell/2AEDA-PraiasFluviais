@@ -4,19 +4,19 @@
 PAlbufeira::PAlbufeira() {
 	area = 0;
 }
-PAlbufeira::PAlbufeira(std::string n, std::string c, bool bA,  Gps cd, float a) : Praia(n,c,bA,cd) {
+PAlbufeira::PAlbufeira(std::string n, std::string c, std::vector<std::string> s, bool bA,  Gps cd, double a) : Praia(n,c,s,bA,cd) {
 	area = a;
 }
 PAlbufeira::~PAlbufeira(){
 }
 
 //Get methods
-float PAlbufeira::getArea() const {
+double PAlbufeira::getArea() const {
 	return area;
 }
 
 //Set methods
-void PAlbufeira::setArea(float a) {
+void PAlbufeira::setArea(double a) {
 	area = a;
 }
 

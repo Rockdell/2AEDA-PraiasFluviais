@@ -15,16 +15,16 @@ int main() {
 
 	std::string filename_praias;
 
+	get_filename:
 	std::cout << " Ficheiro de praias: ";
 	getline(std::cin, filename_praias);
 
 	//Catch exception while loading
-	get_filename:
 	try {
 		db.load(filename_praias);
 	}
 	catch(Exception& e) {
-		std::cout << " Erro com o ficheiro: " << e.getMessage() << std::endl;
+		e.display();
 		goto get_filename;
 	}
 
@@ -39,8 +39,6 @@ int main() {
 		catch (Exception& e) {
 			std::cout << " Ocorreu um erro com: " << e.getMessage() << std::endl;
 		}
-
-		std::cin.ignore();
 	}
 
 	//Catch exceptions while saving
@@ -50,5 +48,6 @@ int main() {
 	catch (Exception& e) {
 		e.display();
 	}
+
 	return 0;
 }

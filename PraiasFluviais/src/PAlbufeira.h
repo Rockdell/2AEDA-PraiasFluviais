@@ -4,14 +4,14 @@
 #define PALBUFEIRA_H_
 
 class PAlbufeira : public Praia {
-	float area;
+	double area;
 public:
 	PAlbufeira();
-	PAlbufeira(std::string n, std::string c, bool bA,  Gps cd, float a);
+	PAlbufeira(std::string n, std::string c, std::vector<std::string> s, bool bA,  Gps cd, double a);
 	~PAlbufeira();
 
-	float getArea() const;
-	void setArea(float a);
+	double getArea() const;
+	void setArea(double a);
 
 	std::string savePraia();
 };

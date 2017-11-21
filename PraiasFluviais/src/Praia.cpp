@@ -10,6 +10,9 @@ Praia::Praia() {
 Praia::Praia(std::string n, std::string c, bool bA, Gps cd) : nome(n), concelho(c), bandeiraAzul(bA), coord(cd) {
 }
 
+Praia::Praia(std::string n, std::string c, std::vector<std::string> s, bool bA, Gps cd) : nome(n), concelho(c), servicos(s), bandeiraAzul(bA), coord(cd){
+}
+
 //Get methods
 std::string Praia::getNome() const {
 	return nome;
