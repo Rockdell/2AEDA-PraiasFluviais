@@ -56,13 +56,13 @@ public:
 	/**
 	 * @brief Calculates the distance between places
 	 * @param f Gps coordinates to calculate distance to
-	 * return Returns distance from the two Gps coordinates in km
+	 * @return Returns distance from the two Gps coordinates in km
 	 */
 	double diff(Gps f) const;
 
 	/**
 	 * @brief Puts Gps coordinates in "easy to read" format
-	 * return Returns a string in that format
+	 * @return Returns a string in that format
 	 */
 	std::string displayGps() const;
 };
