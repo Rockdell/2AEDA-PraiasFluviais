@@ -203,7 +203,7 @@ void Database::processLine(std::string l) {
 
 }
 
-std::vector<Praia *> Database::withInRangePraia(Praia * p, double r) const {
+std::map<double,std::unique_ptr<Praia>> Database::withInRangePraia(Praia * p, double r) const {
 
 	std::vector<double> ranges; //Vector with all the ranges to the selected beach "p"
 	std::vector<Praia *> b; //Vector with the all the beaches within the selected range
@@ -220,12 +220,13 @@ std::vector<Praia *> Database::withInRangePraia(Praia * p, double r) const {
 		/*If none of the beaches is within the selected range then we return a vector with
 		 * the beaches in ascending order of range, with an "empty" beach as the last element so
 		 * we can distinguish between the vector with the beaches within range and the ordered vector*/
-		PRio trash = PRio();
+		PRio* trash = new PRio();
 		//Now the vector b is will have all the beaches in ascending order or range
-		orderRange(b, ranges);
+		b = praias;
+		std::map<double,std::unique_ptr<Praia>> ret = orderRange(b, ranges);
 		//Adds the "empty" object
-		b.push_back(&trash);
-		return b;
+		ret.insert(std::make_pair(0,trash));
+		return ret;
 	} else {
 		//Clears ranges vector
 		ranges.clear();
@@ -235,12 +236,12 @@ std::vector<Praia *> Database::withInRangePraia(Praia * p, double r) const {
 			ranges.push_back(d);
 		}
 
-		orderRange(b, ranges);
-		return b;
+		std::map<double,std::unique_ptr<Praia>> ret = orderRange(b, ranges);
+		return ret;
 	}
 }
 
-std::vector<Praia *> Database::withInRangeGps(Gps g, double r) const {
+std::map<double,std::unique_ptr<Praia>> Database::withInRangeGps(Gps g, double r) const {
 
 	std::vector<double> ranges; //Vector with all the ranges to the selected beach "p"
 	std::vector<Praia *> b; //Vector with the all the beaches within the selected range
@@ -257,12 +258,13 @@ std::vector<Praia *> Database::withInRangeGps(Gps g, double r) const {
 		/*If none of the beaches is within the selected range then we return a vector with
 		 * the beaches in ascending order of range, with an "empty" beach as the last element so
 		 * we can distinguish between the vector with the beaches within range and the ordered vector*/
-		PRio trash = PRio();
+		PRio* trash = new PRio();
 		//Now the vector b is will have all the beaches in ascending order or range
-		orderRange(b, ranges);
+		b = praias;
+		std::map<double, std::unique_ptr<Praia>> ret = orderRange(b, ranges);
 		//Adds the "empty" object
-		b.push_back(&trash);
-		return b;
+		ret.insert(std::make_pair(0, trash));
+		return ret;
 	} else {
 		//Clears ranges vector
 		ranges.clear();
@@ -272,14 +274,24 @@ std::vector<Praia *> Database::withInRangeGps(Gps g, double r) const {
 			ranges.push_back(d);
 		}
 
-		orderRange(b, ranges);
-		return b;
+		std::map<double,std::unique_ptr<Praia>> ret = orderRange(b, ranges);
+		return ret;
 	}
 
 }
 
-void Database::orderRange(std::vector<Praia *> & ps, std::vector<double> ranges) const {
+std::map<double,std::unique_ptr<Praia>> Database::orderRange(std::vector<Praia *> & ps, std::vector<double> ranges) const {
 
+	std::map<double,std::unique_ptr<Praia>> ord;
+
+	for(size_t i = 0; i < ps.size() ; i++)
+	{
+		ord.insert(std::make_pair(ranges.at(i),ps.at(i)));
+	}
+
+	return ord;
+
+	/*
 	std::vector<double>::iterator it;
 	std::vector<Praia *>::iterator it_p = ps.begin();
 
@@ -298,4 +310,5 @@ void Database::orderRange(std::vector<Praia *> & ps, std::vector<double> ranges)
 
 		it_p++;
 	}
+	*/
 }

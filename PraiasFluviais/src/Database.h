@@ -6,11 +6,13 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <map>
 #include "Praia.h"
 #include "PAlbufeira.h"
 #include "PRio.h"
 #include "Exceptions.h"
 #include "Gps.h"
+
 
 #ifndef DATABASE_H_
 #define DATABASE_H_
@@ -31,6 +33,15 @@ public:
 	 * @brief Class destructor
 	 */
 	~Database();
+
+	/**
+	 * @brief Sets the data-member praias to the given vector
+	 * @param ps Vector with Praia* objects
+	 */
+	void setPraias(std::vector<Praia*> ps)
+	{
+		praias = ps;
+	}
 
 	/**
 	 * @brief Populate vector "praias" with objects from file
@@ -99,9 +110,9 @@ public:
 	 */
 	void processLine(std::string l);
 
-	std::vector<Praia *> withInRangePraia(Praia * p, double r) const;
-	std::vector<Praia *> withInRangeGps(Gps g, double r) const;
-	void orderRange(std::vector<Praia *> & ps, std::vector<double> ranges) const;
+	std::map<double,std::unique_ptr<Praia>> withInRangePraia(Praia * p, double r) const;
+	std::map<double,std::unique_ptr<Praia>> withInRangeGps(Gps g, double r) const;
+	std::map<double,std::unique_ptr<Praia>> orderRange(std::vector<Praia *> & ps, std::vector<double> ranges) const;
 };
 
 #endif /* DATABASE_H_ */

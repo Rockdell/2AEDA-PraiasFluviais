@@ -2,12 +2,53 @@
 #include "Menu.h"
 #include "Gps.h"
 #include "Globals.h"
+#include <map>
+#include "Praia.h"
 
 //Global database variable
 Database db;
 
 int main() {
 
+	//Teste DATABASE
+
+	//PRio(std::string n, std::string c, bool bA, Gps cd, float l, float cl, float p);
+	//PAlbufeira(std::string n, std::string c, bool bA,  Gps cd, float a);
+	//Gps(double lat, double lon);
+
+
+	Gps g1 = Gps(51.0664, -5.7147);
+	std::cout << g1.displayGps() << std::endl;
+	Gps g2 = Gps(58.6439, -3.07);
+	std::cout << g2.displayGps() << std::endl;
+	Gps g3 = Gps(-6.9233, 65.3889);
+	std::cout << g3.displayGps() << std::endl;
+	Gps g4 = Gps(65.0833, -98.2);
+	std::cout << g4.displayGps() << std::endl;
+
+	PRio pr1 = PRio("pr1", "c1", true, g1, 1, 1, 1);
+	PAlbufeira pa2 = PAlbufeira("pa2", "c2", true, g2, 2);
+	PRio pr3 = PRio("pr3", "c3", true, g3, 3, 3, 3);
+	PAlbufeira pa4 = PAlbufeira("pa4", "c4", true, g4, 4);
+
+	std::vector<Praia *> test1;
+	test1.push_back(&pa2);
+	test1.push_back(&pr1);
+	test1.push_back(&pa4);
+	test1.push_back(&pr3);
+
+	db.setPraias(test1);
+
+	std::map<double,std::unique_ptr<Praia>> test;
+	test = db.withInRangePraia(&pa2, 5000);
+
+	for(auto it = test.begin(); it != test.end(); it++)
+	{
+		std::cout << it->first << " " << it->second->getNome() << std::endl;
+	}
+
+
+	/*
 	//Allow to output portuguese characters like 'ç' or 'ã'
 	setlocale(LC_ALL, "");
 	std::locale::global(std::locale(""));
@@ -50,5 +91,6 @@ int main() {
 	catch (Exception& e) {
 		e.display();
 	}
+	*/
 	return 0;
 }
