@@ -1,7 +1,14 @@
 #include "Menu.h"
-#include <conio.h>
+
+#ifdef _WIN32
+#define clearScreen() system("cls");
+#else
+#define clearScreen() system("clear");
+#endif
 
 int printMenu() {
+
+	clearScreen();
 
 	state_t state = getCurrentState();
 
@@ -30,8 +37,6 @@ int printMenu() {
 }
 
 void MainMenu() {
-
-	using namespace std;
 
 	std::cout << " - Main Menu - " << std::endl << std::endl;
 	std::cout << " [1] Add Menu " << std::endl;
