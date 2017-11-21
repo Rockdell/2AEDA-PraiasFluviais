@@ -17,7 +17,7 @@ std::string Praia::getNome() const {
 std::string Praia::getConcelho() const {
 	return concelho;
 }
-std::vector<Servico> Praia::getServicos() const {
+std::vector<std::string> Praia::getServicos() const {
 	return servicos;
 }
 bool Praia::getBandeira() const {
@@ -34,7 +34,7 @@ void Praia::setNome(std::string n) {
 void Praia::setConcelho(std::string c) {
 	concelho = c;
 }
-void Praia::setServicos(std::vector<Servico> s) {
+void Praia::setServicos(std::vector<std::string> s) {
 	servicos = s;
 }
 void Praia::setBandeira(bool bA) {
@@ -45,20 +45,20 @@ void Praia::setGps(Gps cd) {
 }
 
 //Other methods
-void Praia::addServico(Servico s) {
+void Praia::addServico(std::string s) {
 	servicos.push_back(s);
 }
 
-void Praia::removeServico(Servico s) {
+void Praia::removeServico(std::string s) {
 	int i = searchServico(s);
 
 	if(i == -1)
-		throw ServicoNotFound(s.getDescricao());
+		throw ServicoNotFound(s);
 	else
 		servicos.erase(servicos.begin() + i);
 }
 
-int Praia::searchServico(Servico s) {
+int Praia::searchServico(std::string s) {
 	for(size_t i = 0; i < servicos.size(); i++)
 	{
 		if (s == servicos[i])

@@ -3,8 +3,6 @@
 #ifndef PALBUFEIRA_H_
 #define PALBUFEIRA_H_
 
-using json = nlohmann::json;
-
 class PAlbufeira : public Praia {
 	float area;
 public:
@@ -15,10 +13,7 @@ public:
 	float getArea() const;
 	void setArea(float a);
 
-	json savePraia();
-
-	void to_json(json &j, const PAlbufeira* p);
-	void from_json(const json &j, PAlbufeira* p);
+	std::string savePraia();
 };
 
 #endif /* PALBUFEIRA_H_ */

@@ -1,19 +1,15 @@
 #include <string>
 #include <vector>
-#include "Servico.h"
 #include "Gps.h"
 #include "Exceptions.h"
-#include "json.hpp"
 
 #ifndef PRAIA_H_
 #define PRAIA_H_
 
-using json = nlohmann::json;
-
 class Praia {
 	std::string nome;
 	std::string concelho;
-	std::vector<Servico> servicos;
+	std::vector<std::string> servicos;
 	bool bandeiraAzul;
 	Gps coord;
 public:
@@ -24,24 +20,24 @@ public:
 
 	std::string getNome() const;
 	std::string getConcelho() const;
-	std::vector<Servico> getServicos() const;
+	std::vector<std::string> getServicos() const;
 	bool getBandeira() const;
 	Gps getGps() const;
 
 	void setNome(std::string n);
 	void setConcelho(std::string c);
-	void setServicos(std::vector<Servico> s);
+	void setServicos(std::vector<std::string> s);
 	void setBandeira(bool bA);
 	void setGps(Gps cd);
 
-	void addServico(Servico s);
-	void removeServico(Servico s);
-	int searchServico(Servico s);
+	void addServico(std::string s);
+	void removeServico(std::string s);
+	int searchServico(std::string s);
 
 	//Change and add some more
 	bool operator==(const Praia* p1) const;
 
-	virtual json savePraia() = 0;
+	virtual std::string savePraia() = 0;
 
 };
 

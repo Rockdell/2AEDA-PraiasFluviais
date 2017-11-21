@@ -3,8 +3,6 @@
 #ifndef PRIO_H_
 #define PRIO_H_
 
-using json = nlohmann::json;
-
 class PRio : public Praia {
 	float largura, caudal, profundidade;
 public:
@@ -19,11 +17,7 @@ public:
 	void setCaudal(float c);
 	void setProfundidade(float p);
 
-	json savePraia();
-
-	//Test json j = PRio;
-	void to_json(json &j, const PRio* p);
-	void from_json(const json &j, PRio* p);
+	std::string savePraia();
 };
 
 #endif /* PRIO_H_ */

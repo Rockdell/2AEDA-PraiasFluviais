@@ -6,15 +6,16 @@ Database::~Database() {
 }
 
 void Database::load(std::string filename) {
-	std::ifstream input("listaPraias.txt");
-	json j;
+	std::ifstream input(filename);
+	std::string j;
 
 	if(!input.is_open())
 		throw FileNotFound(filename);
 
-	//May give some trouble! Test better
-	while(input >> j) {
-		processLine(j);
+	std::string line;
+
+	while(getline(input, line)) {
+		processLine(line);
 	}
 
 	input.close();
@@ -71,12 +72,12 @@ int Database::searchPraia(std::string n) {
 }
 
 bool Database::existPraia(Praia* p) {
-	if(searchPraia(p) == -1)
+	int i = searchPraia(p);
+
+	if(i == -1)
 		return false;
-	else if(*p == praias[searchPraia(p)])
-		return true;
 	else
-		return false;
+		return true;
 }
 
 void Database::orderPraiasNome() {
@@ -115,68 +116,90 @@ void Database::orderPraiasConcelho() {
 	}
 }
 
-void Database::processLine(json j) {
+void Database::processLine(std::string l) {
 
-	if(j.at("type").get<std::string>() == "A") {
-		PAlbufeira p;
-		p.from_json(j, &p);
-		praias.push_back(&p);
+	std::istringstream ss1(l);
+	std::vector<std::string> properties;
+	std::string token;
+
+	//Parse line
+	while (getline(ss1, token, ';')) {
+		properties.push_back(token);
+	}
+
+	//Type
+	std::string type = properties[0];
+
+	//Nome
+	std::string nome = properties[1];
+
+	//Concelho
+	std::string concelho = properties[2];
+
+	//Servicos
+	std::string tmp1 = properties[3];
+	std::istringstream ss2(tmp1);
+	std::vector<std::string> servicos;
+
+	if(tmp1 != "null_servicos") {
+		while(getline(ss2, token, ',')) {
+			servicos.push_back(token);
+		}
+	}
+
+	//Bandeira
+	bool bandeira;
+	std::string tmp2 = properties[4];
+
+	if(tmp2 == "1")
+		bandeira = true;
+	else
+		bandeira = false;
+
+	//Gps
+	double lat, lon;
+	std::string tmp3 = properties[5];
+	std::istringstream ss3(tmp3);
+	ss3 >> lat >> lon;
+
+	Gps gps(lat,lon);
+
+	Praia* p;
+
+	if(type == "R") {
+
+		//Largura
+		double largura;
+		std::string tmp4 = properties[6];
+		std::istringstream ss4(tmp4);
+		ss3 >> largura;
+
+		//Caudal
+		double caudal;
+		std::string tmp5 = properties[7];
+		std::istringstream ss5(tmp5);
+		ss3 >> caudal;
+
+		//Profundidade
+		double profundidade;
+		std::string tmp6 = properties[8];
+		std::istringstream ss6(tmp6);
+		ss3 >> profundidade;
+
+		p = new PRio(nome, concelho, bandeira, gps, largura, caudal, profundidade);
 	}
 	else {
-		PRio p;
-		p.from_json(j, &p);
-		praias.push_back(&p);
+
+		//Area
+		double area;
+		std::string tmp4 = properties[6];
+		std::istringstream ss4(tmp4);
+		ss3 >> area;
+
+		p = new PAlbufeira(nome, concelho, bandeira, gps,area);
 	}
 
-	/*
-	std::istringstream ss(line);
-	char type, chaveta;
-	std::string nome, concelho, servico;
-	int bandeira;
-	bool bandeiraAzul;
-	std::vector<Servico> servicos;
-	double lat, lon;
-
-	ss >> type >> nome >> concelho >> chaveta >> servico;
-
-	while (servico != "}") {
-		Servico newServico(servico);
-		servicos.push_back(newServico);
-		ss >> servico;
-	}
-
-	ss >> bandeira;
-
-	if(bandeira)
-		bandeiraAzul = true;
-	else
-		bandeiraAzul = false;
-
-	ss >> lat >> lon;
-
-	Gps gps = Gps(lat,lon);
-
-	if (type == 'A') {
-		float area;
-
-		ss >> area;
-
-		PAlbufeira p(nome, concelho, bandeiraAzul, gps, area);
-
-		addPraia(&p);
-	}
-	else if (type == 'R') {
-		float largura, caudal, profundidade;
-
-		ss >> largura >> caudal >> profundidade;
-
-		PRio p(nome, concelho, bandeiraAzul, gps, largura, caudal, profundidade);
-
-		addPraia(&p);
-	}
-	else
-		throw ReadingLineError(line);
-		*/
+	addPraia(p);
 
 }
 

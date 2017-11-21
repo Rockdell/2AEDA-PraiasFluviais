@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include <conio.h>
 
 int printMenu() {
 
@@ -8,9 +9,10 @@ int printMenu() {
 		case INITIAL:
 			MainMenu();
 			break;
-		case ADD:
+		case ADD: {
 			AddMenu();
 			break;
+		}
 		case REMOVE:
 			RemoveMenu();
 			break;
@@ -29,6 +31,8 @@ int printMenu() {
 
 void MainMenu() {
 
+	using namespace std;
+
 	std::cout << " - Main Menu - " << std::endl << std::endl;
 	std::cout << " [1] Add Menu " << std::endl;
 	std::cout << " [2] Remove Menu" << std::endl;
@@ -39,6 +43,7 @@ void MainMenu() {
 	int valid;
 
 	do {
+
 		char input = std::cin.get();
 		valid = sendEvent(input);
 	}
@@ -61,14 +66,17 @@ void AddMenu() {
 			break;
 		}
 		case '1': {
+
+			std::cin.ignore();
+
 			std::string nome, concelho;
 			double lat, lon;
 			float largura, caudal, profundidade;
 
 			std::cout << " Nome da praia: ";
-			std::cin >> nome;
+			std::getline(std::cin, nome);
 			std::cout << " Nome do concelho: ";
-			std::cin >> concelho;
+			getline(std::cin, concelho);
 			std::cout << " Latitude: ";
 			std::cin >> lat;
 			std::cout << " Longitude: ";
@@ -81,26 +89,29 @@ void AddMenu() {
 			std::cin >> profundidade;
 
 			Gps g = Gps(lat, lon);
-			PRio p = PRio(nome, concelho, true, g, largura, caudal, profundidade);
+			Praia* p = new PRio(nome, concelho, true, g, largura, caudal, profundidade);
 
-			if(db.existPraia(&p))
+			if(db.existPraia(p))
 				throw PraiaAlreadyExists(nome);
 			else
-				db.addPraia(&p);
+				db.addPraia(p);
 
 			std::cout << " Praia adicionada com sucesso. " << std::endl;
 
 			break;
 		}
 		case '2': {
+
+			std::cin.ignore();
+
 			std::string nome, concelho;
 			double lat, lon;
 			float area;
 
 			std::cout << " Nome da praia: ";
-			std::cin >> nome;
+			getline(std::cin, nome);
 			std::cout << " Nome do concelho: ";
-			std::cin >> concelho;
+			getline(std::cin, concelho);
 			std::cout << " Latitude: ";
 			std::cin >> lat;
 			std::cout << " Longitude: ";
@@ -109,12 +120,12 @@ void AddMenu() {
 			std::cin >> area;
 
 			Gps g = Gps(lat, lon);
-			PAlbufeira p = PAlbufeira(nome, concelho, true, g, area);
+			Praia* p = new PAlbufeira(nome, concelho, true, g, area);
 
-			if(db.existPraia(&p))
+			if(db.existPraia(p))
 				throw PraiaAlreadyExists(nome);
 			else
-				db.addPraia(&p);
+				db.addPraia(p);
 
 			std::cout << " Praia adicionada com sucesso. " << std::endl;
 

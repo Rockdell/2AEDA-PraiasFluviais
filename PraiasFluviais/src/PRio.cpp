@@ -1,7 +1,5 @@
 #include "PRio.h"
 
-using json = nlohmann::json;
-
 //Constructors/Destructors
 PRio::PRio() : Praia() {
 	largura = 0;
@@ -38,45 +36,33 @@ void PRio::setProfundidade(float p) {
 	profundidade = p;
 }
 
-json PRio::savePraia() {
+std::string PRio::savePraia() {
 
-	json j;
-	to_json(j, this);
+	std::string praia = "R;";
 
-	return j;
+	praia += getNome() + ";" + getConcelho() +";";
 
-}
+	if(getServicos().empty())
+		praia += "null_servicos;";
+	else {
+		for(size_t i = 0; i < getServicos().size(); i++) {
 
-void PRio::to_json(json &j, const PRio *p) {
-	j["type"] = "R";
-	j["nome"] = p->getNome();
-	j["concelho"] = p->getConcelho();
-	j["servicos"] = {};
-	j["bandeira"] = p->getBandeira();
-	j["gps"] = { p->getGps().getLat(), p->getGps().getLon() };
-	j["largura"] = p->getLargura();
-	j["caudal"] = p->getCaudal();
-	j["profundidade"] = p->getProfundidade();
+			if(i == getServicos().size() - 1)
+				praia += getServicos()[i] + ";";
+			else
+				praia += getServicos()[i] + ",";
+		}
+	}
 
-	for(size_t i = 0; i < p->getServicos().size(); i++)
-		j["servicos"].push_back(p->getServicos()[i].getDescricao());
-}
+	if(getBandeira())
+		praia += "1;";
+	else
+		praia += "0;";
 
-void PRio::from_json(const json &j, PRio *p) {
-	p->setNome(j.at("nome").get<std::string>());
-	p->setConcelho(j.at("concelho").get<std::string>());
-	p->setBandeira(j.at("bandeira").get<bool>());
-	p->setGps(Gps(j.at("gps").at(0).get<double>(), j.at("gps").at(1).get<double>()));
-	p->setLargura(j.at("largura").get<float>());
-	p->setCaudal(j.at("caudal").get<float>());
-	p->setProfundidade(j.at("profundidade").get<float>());
+	praia += std::to_string(getGps().getLat()) + " " + std::to_string(getGps().getLon()) + ";";
 
-	std::vector<std::string> servicos_tmp = j.at("servicos").get<std::vector<std::string>>();
-	std::vector<Servico> servicos_new;
+	praia += std::to_string(largura) + ";" + std::to_string(caudal) + ";" + std::to_string(profundidade);
 
-	for(size_t i = 0; i < servicos_tmp.size(); i++)
-		servicos_new.push_back(Servico(servicos_tmp[i]));
-
-	p->setServicos(servicos_new);
+	return praia;
 
 }

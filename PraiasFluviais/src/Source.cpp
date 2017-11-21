@@ -45,17 +45,35 @@ int main() {
 	 * c
 	 */
 
-	//db.load("listaPraias.txt");
+	//Catch exception while loading
+	try {
+		db.load("listPraias.txt");
+	}
+	catch(Exception& e) {
+		std::cout << " Ocorreu um erro com: " << e.getMessage() << std::endl;
+	}
 
 	unsigned int stop = 0;
 
 	while(!stop) {
+
+		//Catch any exception
+		try {
 		stop = printMenu();
+		}
+		catch (Exception& e) {
+			std::cout << " Ocorreu um erro com: " << e.getMessage() << std::endl;
+		}
+
 		std::cin.ignore();
 	}
 
-	//db.save("listPraias.txt");
-
+	//Catch exceptions while saving
+	try {
+		db.save("listPraias.txt");
+	}
+	catch (Exception& e) {
+		std::cout << " Ocorreu um erro com: " << e.getMessage() << std::endl;
+	}
 	return 0;
 }
-;

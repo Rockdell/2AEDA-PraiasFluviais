@@ -2,43 +2,55 @@
 #ifndef EXCEPTIONS_H_
 #define EXCEPTIONS_H_
 
-class FileNotFound {
-	std::string file;
+/**
+ * @brief Exceptions's base class
+ */
+class Exception {
+	std::string message;
 public:
-	FileNotFound(std::string f) {
-		file = f;
+	/**
+	 * @brief Class constructor
+	 */
+	Exception(std::string m) {
+		message = m;
+	}
+
+	/**
+	 * @brief Class constructor
+	 * @return Returns exception's message
+	 */
+	std::string getMessage() const {
+		return message;
 	}
 };
 
-class PraiaNotFound {
-	std::string nome;
+class FileNotFound : public Exception {
 public:
-	PraiaNotFound(std::string n) {
-		nome = n;
+	FileNotFound(std::string f) : Exception(f) {
 	}
 };
 
-class ServicoNotFound {
-	std::string nome;
+class PraiaNotFound : public Exception {
 public:
-	ServicoNotFound(std::string n) {
-		nome = n;
+	PraiaNotFound(std::string n) : Exception(n) {
 	}
 };
 
-class ReadingLineError {
-	std::string line;
+class ServicoNotFound : public Exception {
 public:
-	ReadingLineError(std::string l) {
-		line = l;
+	ServicoNotFound(std::string n) : Exception(n) {
 	}
 };
 
-class PraiaAlreadyExists {
-	std::string nome;
+class ReadingLineError : public Exception {
 public:
-	PraiaAlreadyExists(std::string n) {
-		nome = n;
+	ReadingLineError(std::string l) : Exception(l) {
+	}
+};
+
+class PraiaAlreadyExists : public Exception {
+public:
+	PraiaAlreadyExists(std::string n) : Exception(n) {
 	}
 };
 
