@@ -1,4 +1,6 @@
 #include <string>
+#include <iostream>
+
 #ifndef EXCEPTIONS_H_
 #define EXCEPTIONS_H_
 
@@ -15,13 +17,11 @@ public:
 		message = m;
 	}
 
-	/**
-	 * @brief Class constructor
-	 * @return Returns exception's message
-	 */
 	std::string getMessage() const {
 		return message;
 	}
+	virtual void display() const = 0;
+
 };
 
 /**
@@ -33,6 +33,11 @@ public:
 	 * @brief FileNotFound Class constructor
 	 */
 	FileNotFound(std::string f) : Exception(f) {
+	}
+
+	void display() const {
+		std::string msg = " Ficheiro não encontrado: " + getMessage();
+		std::cout << msg;
 	}
 };
 
@@ -46,6 +51,11 @@ public:
 	 */
 	PraiaNotFound(std::string n) : Exception(n) {
 	}
+
+	void display() const {
+		std::string msg = " Praia não encontrada: " + getMessage();
+		std::cout << msg;
+	}
 };
 
 /**
@@ -57,6 +67,11 @@ public:
 	 * @brief ServicoNotFound Class constructor
 	 */
 	ServicoNotFound(std::string n) : Exception(n) {
+	}
+
+	void display() const {
+		std::string msg = " Serviço não encontrado: " + getMessage();
+		std::cout << msg;
 	}
 };
 
@@ -70,6 +85,11 @@ public:
 	 */
 	ReadingLineError(std::string l) : Exception(l) {
 	}
+
+	void display() const {
+		std::string msg = " Erro ao ler a linha: " + getMessage();
+		std::cout << msg;
+	}
 };
 
 /**
@@ -81,6 +101,11 @@ public:
 	 * @brief PraiaAlreadyExists Class constructor
 	 */
 	PraiaAlreadyExists(std::string n) : Exception(n) {
+	}
+
+	void display() const {
+		std::string msg = " Praia já existe: " + getMessage();
+		std::cout << msg;
 	}
 };
 
