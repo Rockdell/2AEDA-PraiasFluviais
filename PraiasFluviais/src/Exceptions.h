@@ -11,7 +11,7 @@ class Exception {
 	std::string message;
 public:
 	/**
-	 * @brief Class constructor
+	 * @brief Exception Class constructor
 	 */
 	Exception(std::string m) {
 		message = m;
@@ -24,8 +24,14 @@ public:
 
 };
 
+/**
+ * @brief FileNotFound is derived from class Exception
+ */
 class FileNotFound : public Exception {
 public:
+	/**
+	 * @brief FileNotFound Class constructor
+	 */
 	FileNotFound(std::string f) : Exception(f) {
 	}
 
@@ -35,8 +41,14 @@ public:
 	}
 };
 
+/**
+ * @brief PraiaNotFound is derived from class Exception
+ */
 class PraiaNotFound : public Exception {
 public:
+	/**
+	 * @brief PraiaNotFound Class constructor
+	 */
 	PraiaNotFound(std::string n) : Exception(n) {
 	}
 
@@ -46,8 +58,14 @@ public:
 	}
 };
 
+/**
+ * @brief ServicoNotFound is derived from class Exception
+ */
 class ServicoNotFound : public Exception {
 public:
+	/**
+	 * @brief ServicoNotFound Class constructor
+	 */
 	ServicoNotFound(std::string n) : Exception(n) {
 	}
 
@@ -57,8 +75,14 @@ public:
 	}
 };
 
+/**
+ * @brief ReadingLineError is derived from class Exception
+ */
 class ReadingLineError : public Exception {
 public:
+	/**
+	 * @brief ReadingLineError Class constructor
+	 */
 	ReadingLineError(std::string l) : Exception(l) {
 	}
 
@@ -68,8 +92,14 @@ public:
 	}
 };
 
+/**
+ * @brief PraiaAlreadyExists is derived from class Exception
+ */
 class PraiaAlreadyExists : public Exception {
 public:
+	/**
+	 * @brief PraiaAlreadyExists Class constructor
+	 */
 	PraiaAlreadyExists(std::string n) : Exception(n) {
 	}
 

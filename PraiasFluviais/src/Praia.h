@@ -2,6 +2,7 @@
 #include <vector>
 #include "Gps.h"
 #include "Exceptions.h"
+#include <map>
 
 #ifndef PRAIA_H_
 #define PRAIA_H_
