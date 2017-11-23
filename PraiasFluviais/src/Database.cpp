@@ -1,5 +1,7 @@
 #include "Database.h"
 
+typedef std::string Concelho;
+
 Database::Database() {
 }
 Database::~Database() {

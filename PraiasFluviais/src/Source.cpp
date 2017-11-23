@@ -17,6 +17,7 @@ int main() {
 	//Gps(double lat, double lon);
 
 
+	/*
 	Gps g1 = Gps(51.0664, -5.7147);
 	std::cout << g1.displayGps() << std::endl;
 	Gps g2 = Gps(58.6439, -3.07);
@@ -48,8 +49,9 @@ int main() {
 	{
 		std::cout << it->first << " " << it->second->getNome() << std::endl;
 	}
+	*/
 
-	/*
+
 	//Allow to output portuguese characters like 'ç' or 'ã'
 	setlocale(LC_ALL, "");
 	std::locale::global(std::locale(""));
@@ -82,8 +84,6 @@ int main() {
 			//TODO Not showing
 			std::cout << " Ocorreu um erro com: " << e.getMessage() << std::endl;
 		}
-
-		std::cin.ignore();
 	}
 
 	//Catch exceptions while saving
@@ -93,6 +93,6 @@ int main() {
 	catch (Exception& e) {
 		e.display();
 	}
-	*/
+
 	return 0;
 }

@@ -13,7 +13,6 @@
 #include "Exceptions.h"
 #include "Gps.h"
 
-
 #ifndef DATABASE_H_
 #define DATABASE_H_
 
@@ -21,6 +20,7 @@
  * @brief Database where we will store all the information about Praias
  */
 class Database {
+
 	std::vector<Praia*> praias;
 public:
 
