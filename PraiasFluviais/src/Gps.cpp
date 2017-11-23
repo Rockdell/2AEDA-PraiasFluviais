@@ -59,9 +59,9 @@ std::string Gps::displayGps() const {
 	oss << tlat << "'' ";
 
 	if(lat > 0)
-		oss << "N" << std::endl;
+		oss << "N" << " / "; // std::endl;
 	else
-		oss << "S" << std::endl;
+		oss << "S" << " / "; //std::endl;
 
 	//Longitude calculations
 	double tlon = fabs(lon);
@@ -77,9 +77,9 @@ std::string Gps::displayGps() const {
 	oss << tlon << "'' ";
 
 	if(lon > 0)
-		oss << "E" << std::endl;
+		oss << "E";//<< std::endl;
 	else
-		oss << "W" << std::endl;
+		oss << "W";// << std::endl;
 
 	return oss.str();
 }

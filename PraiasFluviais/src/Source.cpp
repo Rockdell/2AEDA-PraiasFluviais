@@ -37,6 +37,7 @@ int main() {
 		stop = printMenu();
 		}
 		catch (Exception& e) {
+			//TODO Not showing
 			std::cout << " Ocorreu um erro com: " << e.getMessage() << std::endl;
 		}
 	}

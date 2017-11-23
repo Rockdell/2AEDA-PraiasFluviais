@@ -65,6 +65,8 @@ public:
 	//TODO add description
 	void showPraias();
 
+	void showPraia(int i);
+
 	/**
 	 * @brief Search object p in vector "praias"
 	 * @param p Object Praia to search for
@@ -75,9 +77,10 @@ public:
 	/**
 	 * @brief Search object with name n in vector "praias"
 	 * @param n Object's name to search for
+	 * @param c Object's region to search for
 	 * @return Return -1 if not found or the object's index if found
 	 */
-	int searchPraia(std::string n);
+	int searchPraia(std::string n, std::string c);
 
 	/**
 	 * @brief Check if object p exists in database
@@ -85,6 +88,9 @@ public:
 	 * @return Return true if it exists or false if it doesn't
 	 */
 	bool existPraia(Praia* p);
+
+	//TODO add description
+	bool existPraia(std::string n, std::string c);
 
 	//TODO add description
 	int getSize() const;

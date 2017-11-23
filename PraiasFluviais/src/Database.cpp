@@ -56,15 +56,17 @@ void Database::removePraia(int i) {
 
 void Database::showPraias() {
 
-	//Order vector before displaying
-	sortPraiasNome();
-
 	for(size_t i = 0; i < praias.size(); i++) {
 		if(i == praias.size() - 1)
 			std::cout << " [" << i + 1 << "]" << praias[i]->reducedInfoPraia() << std::endl << std::endl;
 		else
 			std::cout << " [" << i + 1 << "]" << praias[i]->reducedInfoPraia() << std::endl;
 	}
+}
+
+void Database::showPraia(int i) {
+
+	std::cout << praias[i]->fullInfoPraia() << std::endl;
 }
 
 int Database::searchPraia(Praia* p) {
@@ -78,11 +80,11 @@ int Database::searchPraia(Praia* p) {
 	return -1;
 }
 
-int Database::searchPraia(std::string n) {
+int Database::searchPraia(std::string n, std::string c) {
 
 	for(size_t i = 0; i < praias.size(); i++)
 	{
-		if(n == praias[i]->getNome())
+		if(n == praias[i]->getNome() && c == praias[i]->getConcelho())
 			return i;
 	}
 
@@ -96,6 +98,16 @@ bool Database::existPraia(Praia* p) {
 		return false;
 	else
 		return true;
+}
+
+bool Database::existPraia(std::string n, std::string c) {
+
+	int i = searchPraia(n, c);
+
+	if(i != -1)
+		return true;
+	else
+		return false;
 }
 
 int Database::getSize() const {

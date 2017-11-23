@@ -69,7 +69,7 @@ std::string PRio::savePraia() {
 
 //TODO not done yet
 std::string PRio::fullInfoPraia() {
-	std::string result = "";
+	std::string result = "\n";
 
 	result += " Nome: " + getNome() + "\n" + " Concelho: " + getConcelho() + "\n" + " Serviços: ";
 
@@ -81,7 +81,11 @@ std::string PRio::fullInfoPraia() {
 		}
 	}
 
-	//result += " Bandeira Azul: " +  getBandeira() + "\n" +  " Coordenadas: " + caudal + " ";
+	std::string bandeira = getBandeira() ? "sim" : "não";
+
+	result += " Bandeira Azul: " + bandeira + "\n" +  " Coordenadas: " + getGps().displayGps() + "\n";
+	result += " Largura: " + std::to_string(largura) + "\n" + " Caudal: " + std::to_string(caudal) + "\n" +
+			" Profundidade: " + std::to_string(profundidade) + "\n";
 
 	return result;
 
