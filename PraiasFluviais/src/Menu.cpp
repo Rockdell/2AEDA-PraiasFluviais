@@ -42,7 +42,7 @@ void MainMenu() {
 	std::cout << " [1] Add Menu " << std::endl;
 	std::cout << " [2] Remove Menu" << std::endl;
 	std::cout << " [3] Edit Menu" << std::endl;
-	std::cout << " [4] Look menu" << std::endl;
+	std::cout << " [4] Watch menu" << std::endl;
 	std::cout << " [0] Exit " << std::endl << std::endl;
 
 	int valid;
