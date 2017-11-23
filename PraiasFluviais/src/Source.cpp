@@ -47,7 +47,6 @@ int main() {
 		std::cout << it->first << " " << it->second->getNome() << std::endl;
 	}
 
-
 	/*
 	//Allow to output portuguese characters like 'ç' or 'ã'
 	setlocale(LC_ALL, "");

@@ -110,9 +110,29 @@ public:
 	 */
 	void processLine(std::string l);
 
+	/**
+	 * @brief Gives all praias within given range of a certain praia
+	 * @param p praia given as center of range
+	 * @param r radius/range given
+	 * @return Returns a map of ordered of praias ordered by range(as the map key)
+	 */
 	std::map<double,std::unique_ptr<Praia>> withInRangePraia(Praia * p, double r) const;
+
+	/**
+	 * @brief Gives all praias within given range of a certain Gps location
+	 * @param p praia given as center of range
+	 * @param r radius/range given
+	 * @return Returns a map of ordered of praias ordered by range(as the map key)
+	 */
 	std::map<double,std::unique_ptr<Praia>> withInRangeGps(Gps g, double r) const;
-	std::map<double,std::unique_ptr<Praia>> orderRange(std::vector<Praia *> & ps, std::vector<double> ranges) const;
+
+	/**
+	 * @brief Creates a map with the ranges (as keys) and praias (as key values)
+	 * @param ps Vector of praia pointers which we want to order
+	 * @param ranges Vector of doubles representing the ranges
+	 * @return Returns a map of ordered of praias ordered by range(as the map key)
+	 */
+	std::map<double,std::unique_ptr<Praia>> orderRange(std::vector<Praia *> ps, std::vector<double> ranges) const;
 };
 
 #endif /* DATABASE_H_ */
