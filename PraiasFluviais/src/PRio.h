@@ -18,6 +18,7 @@ public:
 	void setProfundidade(double p);
 
 	std::string savePraia();
+	std::string fullInfoPraia();
 };
 
 #endif /* PRIO_H_ */

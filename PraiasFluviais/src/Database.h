@@ -62,6 +62,9 @@ public:
 	 */
 	void removePraia(int i);
 
+	//TODO add description
+	void showPraias();
+
 	/**
 	 * @brief Search object p in vector "praias"
 	 * @param p Object Praia to search for
@@ -82,6 +85,9 @@ public:
 	 * @return Return true if it exists or false if it doesn't
 	 */
 	bool existPraia(Praia* p);
+
+	//TODO add description
+	int getSize() const;
 
 	/**
 	 * @brief Orders vector "praias" by name

@@ -14,6 +14,7 @@ public:
 	void setArea(double a);
 
 	std::string savePraia();
+	std::string fullInfoPraia();
 };
 
 #endif /* PALBUFEIRA_H_ */

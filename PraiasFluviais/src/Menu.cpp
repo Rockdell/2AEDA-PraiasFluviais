@@ -483,30 +483,52 @@ void RemoveMenu() {
 		}
 		case '1': {
 
+			std::string i_nome;
 
-			std::string nome;
+			db.showPraias();
 
-			std::cout << " Nome da praia que pretende eliminar: ";
-			std::cin >> nome;
+			if(db.getSize() == 0) {
+				std::cerr << " Não existem praias para remover. ";
+				_getch();
+				return;
+			}
+			else
+				std::cout << " Nome da praia que pretende remover: ";
 
-			int i = db.searchPraia(nome);
+			redo_nome:
+			std::getline(std::cin, i_nome);
+
+			switch (inputHandling(i_nome, 's')) {
+				case 0:
+					std::cerr << " # Input inválido. Introduza novamente: ";
+					goto redo_nome;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operação cancelada. ";
+					_getch();
+					return;
+			}
+
+			int i = db.searchPraia(i_nome);
 
 			if(i != -1) {
 				db.removePraia(i);
 				std::cout << " Praia removida com sucesso. ";
+				_getch();
 			}
-			else
-				std::cout << " Não existe uma praia com esse nome. " << std::endl;
+			else {
+				std::cerr << " # Não existe uma praia com esse nome. Introduza novamente: ";
+				goto redo_nome;
+			}
 
 			break;
 		}
 		default: {
 			std::cout << " Escolha uma das opções! " << std::endl;
-			std::cin.ignore();
 			goto again;
 		}
 	}
-
 }
 
 void EditMenu() {
@@ -537,7 +559,11 @@ void EditMenu() {
 void WatchMenu() {
 
 	std::cout << " - Watch Menu - " << std::endl << std::endl;
-	std::cout << " [1] Ver praias " << std::endl;
+	std::cout << " [1] Ver praias por nome" << std::endl;
+	std::cout << " [2] Ver praias por concelho" << std::endl;
+	std::cout << " [3] Pesquisar praias por coordenadas GPS" << std::endl;
+	std::cout << " [4] Pesquisar praias nas proximidades de outras praias" << std::endl;
+	//std::cout << " [5] Pesquisar "
 	std::cout << " [0] Back " << std::endl << std::endl;
 
 	again:
@@ -553,7 +579,6 @@ void WatchMenu() {
 		}
 		default: {
 			std::cout << " Escolha uma das opções! " << std::endl;
-			std::cin.ignore();
 			goto again;
 		}
 	}
@@ -571,6 +596,8 @@ int inputHandling(std::string input, char property) {
 		1 : Continuar operação
 		2 : Cancelar operação
 		*/
+
+	//TODO lat de -90 a 90 e lon de -180 a 180
 
 		if (std::cin.eof() || input.length() == 0)
 		{

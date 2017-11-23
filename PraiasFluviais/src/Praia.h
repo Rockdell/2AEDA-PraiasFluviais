@@ -38,7 +38,10 @@ public:
 	//Change and add some more
 	bool operator==(const Praia* p1) const;
 
+	std::string reducedInfoPraia();
+
 	virtual std::string savePraia() = 0;
+	virtual std::string fullInfoPraia() = 0;
 
 };
 

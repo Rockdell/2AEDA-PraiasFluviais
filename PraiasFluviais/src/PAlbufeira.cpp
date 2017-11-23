@@ -49,3 +49,23 @@ std::string PAlbufeira::savePraia() {
 
 	return praia;
 }
+
+//TODO not done yet
+std::string PAlbufeira::fullInfoPraia() {
+	std::string result = "";
+
+	result += " Nome: " + getNome() + "\n" + " Concelho: " + getConcelho() + "\n" + " Serviços: ";
+
+	for(size_t i = 0; i < getServicos().size(); i++) {
+		if(i == getServicos().size() - 1)
+			result += getServicos()[i] + "\n";
+		else {
+			result += getServicos()[i] + ", ";
+		}
+	}
+
+	//result += " Bandeira Azul: " +  getBandeira() + "\n" +  " Coordenadas: " + caudal + " ";
+
+	return result;
+
+}

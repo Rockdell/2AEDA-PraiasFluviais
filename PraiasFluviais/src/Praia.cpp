@@ -77,3 +77,11 @@ bool Praia::operator ==(const Praia* p1) const {
 	else
 		return false;
 }
+
+std::string Praia::reducedInfoPraia() {
+	std::string result = "";
+
+	result += " Nome: " + nome + " (" +  concelho + ")";
+
+	return result;
+}
