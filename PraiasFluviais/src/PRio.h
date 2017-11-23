@@ -4,20 +4,21 @@
 #define PRIO_H_
 
 class PRio : public Praia {
-	float largura, caudal, profundidade;
+	double largura, caudal, profundidade;
 public:
 	PRio();
-	PRio(std::string n, std::string c, bool bA, Gps cd, float l, float cl, float p);
+	PRio(std::string n, std::string c, std::vector<std::string> s, bool bA, Gps cd, double l, double cl, double p);
 	~PRio();
 
-	float getLargura() const;
-	float getCaudal() const;
-	float getProfundidade() const;
-	void setLargura(float l);
-	void setCaudal(float c);
-	void setProfundidade(float p);
+	double getLargura() const;
+	double getCaudal() const;
+	double getProfundidade() const;
+	void setLargura(double l);
+	void setCaudal(double c);
+	void setProfundidade(double p);
 
 	std::string savePraia();
+	std::string fullInfoPraia();
 };
 
 #endif /* PRIO_H_ */

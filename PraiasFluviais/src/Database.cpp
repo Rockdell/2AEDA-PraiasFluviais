@@ -27,6 +27,9 @@ void Database::save(std::string filename) {
 	if(!output.is_open())
 		throw FileNotFound(filename);
 
+	//Sort vector before saving
+	sortPraiasNome();
+
 	for(size_t i = 0; i < praias.size(); i++) {
 		output << praias[i]->savePraia() << std::endl;
 	}
@@ -51,7 +54,21 @@ void Database::removePraia(int i) {
 	praias.erase(praias.begin() + i);
 }
 
+void Database::showPraias() {
+
+	//Order vector before displaying
+	sortPraiasNome();
+
+	for(size_t i = 0; i < praias.size(); i++) {
+		if(i == praias.size() - 1)
+			std::cout << " [" << i + 1 << "]" << praias[i]->reducedInfoPraia() << std::endl << std::endl;
+		else
+			std::cout << " [" << i + 1 << "]" << praias[i]->reducedInfoPraia() << std::endl;
+	}
+}
+
 int Database::searchPraia(Praia* p) {
+
 	for(size_t i = 0; i < praias.size(); i++)
 	{
 		if(*p == praias[i])
@@ -62,6 +79,7 @@ int Database::searchPraia(Praia* p) {
 }
 
 int Database::searchPraia(std::string n) {
+
 	for(size_t i = 0; i < praias.size(); i++)
 	{
 		if(n == praias[i]->getNome())
@@ -80,7 +98,15 @@ bool Database::existPraia(Praia* p) {
 		return true;
 }
 
-void Database::orderPraiasNome() {
+int Database::getSize() const {
+	return praias.size();
+}
+
+void Database::sortPraiasNome() {
+
+	//Check if there are any Praias to sort
+	if(praias.empty())
+		return;
 
 	for(size_t j = praias.size() - 1; j > 0; j--) {
 
@@ -98,7 +124,11 @@ void Database::orderPraiasNome() {
 	}
 }
 
-void Database::orderPraiasConcelho() {
+void Database::sortPraiasConcelho() {
+
+	//Check if there are any Praias to sort
+	if(praias.empty())
+		return;
 
 	for(size_t j = praias.size() - 1; j > 0; j--) {
 
@@ -186,7 +216,7 @@ void Database::processLine(std::string l) {
 		std::istringstream ss6(tmp6);
 		ss3 >> profundidade;
 
-		p = new PRio(nome, concelho, bandeira, gps, largura, caudal, profundidade);
+		p = new PRio(nome, concelho, servicos, bandeira, gps, largura, caudal, profundidade);
 	}
 	else {
 
@@ -196,7 +226,7 @@ void Database::processLine(std::string l) {
 		std::istringstream ss4(tmp4);
 		ss3 >> area;
 
-		p = new PAlbufeira(nome, concelho, bandeira, gps,area);
+		p = new PAlbufeira(nome, concelho, servicos, bandeira, gps,area);
 	}
 
 	addPraia(p);

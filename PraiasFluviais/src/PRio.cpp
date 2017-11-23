@@ -6,7 +6,7 @@ PRio::PRio() : Praia() {
 	caudal = 0;
 	profundidade = 0;
 }
-PRio::PRio(std::string n, std::string c, bool bA, Gps cd, float l, float cl, float p) : Praia(n,c,bA,cd) {
+PRio::PRio(std::string n, std::string c, std::vector<std::string> s, bool bA, Gps cd, double l, double cl, double p) : Praia(n,c,s,bA,cd) {
 	largura = l;
 	caudal = cl;
 	profundidade = p;
@@ -15,24 +15,24 @@ PRio::~PRio() {
 }
 
 //Get methods
-float PRio::getLargura() const {
+double PRio::getLargura() const {
 	return largura;
 }
-float PRio::getCaudal() const {
+double PRio::getCaudal() const {
 	return caudal;
 }
-float PRio::getProfundidade() const {
+double PRio::getProfundidade() const {
 	return profundidade;
 }
 
 //Set methods
-void PRio::setLargura(float l) {
+void PRio::setLargura(double l) {
 	largura = l;
 }
-void PRio::setCaudal(float c) {
+void PRio::setCaudal(double c) {
 	caudal = c;
 }
-void PRio::setProfundidade(float p) {
+void PRio::setProfundidade(double p) {
 	profundidade = p;
 }
 
@@ -64,5 +64,25 @@ std::string PRio::savePraia() {
 	praia += std::to_string(largura) + ";" + std::to_string(caudal) + ";" + std::to_string(profundidade);
 
 	return praia;
+
+}
+
+//TODO not done yet
+std::string PRio::fullInfoPraia() {
+	std::string result = "";
+
+	result += " Nome: " + getNome() + "\n" + " Concelho: " + getConcelho() + "\n" + " Serviços: ";
+
+	for(size_t i = 0; i < getServicos().size(); i++) {
+		if(i == getServicos().size() - 1)
+			result += getServicos()[i] + "\n";
+		else {
+			result += getServicos()[i] + ", ";
+		}
+	}
+
+	//result += " Bandeira Azul: " +  getBandeira() + "\n" +  " Coordenadas: " + caudal + " ";
+
+	return result;
 
 }

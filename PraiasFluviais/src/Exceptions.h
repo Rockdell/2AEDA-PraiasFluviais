@@ -37,7 +37,7 @@ public:
 
 	void display() const {
 		std::string msg = " Ficheiro não encontrado: " + getMessage();
-		std::cout << msg;
+		std::cout << msg << std::endl;
 	}
 };
 
@@ -54,7 +54,7 @@ public:
 
 	void display() const {
 		std::string msg = " Praia não encontrada: " + getMessage();
-		std::cout << msg;
+		std::cout << msg << std::endl;
 	}
 };
 
@@ -71,7 +71,7 @@ public:
 
 	void display() const {
 		std::string msg = " Serviço não encontrado: " + getMessage();
-		std::cout << msg;
+		std::cout << msg << std::endl;
 	}
 };
 
@@ -88,7 +88,7 @@ public:
 
 	void display() const {
 		std::string msg = " Erro ao ler a linha: " + getMessage();
-		std::cout << msg;
+		std::cout << msg << std::endl;
 	}
 };
 
@@ -105,7 +105,7 @@ public:
 
 	void display() const {
 		std::string msg = " Praia já existe: " + getMessage();
-		std::cout << msg;
+		std::cout << msg << std::endl;
 	}
 };
 

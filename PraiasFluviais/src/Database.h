@@ -73,6 +73,9 @@ public:
 	 */
 	void removePraia(int i);
 
+	//TODO add description
+	void showPraias();
+
 	/**
 	 * @brief Search object p in vector "praias"
 	 * @param p Object Praia to search for
@@ -94,15 +97,18 @@ public:
 	 */
 	bool existPraia(Praia* p);
 
+	//TODO add description
+	int getSize() const;
+
 	/**
 	 * @brief Orders vector "praias" by name
 	 */
-	void orderPraiasNome();
+	void sortPraiasNome();
 
 	/**
 	 * @brief Orders vector "praias" by region
 	 */
-	void orderPraiasConcelho();
+	void sortPraiasConcelho();
 
 	/**
 	 * @brief Processes line from file
