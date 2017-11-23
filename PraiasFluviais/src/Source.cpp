@@ -26,10 +26,12 @@ int main() {
 	Gps g4 = Gps(65.0833, -98.2);
 	std::cout << g4.displayGps() << std::endl;
 
-	PRio pr1 = PRio("pr1", "c1", true, g1, 1, 1, 1);
-	PAlbufeira pa2 = PAlbufeira("pa2", "c2", true, g2, 2);
-	PRio pr3 = PRio("pr3", "c3", true, g3, 3, 3, 3);
-	PAlbufeira pa4 = PAlbufeira("pa4", "c4", true, g4, 4);
+	std::vector<std::string> t (0,"3");
+
+	PRio pr1 = PRio("pr1", "c1", t,true, g1, 1, 1, 1);
+	PAlbufeira pa2 = PAlbufeira("pa2", "c2", t, true, g2, 2);
+	PRio pr3 = PRio("pr3", "c3", t, true, g3, 3, 3, 3);
+	PAlbufeira pa4 = PAlbufeira("pa4", "c4", t, true, g4, 4);
 
 	std::vector<Praia *> test1;
 	test1.push_back(&pa2);
