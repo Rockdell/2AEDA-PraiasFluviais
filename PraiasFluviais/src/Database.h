@@ -86,12 +86,12 @@ public:
 	/**
 	 * @brief Orders vector "praias" by name
 	 */
-	void orderPraiasNome();
+	void sortPraiasNome();
 
 	/**
 	 * @brief Orders vector "praias" by region
 	 */
-	void orderPraiasConcelho();
+	void sortPraiasConcelho();
 
 	/**
 	 * @brief Processes line from file

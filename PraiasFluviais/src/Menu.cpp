@@ -482,6 +482,8 @@ void RemoveMenu() {
 			break;
 		}
 		case '1': {
+
+
 			std::string nome;
 
 			std::cout << " Nome da praia que pretende eliminar: ";

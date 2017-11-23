@@ -27,6 +27,9 @@ void Database::save(std::string filename) {
 	if(!output.is_open())
 		throw FileNotFound(filename);
 
+	//Sort vector before saving
+	sortPraiasNome();
+
 	for(size_t i = 0; i < praias.size(); i++) {
 		output << praias[i]->savePraia() << std::endl;
 	}
@@ -80,7 +83,7 @@ bool Database::existPraia(Praia* p) {
 		return true;
 }
 
-void Database::orderPraiasNome() {
+void Database::sortPraiasNome() {
 
 	for(size_t j = praias.size() - 1; j > 0; j--) {
 
@@ -98,7 +101,7 @@ void Database::orderPraiasNome() {
 	}
 }
 
-void Database::orderPraiasConcelho() {
+void Database::sortPraiasConcelho() {
 
 	for(size_t j = praias.size() - 1; j > 0; j--) {
 
