@@ -42,45 +42,38 @@ public:
 	~Database();
 
 	/**
-	 * @brief Sets the data-member praias to the given vector
-	 * @param ps Vector with Praia* objects
-	 */
-//	void setPraias(std::map<Concelho,Praia*> ps)
-//	{
-//		praias = ps;
-//	}
-
-	/**
-	 * @brief Populate vector "praias" with objects from file
+	 * @brief Populate map "praias" with objects from file
 	 * @param filename File to open
 	 */
 	void load(std::string filename);
 
 	/**
-	 * @brief Save objects from vector "praias" in file
+	 * @brief Save objects from map "praias" in file
 	 * @param filename File to open
 	 */
 	void save(std::string filename);
 
 	/**
-	 * @brief Add object p to vector "praias"
+	 * @brief Add object p to map"praias"
 	 * @param p Object Praia to add
 	 */
 	void addPraia(Praia* p);
 
 	/**
-	 * @brief Remove object p from vector "praias"
+	 * @brief Remove object p from map "praias"
 	 * @param p Object Praia to add
 	 */
 	void removePraia(Praia* p);
 
-	//TODO add description
+	/**
+	 * @brief Display's a specific Praia object in a reduced way
+	 */
 	void showPraias();
 
 	/**
-	 * @brief Search object p in vector "praias"
+	 * @brief Search object p in map "praias"
 	 * @param p Object Praia to search for
-	 * @return Return -1 if not found or the object's index if found
+	 * @return Return a pair with -1 if not found or the object's iterator in the map and it's index in the vector
 	 */
 	iter searchPraia(Praia* p);
 
@@ -88,11 +81,15 @@ public:
 	 * @brief Search object with name n in vector "praias"
 	 * @param n Object's name to search for
 	 * @param c Object's region to search for
-	 * @return Return -1 if not found or the object's index if found
+	 * @return Return a pair with -1 if not found or the object's iterator in the map and it's index in the vector
 	 */
 	iter searchPraia(std::string n, std::string c);
 	
-	//TODO add description
+	/*
+	 * @brief Search praia from user's input and returns a pointer to it
+	 * @param i User's input (when choosing from a list of objects Praia)
+	 * @return Pointer to an object Praia
+	 */
 	Praia* searchPraia(int i);
 
 	/**
@@ -102,14 +99,22 @@ public:
 	 */
 	bool existPraia(Praia* p);
 
-	//TODO add description
+	/**
+	 * @brief Check if object p exists in database
+	 * @param n Object's name
+	 * @param c Object's region
+	 * @return Return true if it exists or false if it doesn't
+	 */
 	bool existPraia(std::string n, std::string c);
 
-	//TODO add description
+	/*
+	 * @brief Return size of map praias
+	 * @return Size of map praias
+	 */
 	unsigned int getSize();
 
 	/**
-	 * @brief Orders vector "praias" by name
+	 * @brief Orders the vector inside the map "praias" by name
 	 */
 	void sortPraiasNome();
 
@@ -144,7 +149,19 @@ public:
 	std::map<double,Praia*> orderRange(std::vector<Praia *> ps, std::vector<double> ranges);
 };
 
+/*
+ * @brief Compares two strings
+ * @param strFirst First string
+ * @param strSecond Second string
+ * @return True if equal, false if not
+ */
 bool compararCaseInsensitive(std::string strFirst, std::string strSecond);
+
+/*
+ * @brief Turns all characters in string to lower case
+ * @param s String to change
+ * @return New string
+ */
 std::string decapitalize(std::string s);
 
 #endif /* DATABASE_H_ */
