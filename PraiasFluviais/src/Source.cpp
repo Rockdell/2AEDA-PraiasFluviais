@@ -19,13 +19,13 @@ int main() {
 
 	std::string filename_praias;
 
-	std::cout << " Hello! Ficheiro de praias: ";
+	std::cout << " Ficheiro de praias: ";
 	getline(std::cin, filename_praias);
 
 	//Catch exception while loading
 	get_filename:
 	try {
-		db.load("C:\\Users\\Miguel Teixeira\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt");
+		db.load(filename_praias);
 	}
 	catch(Exception& e) {
 		std::cout << " Erro com o ficheiro: " << e.getMessage() << std::endl;
@@ -48,7 +48,7 @@ int main() {
 
 	//Catch exceptions while saving
 	try {
-		db.save("C:\\Users\\Miguel Teixeira\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt");
+		db.save(filename_praias);
 	}
 	catch (Exception& e) {
 		e.display();
