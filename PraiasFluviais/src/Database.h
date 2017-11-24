@@ -144,4 +144,7 @@ public:
 	std::map<double,Praia*> orderRange(std::vector<Praia *> ps, std::vector<double> ranges);
 };
 
+bool compararCaseInsensitive(std::string strFirst, std::string strSecond);
+std::string decapitalize(std::string s);
+
 #endif /* DATABASE_H_ */

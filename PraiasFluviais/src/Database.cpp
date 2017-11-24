@@ -417,3 +417,23 @@ std::map<double,Praia*> Database::orderRange(std::vector<Praia *> ps, std::vecto
 
 	return ord;
 }
+
+bool compararCaseInsensitive(std::string strFirst, std::string strSecond)
+{
+	// Convert both strings to upper case by transfrom() before compare.
+	std::transform(strFirst.begin(), strFirst.end(), strFirst.begin(), toupper);
+	std::transform(strSecond.begin(), strSecond.end(), strSecond.begin(), toupper);
+
+	if (strFirst == strSecond)
+		return true;
+	else
+		return false;
+}
+
+std::string decapitalize(std::string s) {
+
+	std::string str = s;
+	std::transform(str.begin(), str.end(), str.begin(), tolower);
+
+	return str;
+}
