@@ -17,9 +17,17 @@ public:
 		message = m;
 	}
 
+	/**
+	 * @brief Gets the message data member
+	 * @return Returns string with the message data member
+	 */
 	std::string getMessage() const {
 		return message;
 	}
+
+	/**
+	 * @brief Virtual function for the other classes
+	 */
 	virtual void display() const = 0;
 
 };
@@ -35,6 +43,9 @@ public:
 	FileNotFound(std::string f) : Exception(f) {
 	}
 
+	/**
+	 * @brief Displays the message data member
+	 */
 	void display() const {
 		std::string msg = " Ficheiro não encontrado: " + getMessage();
 		std::cout << msg << std::endl;
@@ -52,6 +63,9 @@ public:
 	PraiaNotFound(std::string n) : Exception(n) {
 	}
 
+	/**
+	 * @brief Displays the message data member
+	 */
 	void display() const {
 		std::string msg = " Praia não encontrada: " + getMessage();
 		std::cout << msg << std::endl;
@@ -69,6 +83,9 @@ public:
 	ServicoNotFound(std::string n) : Exception(n) {
 	}
 
+	/**
+	 * @brief Displays the message data member
+	 */
 	void display() const {
 		std::string msg = " Serviço não encontrado: " + getMessage();
 		std::cout << msg << std::endl;
@@ -86,6 +103,9 @@ public:
 	ReadingLineError(std::string l) : Exception(l) {
 	}
 
+	/**
+	 * @brief Displays the message data member
+	 */
 	void display() const {
 		std::string msg = " Erro ao ler a linha: " + getMessage();
 		std::cout << msg << std::endl;
@@ -103,6 +123,9 @@ public:
 	PraiaAlreadyExists(std::string n) : Exception(n) {
 	}
 
+	/**
+	 * @brief Displays the message data member
+	 */
 	void display() const {
 		std::string msg = " Praia já existe: " + getMessage();
 		std::cout << msg << std::endl;

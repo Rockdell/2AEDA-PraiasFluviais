@@ -73,9 +73,14 @@ public:
 	 */
 	void removePraia(int i);
 
-	//TODO add description
+	/**
+	 * @brief Display's all the Praia objects in a reduced way
+	 */
 	void showPraias();
 
+	/**
+	 * @brief Display's a specific Praia object in a reduced way
+	 */
 	void showPraia(int i);
 
 	/**
