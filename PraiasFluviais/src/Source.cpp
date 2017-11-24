@@ -85,7 +85,7 @@ int main() {
 
 	std::string filename_praias;
 
-	std::cout << " Ficheiro de praias: ";
+	std::cout << " Hello! Ficheiro de praias: ";
 	getline(std::cin, filename_praias);
 
 	//Catch exception while loading
