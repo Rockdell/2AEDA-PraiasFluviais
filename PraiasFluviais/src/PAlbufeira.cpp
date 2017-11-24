@@ -43,7 +43,7 @@ std::string PAlbufeira::savePraia() {
 	else
 		praia += "0;";
 
-	praia += std::to_string(getGps().getLat()) + "," + std::to_string(getGps().getLon()) + ";";
+	praia += std::to_string(getGps().getLat()) + " " + std::to_string(getGps().getLon()) + ";";
 
 	praia += std::to_string(area);
 
@@ -55,13 +55,17 @@ std::string PAlbufeira::fullInfoPraia() {
 
 	result += " Nome: " + getNome() + "\n" + " Concelho: " + getConcelho() + "\n" + " Serviços: ";
 
-	for(size_t i = 0; i < getServicos().size(); i++) {
-		if(i == getServicos().size() - 1)
-			result += getServicos()[i] + "\n";
-		else {
-			result += getServicos()[i] + ", ";
+	if (!getServicos().empty()) {
+		for (size_t i = 0; i < getServicos().size(); i++) {
+			if (i == getServicos().size() - 1)
+				result += getServicos()[i] + "\n";
+			else {
+				result += getServicos()[i] + ", ";
+			}
 		}
 	}
+	else
+		result += "sem servicos\n";
 
 	std::string bandeira = getBandeira() ? "sim" : "não";
 

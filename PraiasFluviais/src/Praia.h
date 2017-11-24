@@ -41,8 +41,8 @@ public:
 
 	std::string reducedInfoPraia();
 
-	virtual std::string savePraia() = 0;
-	virtual std::string fullInfoPraia() = 0;
+	virtual std::string savePraia() { return "";}
+	virtual std::string fullInfoPraia() {return "";}
 
 };
 

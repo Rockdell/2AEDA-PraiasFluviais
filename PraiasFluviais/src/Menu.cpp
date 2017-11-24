@@ -279,11 +279,8 @@ void AddMenu() {
 			Gps g = Gps(lat, lon);
 			Praia* p = new PRio(i_nome, i_concelho, servicos, bandeira, g, largura, caudal, profundidade);
 
-			//TODO might remove (already implemented above)
-			if(db.existPraia(p))
-				throw PraiaAlreadyExists(i_nome);
-			else
-				db.addPraia(p);
+			//Add praia
+			db.addPraia(p);
 
 			std::cout << " Praia adicionada com sucesso. " << std::endl;
 
@@ -457,10 +454,8 @@ void AddMenu() {
 			Gps g = Gps(lat, lon);
 			Praia* p = new PAlbufeira(i_nome, i_concelho, servicos, bandeira, g, area);
 
-			if(db.existPraia(p))
-				throw PraiaAlreadyExists(i_nome);
-			else
-				db.addPraia(p);
+			//Add praia
+			db.addPraia(p);
 
 			std::cout << " Praia adicionada com sucesso. " << std::endl;
 
@@ -493,9 +488,6 @@ void RemoveMenu() {
 			std::string i_index;
 			int index;
 
-			//Order vector before displaying
-			db.sortPraiasNome();
-
 			//Display praias
 			db.showPraias();
 
@@ -507,13 +499,13 @@ void RemoveMenu() {
 			else
 				std::cout << "Número da praia que pretende remover: ";
 
-			redo_nome:
+			redo_index:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 				case 0:
 					std::cerr << " # Input inválido. Introduza novamente: ";
-					goto redo_nome;
+					goto redo_index;
 				case 1:
 					break;
 				case 2:
@@ -525,16 +517,17 @@ void RemoveMenu() {
 			std::istringstream iss_index(i_index);
 			iss_index >> index;
 
-			int i = index - 1; //db.searchPraia(i_nome);
+			unsigned int i = index - 1;
 
-			if(i >= 0 && index <= db.getSize()) {
-				db.removePraia(i);
+			if(i >= 0 && i <= db.getSize()) {
+				Praia* p = db.searchPraia(i);
+				db.removePraia(p);
 				std::cout << " Praia removida com sucesso. ";
 				_getch();
 			}
 			else {
 				std::cerr << " # Não existe uma praia com esse nome. Introduza novamente: ";
-				goto redo_nome;
+				goto redo_index;
 			}
 
 			break;
@@ -546,11 +539,15 @@ void RemoveMenu() {
 	}
 }
 
-//TODO do it
+//TODO add class derivadas
 void EditMenu() {
 
 	std::cout << " - Edit Menu - " << std::endl << std::endl;
-	std::cout << " [1] Editar Praia " << std::endl;
+	std::cout << " [1] Editar o nome " << std::endl;
+	std::cout << " [2] Editar o concelho " << std::endl;
+	std::cout << " [3] Editar os servicos " << std::endl;
+	std::cout << " [4] Editar a bandeira Azul " << std::endl;
+	std::cout << " [5] Editar as coordenadas " << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
 	again:
@@ -562,11 +559,24 @@ void EditMenu() {
 			break;
 		}
 		case '1': {
+
+			break;
+		}
+		case '2': {
+
+			break;
+		}
+		case '3': {
+			break;
+		}
+		case '4': {
+			break;
+		}
+		case '5': {
 			break;
 		}
 		default: {
 			std::cout << " Escolha uma das opções! " << std::endl;
-			std::cin.ignore();
 			goto again;
 		}
 	}
@@ -575,12 +585,10 @@ void EditMenu() {
 void WatchMenu() {
 
 	std::cout << " - Watch Menu - " << std::endl << std::endl;
-	std::cout << " [1] Ver praias por nome" << std::endl;
-	std::cout << " [2] Ver praias por concelho" << std::endl;
-	std::cout << " [3] Pesquisar praias pelo nome" << std::endl; //TODO add nopraia exception
-	std::cout << " [4] Pesquisar praias por concelho" << std::endl;
+	std::cout << " [1] Ver praias por nome (ordenadas por concelho)" << std::endl;
+	std::cout << " [2] Pesquisar praias pelo nome e concelho" << std::endl;
 	std::cout << " [3] Pesquisar praias por coordenadas GPS" << std::endl;
-	std::cout << " [4] Pesquisar praias nas proximidades de outras praias" << std::endl;
+	std::cout << " [4] Pesquisar praias nas proximidades de uma praia existente" << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
 	again:
@@ -596,9 +604,6 @@ void WatchMenu() {
 			std::string i_index;
 			int index;
 
-			//Order vector before displaying
-			db.sortPraiasNome();
-
 			//Display praias
 			db.showPraias();
 
@@ -610,13 +615,13 @@ void WatchMenu() {
 			else
 				std::cout << " Número da praia que pretende ver mais informação: ";
 
-			redo_nome:
+			redo_index1:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 				case 0:
 					std::cerr << " # Input inválido. Introduza novamente: ";
-					goto redo_nome;
+					goto redo_index1;
 				case 1:
 					break;
 				case 2:
@@ -628,19 +633,272 @@ void WatchMenu() {
 			std::istringstream iss_index(i_index);
 			iss_index >> index;
 
-			int i = index - 1; //db.searchPraia(i_nome);
+			unsigned int i = index - 1;
 
-			if(i >= 0 && i <= db.getSize()) {
-				db.showPraia(i);
+			if(i >= 0 && i < db.getSize()) {
+				Praia* p = db.searchPraia(i);
+				std::cout << p->fullInfoPraia() << std::endl;
 				_getch();
 				return;
 			}
 			else {
 				std::cerr << " # Não existe uma praia com esse nome. Introduza novamente: ";
-				goto redo_nome;
+				goto redo_index1;
 			}
 
 			break;
+		}
+		case '2': {
+
+			std::string query_nome, query_concelho;
+
+			if (db.getSize() == 0) {
+				std::cerr << " Não existem praias para pesquisar. ";
+				_getch();
+				return;
+			}
+			else
+				std::cout << " Qual o nome da praia que pretende pesquisar: ";
+
+			redo_nome:
+			std::getline(std::cin, query_nome);
+
+			switch (inputHandling(query_nome, 's')) {
+			case 0:
+				std::cerr << " # Input inválido. Introduza novamente: ";
+				goto redo_nome;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operação cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::cout << " Qual o nome do concelho da praia que pretende pesquisar: ";
+
+			redo_concelho:
+			std::getline(std::cin, query_concelho);
+
+			switch (inputHandling(query_concelho, 's')) {
+			case 0:
+				std::cerr << " # Input inválido. Introduza novamente: ";
+				goto redo_concelho;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operação cancelada. ";
+				_getch();
+				return;
+			}
+
+			iter result = db.searchPraia(query_nome, query_concelho);
+
+			if (result.second == -1)
+				throw PraiaNotFound(query_nome);
+			else {
+				PRio* p1 = dynamic_cast<PRio*>(result.first->second[result.second]);
+				PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(result.first->second[result.second]);
+
+				if (p1 == nullptr)
+					std::cout << p2->fullInfoPraia() << std::endl;
+				else
+					std::cout << p1->fullInfoPraia() << std::endl;
+
+				_getch();
+			}
+
+			break;
+		}
+		case '3': {
+			
+			std::string i_lat, i_lon, i_radius;
+			double lat, lon, radius;
+
+			if (db.getSize() <= 0) {
+				std::cerr << " Não existem praias para pesquisar. ";
+				_getch();
+				return;
+			}
+
+			//Latitude
+			std::cout << " Latitude: ";
+
+			redo_latitude:
+			std::getline(std::cin, i_lat);
+
+			switch (inputHandling(i_lat, 'd')) {
+			case 0:
+				std::cerr << " # Input inválido. Introduza novamente: ";
+				goto redo_latitude;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operação cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_lat(i_lat);
+			iss_lat >> lat;
+
+			//Longitude
+			std::cout << " Longitude: ";
+
+			redo_longitude:
+			std::getline(std::cin, i_lon);
+
+			switch (inputHandling(i_lon, 'd')) {
+			case 0:
+				std::cerr << " # Input inválido. Introduza novamente: ";
+				goto redo_longitude;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operação cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_lon(i_lon);
+			iss_lon >> lon;
+
+			//Radius
+			std::cout << " Radius of search: ";
+
+			redo_radius1:
+			std::getline(std::cin, i_radius);
+
+			switch (inputHandling(i_radius, 'd')) {
+			case 0:
+				std::cerr << " # Input inválido. Introduza novamente: ";
+				goto redo_radius1;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operação cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_radius(i_radius);
+			iss_radius >> radius;
+
+			Gps coord = Gps(lat, lon);
+
+			auto result = db.withInRangeGps(coord, radius);
+
+			//Formatting
+			std::cout << std::endl;
+
+			for (auto it = result.begin(); it != result.end(); it++) {
+
+				if (it == result.begin() && it->first == -1) {
+					std::cout << " Nao existem praias num raio de " << std::to_string(radius) << " das coordenadas.\n";
+					std::cout << " Todas as praias e respetivas distancias as coordenadas: \n";
+					continue;
+				}
+
+				Praia* p = it->second;
+
+				std::cout << " " << p->getNome() << " (" << p->getConcelho() << ") : " << it->first << "\n";
+			}
+
+			_getch();
+		
+			break;
+		}
+		case '4': {
+
+			std::string i_index, i_radius;
+			int index;
+			double radius;
+
+			//Display praias
+			db.showPraias();
+
+			if (db.getSize() <= 1) {
+				std::cerr << " Não existem praias para pesquisar. ";
+				_getch();
+				return;
+			}
+			else
+				std::cout << " Número da praia a partir da qual pretende pesquisar: ";
+
+		redo_index2:
+			std::getline(std::cin, i_index);
+
+			switch (inputHandling(i_index, 'i')) {
+			case 0:
+				std::cerr << " # Input inválido. Introduza novamente: ";
+				goto redo_index2;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operação cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_index(i_index);
+			iss_index >> index;
+
+			unsigned int i = index - 1;
+
+			if (i >= 0 && i <= db.getSize()) {
+				//All good
+			}
+			else {
+				std::cerr << " # Não existe uma praia com esse nome. Introduza novamente: ";
+				goto redo_index2;
+			}
+
+			//Praia where we will search from
+			Praia* p = db.searchPraia(i);
+
+			//Radius
+			std::cout << " Radius of search: ";
+
+			redo_radius2:
+			std::getline(std::cin, i_radius);
+
+			switch (inputHandling(i_radius, 'd')) {
+			case 0:
+				std::cerr << " # Input inválido. Introduza novamente: ";
+				goto redo_radius2;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operação cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_radius(i_radius);
+			iss_radius >> radius;
+
+			auto result = db.withInRangePraia(p, radius);
+
+			//Formatting
+			std::cout << std::endl;
+
+			for (auto it = result.begin(); it != result.end(); it++) {
+
+				if (it == result.begin() && it->first == -1) {
+					std::cout << " Nao existem praias num raio de " << std::to_string(radius) << " das coordenadas.\n";
+					std::cout << " Todas as praias e respetivas distancias as coordenadas: \n";
+					continue;
+				}
+
+				Praia* p = it->second;
+
+				std::cout << " " << p->getNome() << " (" << p->getConcelho() << ") : " << it->first << "\n";
+			}
+
+			_getch();
+
+			break;
+
 		}
 		default: {
 			std::cout << " Escolha uma das opções! " << std::endl;
@@ -664,6 +922,7 @@ int inputHandling(std::string input, char property) {
 		*/
 
 	//TODO lat de -90 a 90 e lon de -180 a 180, '-' e ' ' para servicos
+	//Comparar case insensitive
 
 		if (std::cin.eof() || input.length() == 0)
 		{

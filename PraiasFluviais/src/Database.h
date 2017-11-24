@@ -7,21 +7,28 @@
 #include <iostream>
 #include <algorithm>
 #include <map>
+#include <utility>
 #include "Praia.h"
 #include "PAlbufeira.h"
 #include "PRio.h"
 #include "Exceptions.h"
 #include "Gps.h"
+#include <memory>
 
 #ifndef DATABASE_H_
 #define DATABASE_H_
+
+typedef std::string Concelho;
+typedef std::map<Concelho, std::vector<Praia*>>::iterator iter_map;
+typedef std::pair<iter_map, int> iter;
 
 /**
  * @brief Database where we will store all the information about Praias
  */
 class Database {
 
-	std::vector<Praia*> praias;
+	std::map<Concelho, std::vector<Praia*>> praias;
+
 public:
 
 	/**
@@ -38,10 +45,10 @@ public:
 	 * @brief Sets the data-member praias to the given vector
 	 * @param ps Vector with Praia* objects
 	 */
-	void setPraias(std::vector<Praia*> ps)
-	{
-		praias = ps;
-	}
+//	void setPraias(std::map<Concelho,Praia*> ps)
+//	{
+//		praias = ps;
+//	}
 
 	/**
 	 * @brief Populate vector "praias" with objects from file
@@ -67,23 +74,15 @@ public:
 	 */
 	void removePraia(Praia* p);
 
-	/**
-	 * @brief Remove object with index i from vector "praias"
-	 * @param i Index of the object Praia to remove
-	 */
-	void removePraia(int i);
-
 	//TODO add description
 	void showPraias();
-
-	void showPraia(int i);
 
 	/**
 	 * @brief Search object p in vector "praias"
 	 * @param p Object Praia to search for
 	 * @return Return -1 if not found or the object's index if found
 	 */
-	int searchPraia(Praia* p);
+	iter searchPraia(Praia* p);
 
 	/**
 	 * @brief Search object with name n in vector "praias"
@@ -91,7 +90,10 @@ public:
 	 * @param c Object's region to search for
 	 * @return Return -1 if not found or the object's index if found
 	 */
-	int searchPraia(std::string n, std::string c);
+	iter searchPraia(std::string n, std::string c);
+	
+	//TODO add description
+	Praia* searchPraia(int i);
 
 	/**
 	 * @brief Check if object p exists in database
@@ -104,17 +106,12 @@ public:
 	bool existPraia(std::string n, std::string c);
 
 	//TODO add description
-	int getSize() const;
+	unsigned int getSize();
 
 	/**
 	 * @brief Orders vector "praias" by name
 	 */
 	void sortPraiasNome();
-
-	/**
-	 * @brief Orders vector "praias" by region
-	 */
-	void sortPraiasConcelho();
 
 	/**
 	 * @brief Processes line from file
@@ -128,7 +125,7 @@ public:
 	 * @param r radius/range given
 	 * @return Returns a map of ordered of praias ordered by range(as the map key)
 	 */
-	std::map<double,std::unique_ptr<Praia>> withInRangePraia(Praia * p, double r) const;
+	std::map<double,Praia*> withInRangePraia(Praia * p, double r);
 
 	/**
 	 * @brief Gives all praias within given range of a certain Gps location
@@ -136,7 +133,7 @@ public:
 	 * @param r radius/range given
 	 * @return Returns a map of ordered of praias ordered by range(as the map key)
 	 */
-	std::map<double,std::unique_ptr<Praia>> withInRangeGps(Gps g, double r) const;
+	std::map<double,Praia*> withInRangeGps(Gps g, double r);
 
 	/**
 	 * @brief Creates a map with the ranges (as keys) and praias (as key values)
@@ -144,7 +141,7 @@ public:
 	 * @param ranges Vector of doubles representing the ranges
 	 * @return Returns a map of ordered of praias ordered by range(as the map key)
 	 */
-	std::map<double,std::unique_ptr<Praia>> orderRange(std::vector<Praia *> ps, std::vector<double> ranges) const;
+	std::map<double,Praia*> orderRange(std::vector<Praia *> ps, std::vector<double> ranges);
 };
 
 #endif /* DATABASE_H_ */
