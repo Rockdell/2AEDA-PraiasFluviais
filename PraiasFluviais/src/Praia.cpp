@@ -4,13 +4,14 @@
 Praia::Praia() {
 	nome = "";
 	concelho = "";
+	lotacao = 0;
 	bandeiraAzul = false;
 	coord = Gps();
 }
-Praia::Praia(std::string n, std::string c, bool bA, Gps cd) : nome(n), concelho(c), bandeiraAzul(bA), coord(cd) {
+Praia::Praia(std::string n, std::string c, int lot, bool bA, Gps cd) : nome(n), concelho(c), lotacao(lot), bandeiraAzul(bA), coord(cd) {
 }
 
-Praia::Praia(std::string n, std::string c, std::vector<std::string> s, bool bA, Gps cd) : nome(n), concelho(c), servicos(s), bandeiraAzul(bA), coord(cd){
+Praia::Praia(std::string n, std::string c, std::vector<std::string> s, int lot, bool bA, Gps cd) : nome(n), concelho(c), servicos(s), lotacao(lot), bandeiraAzul(bA), coord(cd) {
 }
 
 //Get methods
@@ -22,6 +23,9 @@ std::string Praia::getConcelho() const {
 }
 std::vector<std::string> Praia::getServicos() const {
 	return servicos;
+}
+int Praia::getLotacao() const {
+	return lotacao;
 }
 bool Praia::getBandeira() const {
 	return bandeiraAzul;
@@ -39,6 +43,9 @@ void Praia::setConcelho(std::string c) {
 }
 void Praia::setServicos(std::vector<std::string> s) {
 	servicos = s;
+}
+void Praia::setLotacao(int lot) {
+	lotacao = lot;
 }
 void Praia::setBandeira(bool bA) {
 	bandeiraAzul = bA;

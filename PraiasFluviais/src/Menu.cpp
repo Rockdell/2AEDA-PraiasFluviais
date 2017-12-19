@@ -72,10 +72,11 @@ void AddMenu() {
 		case '1': {
 
 			//Input variables
-			std::string i_nome, i_concelho, i_servico, i_bandeira, i_lat, i_lon, i_largura, i_caudal, i_profundidade;
+			std::string i_nome, i_concelho, i_servico, i_lotacao, i_bandeira, i_lat, i_lon, i_largura, i_caudal, i_profundidade;
 
 			//Object's variables
 			std::vector<std::string> servicos;
+			int lotacao;
 			bool bandeira;
 			double lat, lon, largura, caudal, profundidade;
 
@@ -153,6 +154,27 @@ void AddMenu() {
 			goto redo_servico1;
 
 			endservico1:
+
+			//Lotacao:
+			std::cout << " Lotacao da praia: ";
+
+			redo_lotacao1:
+			std::getline(std::cin, i_lotacao);
+
+			switch (inputHandling(i_lotacao, 'i')) {
+				case 0:
+					std::cerr << " # Input invalido. Introduza novamente: ";
+					goto redo_lotacao1;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			std::istringstream iss_lot(i_lotacao);
+			iss_lot >> lotacao;
 
 			//Bandeira
 			std::cout << " Bandeira (true/false): ";
@@ -281,7 +303,7 @@ void AddMenu() {
 			iss_profundidade >> profundidade;
 
 			Gps g = Gps(lat, lon);
-			Praia* p = new PRio(i_nome, i_concelho, servicos, bandeira, g, largura, caudal, profundidade);
+			Praia* p = new PRio(i_nome, i_concelho, servicos, lotacao, bandeira, g, largura, caudal, profundidade);
 
 			//Add praia
 			db.addPraia(p);
@@ -293,10 +315,11 @@ void AddMenu() {
 		case '2': {
 
 			//Input variables
-			std::string i_nome, i_concelho, i_servico, i_bandeira, i_lat, i_lon, i_area;
+			std::string i_nome, i_concelho, i_servico, i_lotacao, i_bandeira, i_lat, i_lon, i_area;
 
 			//Object's variables
 			std::vector<std::string> servicos;
+			int lotacao;
 			bool bandeira;
 			double lat, lon, area;
 
@@ -374,6 +397,27 @@ void AddMenu() {
 			goto redo_servico2;
 
 			endservico2:
+
+			//Lotacao:
+			std::cout << " Lotacao da praia: ";
+
+			redo_lotacao2:
+			std::getline(std::cin, i_lotacao);
+
+			switch (inputHandling(i_lotacao, 'i')) {
+				case 0:
+					std::cerr << " # Input invalido. Introduza novamente: ";
+					goto redo_lotacao2;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			std::istringstream iss_lot(i_lotacao);
+			iss_lot >> lotacao;
 
 			//Bandeira
 			std::cout << " Bandeira (true/false): ";
@@ -460,7 +504,7 @@ void AddMenu() {
 			iss_area >> area;
 
 			Gps g = Gps(lat, lon);
-			Praia* p = new PAlbufeira(i_nome, i_concelho, servicos, bandeira, g, area);
+			Praia* p = new PAlbufeira(i_nome, i_concelho, servicos, lotacao, bandeira, g, area);
 
 			//Add praia
 			db.addPraia(p);
@@ -480,8 +524,7 @@ void AddMenu() {
 void RemoveMenu() {
 
 	std::cout << " - Remove Menu - " << std::endl << std::endl;
-	std::cout << " [1] Remover Praia - Rio" << std::endl;
-	std::cout << " [2] Remover Praia - Albufeira" << std::endl;
+	std::cout << " [1] Remover Praia" << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
 	again:
@@ -554,12 +597,13 @@ void EditMenu() {
 	std::cout << " [1] Editar nome " << std::endl;
 	std::cout << " [2] Editar concelho " << std::endl;
 	std::cout << " [3] Editar servicos " << std::endl;
-	std::cout << " [4] Editar bandeira azul " << std::endl;
-	std::cout << " [5] Editar coordenadas " << std::endl;
-	std::cout << " [6] Editar area " << std::endl;
-	std::cout << " [7] Editar largura " << std::endl;
-	std::cout << " [8] Editar caudal " << std::endl;
-	std::cout << " [9] Editar profundidade " << std::endl;
+	std::cout << " [4] Editar lotacao " << std::endl;
+	std::cout << " [5] Editar bandeira azul " << std::endl;
+	std::cout << " [6] Editar coordenadas " << std::endl;
+	std::cout << " [7] Editar area " << std::endl;
+	std::cout << " [8] Editar largura " << std::endl;
+	std::cout << " [9] Editar caudal " << std::endl;
+	std::cout << " [A] Editar profundidade " << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
 	again:
@@ -822,6 +866,87 @@ void EditMenu() {
 			break;
 		}
 		case '4': {
+
+			std::string i_index, i_lotacao;
+			int index, lotacao;
+
+			//Display praias
+			db.showPraias();
+
+			if (db.getSize() == 0) {
+				std::cerr << " Nao existem praias para editar. ";
+				_getch();
+				return;
+			}
+			else
+				std::cout << "Numero da praia que pretende editar: ";
+
+			redo_index4:
+			std::getline(std::cin, i_index);
+
+			switch (inputHandling(i_index, 'i')) {
+			case 0:
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_index4;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operacao cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_index(i_index);
+			iss_index >> index;
+
+			unsigned int i = index - 1;
+
+			if (i >= 0 && i <= db.getSize()) {
+				//All good
+			}
+			else {
+				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
+				goto redo_index4;
+			}
+
+			std::cout << " Nova lotacao: ";
+
+			redo_lotacao:
+			std::getline(std::cin, i_lotacao);
+
+			switch (inputHandling(i_lotacao, 'i')) {
+			case 0:
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_lotacao;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operacao cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_lotacao(i_lotacao);
+			iss_lotacao >> lotacao;
+
+			Praia* p = db.searchPraia(i);
+
+			PRio* p1 = dynamic_cast<PRio*>(p);
+			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
+
+			//Verificar class
+			if (p1 == nullptr)
+				p2->setLotacao(lotacao);
+			else
+				p1->setLotacao(lotacao);
+
+			std::cout << " Lotacao editada com sucesso. \n";
+
+			_getch();
+
+			break;
+		}
+		case '5': {
 			std::string i_index, i_bandeira;
 			int index;
 			bool bandeira;
@@ -837,13 +962,13 @@ void EditMenu() {
 			else
 				std::cout << "Numero da praia que pretende editar: ";
 
-			redo_index4:
+			redo_index5:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 				case 0:
 					std::cerr << " # Input invalido. Introduza novamente: ";
-					goto redo_index4;
+					goto redo_index5;
 				case 1:
 					break;
 				case 2:
@@ -862,7 +987,7 @@ void EditMenu() {
 			}
 			else {
 				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
-				goto redo_index4;
+				goto redo_index5;
 			}
 
 			std::cout << " Nova bandeira (true/false): ";
@@ -902,7 +1027,7 @@ void EditMenu() {
 
 			break;
 		}
-		case '5': {
+		case '6': {
 
 			std::string i_index, i_lat, i_lon;
 			int index;
@@ -919,13 +1044,13 @@ void EditMenu() {
 			else
 				std::cout << "Numero da praia que pretende editar: ";
 
-			redo_index5:
+			redo_index6:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 				case 0:
 					std::cerr << " # Input invalido. Introduza novamente: ";
-					goto redo_index5;
+					goto redo_index6;
 				case 1:
 					break;
 				case 2:
@@ -944,7 +1069,7 @@ void EditMenu() {
 			}
 			else {
 				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
-				goto redo_index5;
+				goto redo_index6;
 			}
 
 			std::cout << " Nova latitude: ";
@@ -1006,94 +1131,11 @@ void EditMenu() {
 
 			break;
 		}
-		case '6': {
+		case '7': {
 
 			std::string i_index, i_area;
 			int index;
 			double area;
-
-			//Display praias
-			db.showPraias();
-
-			if (db.getSize() == 0) {
-				std::cerr << " Nao existem praias para editar. ";
-				_getch();
-				return;
-			}
-			else
-				std::cout << "Numero da praia que pretende editar: ";
-
-			redo_index6:
-			std::getline(std::cin, i_index);
-
-			switch (inputHandling(i_index, 'i')) {
-			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
-				goto redo_index6;
-			case 1:
-				break;
-			case 2:
-				std::cerr << " # Operacao cancelada. ";
-				_getch();
-				return;
-			}
-
-			std::istringstream iss_index(i_index);
-			iss_index >> index;
-
-			unsigned int i = index - 1;
-
-			if (i >= 0 && i <= db.getSize()) {
-				//All good
-			}
-			else {
-				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
-				goto redo_index6;
-			}
-
-			std::cout << " Nova area: ";
-
-			redo_area:
-			std::getline(std::cin, i_area);
-
-			switch (inputHandling(i_area, 'd')) {
-			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
-				goto redo_area;
-			case 1:
-				break;
-			case 2:
-				std::cerr << " # Operacao cancelada. ";
-				_getch();
-				return;
-			}
-
-			std::istringstream iss_area(i_area);
-			iss_area >> area;
-
-			Praia* p = db.searchPraia(i);
-
-			PRio* p1 = dynamic_cast<PRio*>(p);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
-
-			//Verificar class
-			if (p1 == nullptr) {
-				p2->setArea(area);
-				std::cout << " Area editada com sucesso. \n";
-			}
-			else
-				std::cout << " A praia escolhida nao e uma albufeira. \n";
-
-			_getch();
-
-			break;
-
-		}
-		case '7': {
-
-			std::string i_index, i_largura;
-			int index;
-			double largura;
 
 			//Display praias
 			db.showPraias();
@@ -1134,15 +1176,15 @@ void EditMenu() {
 				goto redo_index7;
 			}
 
-			std::cout << " Nova largura: ";
+			std::cout << " Nova area: ";
 
-			redo_largura:
-			std::getline(std::cin, i_largura);
+			redo_area:
+			std::getline(std::cin, i_area);
 
-			switch (inputHandling(i_largura, 'd')) {
+			switch (inputHandling(i_area, 'd')) {
 			case 0:
 				std::cerr << " # Input invalido. Introduza novamente: ";
-				goto redo_largura;
+				goto redo_area;
 			case 1:
 				break;
 			case 2:
@@ -1151,8 +1193,8 @@ void EditMenu() {
 				return;
 			}
 
-			std::istringstream iss_largura(i_largura);
-			iss_largura >> largura;
+			std::istringstream iss_area(i_area);
+			iss_area >> area;
 
 			Praia* p = db.searchPraia(i);
 
@@ -1160,12 +1202,12 @@ void EditMenu() {
 			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
 
 			//Verificar class
-			if (p1 == nullptr)
-				std::cout << " A praia escolhida nao e um rio. \n";
-			else {
-				p1->setLargura(largura);
-				std::cout << " Largura editada com sucesso. \n";
+			if (p1 == nullptr) {
+				p2->setArea(area);
+				std::cout << " Area editada com sucesso. \n";
 			}
+			else
+				std::cout << " A praia escolhida nao e uma albufeira. \n";
 
 			_getch();
 
@@ -1174,9 +1216,9 @@ void EditMenu() {
 		}
 		case '8': {
 
-			std::string i_index, i_caudal;
+			std::string i_index, i_largura;
 			int index;
-			double caudal;
+			double largura;
 
 			//Display praias
 			db.showPraias();
@@ -1219,13 +1261,13 @@ void EditMenu() {
 
 			std::cout << " Nova largura: ";
 
-			redo_caudal:
-			std::getline(std::cin, i_caudal);
+			redo_largura:
+			std::getline(std::cin, i_largura);
 
-			switch (inputHandling(i_caudal, 'd')) {
+			switch (inputHandling(i_largura, 'd')) {
 			case 0:
 				std::cerr << " # Input invalido. Introduza novamente: ";
-				goto redo_caudal;
+				goto redo_largura;
 			case 1:
 				break;
 			case 2:
@@ -1234,8 +1276,8 @@ void EditMenu() {
 				return;
 			}
 
-			std::istringstream iss_caudal(i_caudal);
-			iss_caudal >> caudal;
+			std::istringstream iss_largura(i_largura);
+			iss_largura >> largura;
 
 			Praia* p = db.searchPraia(i);
 
@@ -1246,8 +1288,8 @@ void EditMenu() {
 			if (p1 == nullptr)
 				std::cout << " A praia escolhida nao e um rio. \n";
 			else {
-				p1->setCaudal(caudal);
-				std::cout << " Caudal editada com sucesso. \n";
+				p1->setLargura(largura);
+				std::cout << " Largura editada com sucesso. \n";
 			}
 
 			_getch();
@@ -1257,9 +1299,9 @@ void EditMenu() {
 		}
 		case '9': {
 
-			std::string i_index, i_profundidade;
+			std::string i_index, i_caudal;
 			int index;
-			double profundidade;
+			double caudal;
 
 			//Display praias
 			db.showPraias();
@@ -1298,6 +1340,89 @@ void EditMenu() {
 			else {
 				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
 				goto redo_index9;
+			}
+
+			std::cout << " Nova largura: ";
+
+			redo_caudal:
+			std::getline(std::cin, i_caudal);
+
+			switch (inputHandling(i_caudal, 'd')) {
+			case 0:
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_caudal;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operacao cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_caudal(i_caudal);
+			iss_caudal >> caudal;
+
+			Praia* p = db.searchPraia(i);
+
+			PRio* p1 = dynamic_cast<PRio*>(p);
+			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
+
+			//Verificar class
+			if (p1 == nullptr)
+				std::cout << " A praia escolhida nao e um rio. \n";
+			else {
+				p1->setCaudal(caudal);
+				std::cout << " Caudal editada com sucesso. \n";
+			}
+
+			_getch();
+
+			break;
+
+		}
+		case 'A': {
+
+			std::string i_index, i_profundidade;
+			int index;
+			double profundidade;
+
+			//Display praias
+			db.showPraias();
+
+			if (db.getSize() == 0) {
+				std::cerr << " Nao existem praias para editar. ";
+				_getch();
+				return;
+			}
+			else
+				std::cout << "Numero da praia que pretende editar: ";
+
+			redo_indexA:
+			std::getline(std::cin, i_index);
+
+			switch (inputHandling(i_index, 'i')) {
+			case 0:
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_indexA;
+			case 1:
+				break;
+			case 2:
+				std::cerr << " # Operacao cancelada. ";
+				_getch();
+				return;
+			}
+
+			std::istringstream iss_index(i_index);
+			iss_index >> index;
+
+			unsigned int i = index - 1;
+
+			if (i >= 0 && i <= db.getSize()) {
+				//All good
+			}
+			else {
+				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
+				goto redo_indexA;
 			}
 
 			std::cout << " Nova profundidade: ";

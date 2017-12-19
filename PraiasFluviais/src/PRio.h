@@ -7,7 +7,7 @@ class PRio : public Praia {
 	double largura, caudal, profundidade;
 public:
 	PRio();
-	PRio(std::string n, std::string c, std::vector<std::string> s, bool bA, Gps cd, double l, double cl, double p);
+	PRio(std::string n, std::string c, std::vector<std::string> s, int lot, bool bA, Gps cd, double l, double cl, double p);
 	~PRio();
 
 	double getLargura() const;

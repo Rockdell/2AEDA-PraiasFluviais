@@ -9,18 +9,18 @@ Database::~Database() {
 
 void Database::load(std::string filename) {
 	std::ifstream input(filename);
-std::string j;
+	std::string j;
 
-if (!input.is_open())
-throw FileNotFound(filename);
+	if (!input.is_open())
+		throw FileNotFound(filename);
 
-std::string line;
+	std::string line;
 
-while (getline(input, line)) {
-	processLine(line);
-}
+	while (getline(input, line)) {
+		processLine(line);
+	}
 
-input.close();
+	input.close();
 }
 
 void Database::save(std::string filename) {
@@ -241,19 +241,27 @@ void Database::processLine(std::string l) {
 		}
 	}
 
+	//Lotacao
+	int lotacao;
+	std::string tmp2 = properties[4];
+	std::istringstream ss3(tmp2);
+	std::string s_lotacao;
+	ss3 >> s_lotacao;
+	lotacao = std::stoi(s_lotacao);
+
 	//Bandeira
 	bool bandeira;
-	std::string tmp2 = properties[4];
+	std::string tmp3 = properties[5];
 
-	if(tmp2 == "1")
+	if(tmp3 == "1")
 		bandeira = true;
 	else
 			bandeira = false;
 
 	//Gps
 	double lat, lon;
-	std::string tmp3 = properties[5];
-	std::istringstream ss3(tmp3);
+	std::string tmp4 = properties[6];
+	std::istringstream ss4(tmp4);
 	std::string s_lat, s_lon;
 	ss3 >> s_lat >> s_lon;
 	lat = std::stod(s_lat);
@@ -265,29 +273,29 @@ void Database::processLine(std::string l) {
 
 		//Largura
 		double largura;
-		std::string tmp4 = properties[6];
-		std::istringstream ss4(tmp4);
+		std::string tmp5 = properties[7];
+		std::istringstream ss5(tmp5);
 		std::string s_largura;
-		ss4 >> s_largura;
+		ss5 >> s_largura;
 		largura = std::stod(s_largura);
 
 		//Caudal
 		double caudal;
-		std::string tmp5 = properties[7];
-		std::istringstream ss5(tmp5);
+		std::string tmp6 = properties[8];
+		std::istringstream ss6(tmp6);
 		std::string s_caudal;
-		ss5 >> s_caudal;
+		ss6 >> s_caudal;
 		caudal = std::stod(s_caudal);
 
 		//Profundidade
 		double profundidade;
-		std::string tmp6 = properties[8];
-		std::istringstream ss6(tmp6);
+		std::string tmp7 = properties[9];
+		std::istringstream ss7(tmp7);
 		std::string s_profundidade;
-		ss6 >> s_profundidade;
+		ss7 >> s_profundidade;
 		profundidade = std::stod(s_profundidade);
 
-		PRio* p = new PRio(nome, concelho, servicos, bandeira, gps, largura, caudal, profundidade);
+		PRio* p = new PRio(nome, concelho, servicos, lotacao, bandeira, gps, largura, caudal, profundidade);
 
 		addPraia(p);
 	}
@@ -295,13 +303,13 @@ void Database::processLine(std::string l) {
 
 		//Area
 		double area;
-		std::string tmp4 = properties[6];
-		std::istringstream ss4(tmp4);
+		std::string tmp5 = properties[7];
+		std::istringstream ss5(tmp5);
 		std::string s_area;
-		ss4 >> s_area;
+		ss5 >> s_area;
 		area = std::stod(s_area);
 
-		PAlbufeira* p = new PAlbufeira(nome, concelho, servicos, bandeira, gps, area);
+		PAlbufeira* p = new PAlbufeira(nome, concelho, servicos, lotacao, bandeira, gps, area);
 
 		addPraia(p);
 	}

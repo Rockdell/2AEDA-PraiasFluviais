@@ -6,7 +6,7 @@ PRio::PRio() : Praia() {
 	caudal = 0;
 	profundidade = 0;
 }
-PRio::PRio(std::string n, std::string c, std::vector<std::string> s, bool bA, Gps cd, double l, double cl, double p) : Praia(n,c,s,bA,cd) {
+PRio::PRio(std::string n, std::string c, std::vector<std::string> s, int lot, bool bA, Gps cd, double l, double cl, double p) : Praia(n,c,s,lot,bA,cd) {
 	largura = l;
 	caudal = cl;
 	profundidade = p;
@@ -40,7 +40,7 @@ std::string PRio::savePraia() {
 
 	std::string praia = "R;";
 
-	praia += getNome() + ";" + getConcelho() +";";
+	praia += getNome() + ";" + getConcelho() + ";";
 
 	if(getServicos().empty())
 		praia += "null_servicos;";
@@ -53,6 +53,8 @@ std::string PRio::savePraia() {
 				praia += getServicos()[i] + ",";
 		}
 	}
+
+	praia += getLotacao() + ";";
 
 	if(getBandeira())
 		praia += "1;";
@@ -67,19 +69,26 @@ std::string PRio::savePraia() {
 
 }
 
-//TODO not done yet
 std::string PRio::fullInfoPraia() {
 	std::string result = "\n";
 
 	result += " Nome: " + getNome() + "\n" + " Concelho: " + getConcelho() + "\n" + " Serviços: ";
 
-	for(size_t i = 0; i < getServicos().size(); i++) {
-		if(i == getServicos().size() - 1)
-			result += getServicos()[i] + "\n";
-		else {
-			result += getServicos()[i] + ", ";
+	if (!getServicos().empty()) {
+		for (size_t i = 0; i < getServicos().size(); i++) {
+			if (i == getServicos().size() - 1)
+				result += getServicos()[i];
+			else {
+				result += getServicos()[i] + ", ";
+			}
 		}
 	}
+	else
+		result += "sem servicos";
+
+	result += "\n";
+
+	result += " Lotacao: " + std::to_string(getLotacao()) + "\n";
 
 	std::string bandeira = getBandeira() ? "sim" : "não";
 

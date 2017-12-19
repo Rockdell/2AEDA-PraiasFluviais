@@ -11,24 +11,27 @@ class Praia {
 	std::string nome;
 	std::string concelho;
 	std::vector<std::string> servicos;
+	int lotacao;
 	bool bandeiraAzul;
 	Gps coord;
 public:
 	Praia();
-	Praia(std::string n, std::string c, bool bA, Gps cd);
-	Praia(std::string n, std::string c, std::vector<std::string> s, bool bA, Gps cd);
+	Praia(std::string n, std::string c, int lot, bool bA, Gps cd);
+	Praia(std::string n, std::string c, std::vector<std::string> s, int lot, bool bA, Gps cd);
 	//Praia(std::string n, std::string c, bool bA);
 	virtual ~Praia() {};
 
 	std::string getNome() const;
 	std::string getConcelho() const;
 	std::vector<std::string> getServicos() const;
+	int getLotacao() const;
 	bool getBandeira() const;
 	Gps getGps() const;
 
 	void setNome(std::string n);
 	void setConcelho(std::string c);
 	void setServicos(std::vector<std::string> s);
+	void setLotacao(int lot);
 	void setBandeira(bool bA);
 	void setGps(Gps cd);
 

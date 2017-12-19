@@ -5,7 +5,7 @@
 PAlbufeira::PAlbufeira() {
 	area = 0;
 }
-PAlbufeira::PAlbufeira(std::string n, std::string c, std::vector<std::string> s, bool bA,  Gps cd, double a) : Praia(n,c,s,bA,cd) {
+PAlbufeira::PAlbufeira(std::string n, std::string c, std::vector<std::string> s, int lot, bool bA,  Gps cd, double a) : Praia(n,c,s,lot,bA,cd) {
 	area = a;
 }
 PAlbufeira::~PAlbufeira(){
@@ -25,7 +25,7 @@ std::string PAlbufeira::savePraia() {
 
 	std::string praia = "A;";
 
-	praia += getNome() + ";" + getConcelho() +";";
+	praia += getNome() + ";" + getConcelho() + ";";
 
 	if(getServicos().empty())
 		praia += "null_servicos;";
@@ -38,6 +38,8 @@ std::string PAlbufeira::savePraia() {
 				praia += getServicos()[i] + ",";
 		}
 	}
+
+	praia += getLotacao() + ";";
 
 	if(getBandeira())
 		praia += "1;";
@@ -59,14 +61,18 @@ std::string PAlbufeira::fullInfoPraia() {
 	if (!getServicos().empty()) {
 		for (size_t i = 0; i < getServicos().size(); i++) {
 			if (i == getServicos().size() - 1)
-				result += getServicos()[i] + "\n";
+				result += getServicos()[i];
 			else {
 				result += getServicos()[i] + ", ";
 			}
 		}
 	}
 	else
-		result += "sem servicos\n";
+		result += "sem servicos";
+
+	result += "\n";
+
+	result += " Lotacao: " + std::to_string(getLotacao()) + "\n";
 
 	std::string bandeira = getBandeira() ? "sim" : "não";
 
@@ -74,5 +80,4 @@ std::string PAlbufeira::fullInfoPraia() {
 	result += " Área: " + std::to_string(area) + "\n";
 
 	return result;
-
 }
