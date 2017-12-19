@@ -1681,7 +1681,6 @@ int inputHandling(std::string input, char property) {
 		'd' : latitude, longitude, area, largura, caudal, profundidade (double)
 		'b' : bandeira (bool)
 		'i' : indices (int)
-
 		RETURN:
 		0 : Input invalido
 		1 : Continuar Operacao
@@ -1766,4 +1765,3 @@ int sendEvent(char c) {
 
 	return 1;
 }
-

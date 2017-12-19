@@ -83,4 +83,3 @@ std::string Gps::displayGps() const {
 
 	return oss.str();
 }
-

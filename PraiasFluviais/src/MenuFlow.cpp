@@ -62,6 +62,3 @@ int menuHandler(event_t *evt) {
 
 	return 1;
 }
-
-
-
