@@ -15,6 +15,7 @@ int main() {
 	//setlocale(LC_ALL, "");
 	//std::locale::global(std::locale(""));
 	//std::cout.imbue(std::locale());
+	//Merging thid branch with master
 
 
 	std::string filename_praias;
