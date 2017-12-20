@@ -20,7 +20,7 @@
 
 typedef std::string Concelho;
 typedef std::map<Concelho, std::vector<Praia*>>::iterator iter_map;
-typedef std::pair<iter_map, int> iter;
+typedef std::pair<iter_map, int> iter_pair;
 
 /**
  * @brief Database where we will store all the information about Praias
@@ -75,7 +75,7 @@ public:
 	 * @param p Object Praia to search for
 	 * @return Return a pair with -1 if not found or the object's iterator in the map and it's index in the vector
 	 */
-	iter searchPraia(Praia* p);
+	iter_pair searchPraia(Praia* p);
 
 	/**
 	 * @brief Search object with name n in vector "praias"
@@ -83,7 +83,7 @@ public:
 	 * @param c Object's region to search for
 	 * @return Return a pair with -1 if not found or the object's iterator in the map and it's index in the vector
 	 */
-	iter searchPraia(std::string n, std::string c);
+	iter_pair searchPraia(std::string n, std::string c);
 	
 	/*
 	 * @brief Search praia from user's input and returns a pointer to it
@@ -150,15 +150,7 @@ public:
 };
 
 /*
- * @brief Compares two strings
- * @param strFirst First string
- * @param strSecond Second string
- * @return True if equal, false if not
- */
-bool compararCaseInsensitive(std::string strFirst, std::string strSecond);
-
-/*
- * @brief Turns all characters in string to lower case
+ * @brief Turns all characters in string to lower case and capitalizes the first letter
  * @param s String to change
  * @return New string
  */

@@ -15,16 +15,16 @@ int main() {
 	//setlocale(LC_ALL, "");
 	//std::locale::global(std::locale(""));
 	//std::cout.imbue(std::locale());
-
+	std::string path = "C:\\Users\\Miguel Teixeira\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt";
 	std::string filename_praias;
 
 	std::cout << " Ficheiro de praias: ";
-	getline(std::cin, filename_praias);
+	//getline(std::cin, filename_praias);
 
 	//Catch exception while loading
 	get_filename:
 	try {
-		db.load(filename_praias);
+		db.load(path);
 	}
 	catch(Exception& e) {
 		std::cout << " Erro com o ficheiro: " << e.getMessage() << std::endl;
@@ -47,7 +47,7 @@ int main() {
 
 	//Catch exceptions while saving
 	try {
-		db.save(filename_praias);
+		db.save(path);
 	}
 	catch (Exception& e) {
 		e.display();

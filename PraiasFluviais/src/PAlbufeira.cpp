@@ -27,19 +27,21 @@ std::string PAlbufeira::savePraia() {
 
 	praia += getNome() + ";" + getConcelho() + ";";
 
-	if(getServicos().empty())
-		praia += "null_servicos;";
-	else {
-		for(size_t i = 0; i < getServicos().size(); i++) {
-
-			if(i == getServicos().size() - 1)
-				praia += getServicos()[i] + ";";
-			else
-				praia += getServicos()[i] + ",";
+	if (!getServicos().empty()) {
+		for (size_t i = 0; i < getServicos().size(); i++) {
+			if (i == getServicos().size() - 1)
+				praia += getServicos()[i];
+			else {
+				praia += getServicos()[i] + ", ";
+			}
 		}
 	}
+	else
+		praia += "null_servicos";
 
-	praia += getLotacao() + ";";
+	praia += ";";
+
+	praia += std::to_string(getLotacao()) + ";";
 
 	if(getBandeira())
 		praia += "1;";

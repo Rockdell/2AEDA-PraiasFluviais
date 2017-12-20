@@ -203,7 +203,7 @@ void AddMenu() {
 			redo_latitude1:
 			std::getline(std::cin, i_lat);
 
-			switch (inputHandling(i_lat, 'd')) {
+			switch (inputHandling(i_lat, 'c')) {
 				case 0:
 					std::cerr << " # Input invalido. Introduza novamente: ";
 					goto redo_latitude1;
@@ -218,13 +218,18 @@ void AddMenu() {
 			std::istringstream iss_lat(i_lat);
 			iss_lat >> lat;
 
+			if (lat < -90 || lat > 90) {
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_latitude1;
+			}
+
 			//Longitude
 			std::cout << " Longitude: ";
 
 			redo_longitude1:
 			std::getline(std::cin, i_lon);
 
-			switch (inputHandling(i_lon, 'd')) {
+			switch (inputHandling(i_lon, 'c')) {
 				case 0:
 					std::cerr << " # Input invalido. Introduza novamente: ";
 					goto redo_longitude1;
@@ -238,6 +243,11 @@ void AddMenu() {
 
 			std::istringstream iss_lon(i_lon);
 			iss_lon >> lon;
+
+			if (lat < -180 || lat > 180) {
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_longitude1;
+			}
 
 			//Largura
 			std::cout << " Largura: ";
@@ -446,7 +456,7 @@ void AddMenu() {
 			redo_latitude2:
 			std::getline(std::cin, i_lat);
 
-			switch (inputHandling(i_lat, 'd')) {
+			switch (inputHandling(i_lat, 'c')) {
 			case 0:
 				std::cerr << " # Input invalido. Introduza novamente: ";
 				goto redo_latitude2;
@@ -461,13 +471,18 @@ void AddMenu() {
 			std::istringstream iss_lat(i_lat);
 			iss_lat >> lat;
 
+			if (lat < -90 || lat > 90) {
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_latitude2;
+			}
+
 			//Longitude
 			std::cout << " Longitude: ";
 
 			redo_longitude2:
 			std::getline(std::cin, i_lon);
 
-			switch (inputHandling(i_lon, 'd')) {
+			switch (inputHandling(i_lon, 'c')) {
 			case 0:
 				std::cerr << " # Input invalido. Introduza novamente: ";
 				goto redo_longitude2;
@@ -481,6 +496,11 @@ void AddMenu() {
 
 			std::istringstream iss_lon(i_lon);
 			iss_lon >> lon;
+
+			if (lon < -180 || lon > 180) {
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_longitude2;
+			}
 
 			//Area
 			std::cout << " Area: ";
@@ -608,6 +628,9 @@ void EditMenu() {
 
 	again:
 	char input = _getch();
+
+	if (isalpha(input))
+		input = toupper(input);
 
 	switch (input) {
 		case '0': {
@@ -1077,7 +1100,7 @@ void EditMenu() {
 			redo_latitude:
 			std::getline(std::cin, i_lat);
 
-			switch (inputHandling(i_lat, 'd')) {
+			switch (inputHandling(i_lat, 'c')) {
 			case 0:
 				std::cerr << " # Input invalido. Introduza novamente: ";
 				goto redo_latitude;
@@ -1092,12 +1115,17 @@ void EditMenu() {
 			std::istringstream iss_latitude(i_lat);
 			iss_latitude >> lat;
 
+			if (lat < -90 || lat > 90) {
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_latitude;
+			}
+
 			std::cout << " Nova longitude: ";
 
 			redo_longitude:
-			std::getline(std::cin, i_lat);
+			std::getline(std::cin, i_lon);
 
-			switch (inputHandling(i_lat, 'd')) {
+			switch (inputHandling(i_lon, 'c')) {
 			case 0:
 				std::cerr << " # Input invalido. Introduza novamente: ";
 				goto redo_longitude;
@@ -1111,6 +1139,11 @@ void EditMenu() {
 
 			std::istringstream iss_longitude(i_lon);
 			iss_longitude >> lon;
+
+			if (lon < -180 || lon > 180) {
+				std::cerr << " # Input invalido. Introduza novamente: ";
+				goto redo_longitude;
+			}
 
 			Gps coord = Gps(lat, lon);
 
@@ -1198,16 +1231,15 @@ void EditMenu() {
 
 			Praia* p = db.searchPraia(i);
 
-			PRio* p1 = dynamic_cast<PRio*>(p);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
+			PAlbufeira* p1 = dynamic_cast<PAlbufeira*>(p);
 
 			//Verificar class
-			if (p1 == nullptr) {
-				p2->setArea(area);
+			if (p1 == nullptr)
+				std::cout << " A praia escolhida nao e uma albufeira. \n";
+			else {
+				p1->setArea(area);
 				std::cout << " Area editada com sucesso. \n";
 			}
-			else
-				std::cout << " A praia escolhida nao e uma albufeira. \n";
 
 			_getch();
 
@@ -1282,7 +1314,6 @@ void EditMenu() {
 			Praia* p = db.searchPraia(i);
 
 			PRio* p1 = dynamic_cast<PRio*>(p);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
 
 			//Verificar class
 			if (p1 == nullptr)
@@ -1365,7 +1396,6 @@ void EditMenu() {
 			Praia* p = db.searchPraia(i);
 
 			PRio* p1 = dynamic_cast<PRio*>(p);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
 
 			//Verificar class
 			if (p1 == nullptr)
@@ -1448,7 +1478,6 @@ void EditMenu() {
 			Praia* p = db.searchPraia(i);
 
 			PRio* p1 = dynamic_cast<PRio*>(p);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
 
 			//Verificar class
 			if (p1 == nullptr)
@@ -1474,8 +1503,8 @@ void WatchMenu() {
 
 	std::cout << " - Watch Menu - " << std::endl << std::endl;
 	std::cout << " [1] Ver praias por nome (ordenadas por concelho)" << std::endl;
-	std::cout << " [2] Pesquisar praias pelo nome e concelho" << std::endl;
-	std::cout << " [3] Pesquisar praias por coordenadas GPS" << std::endl;
+	std::cout << " [2] Pesquisar praia pelo nome e concelho" << std::endl;
+	std::cout << " [3] Pesquisar praia por coordenadas GPS" << std::endl;
 	std::cout << " [4] Pesquisar praias nas proximidades de uma praia existente" << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
@@ -1501,7 +1530,7 @@ void WatchMenu() {
 				return;
 			}
 			else
-				std::cout << " Numero da praia que pretende ver mais informação: ";
+				std::cout << " Numero da praia que pretende ver mais informacao: ";
 
 			redo_index1:
 			std::getline(std::cin, i_index);
@@ -1584,7 +1613,7 @@ void WatchMenu() {
 
 			query_concelho = decapitalize(query_concelho);
 
-			iter result = db.searchPraia(query_nome, query_concelho);
+			iter_pair result = db.searchPraia(query_nome, query_concelho);
 
 			if (result.second == -1)
 				throw PraiaNotFound(query_nome);
@@ -1801,58 +1830,83 @@ void WatchMenu() {
 
 int inputHandling(std::string input, char property) {
 	/*
-		PROPRIEDADES:
-		's' : nome, concelho, servico (string)
-		'd' : latitude, longitude, area, largura, caudal, profundidade (double)
-		'b' : bandeira (bool)
-		'i' : indices (int)
-		RETURN:
-		0 : Input invalido
-		1 : Continuar Operacao
-		2 : Cancelar Operacao
-		*/
+	 PROPRIEDADES:
+	 's' : nome, concelho, servico (string)
+	 'c':  latitude, longitude (double)
+	 'd' : area, largura, caudal, profundidade (double)
+	 'b' : bandeira (bool)
+	 'i' : indices (int)
+	 RETURN:
+	 0 : Input invalido
+	 1 : Continuar Operacao
+	 2 : Cancelar Operacao
+	 */
 
-	//TODO lat de -90 a 90 e lon de -180 a 180
-	//Comparar case insensitive
+	bool dot = false;
 
-		if (std::cin.eof() || input.length() == 0)
-		{
-			std::cin.clear();
-			return 0;
-		}
-		else if (input.length() == 1 && input == "0")
-			return 2;
+	if (std::cin.eof() || input.length() == 0) {
+		std::cin.clear();
+		return 0;
+	}
+	else if (input.length() == 1 && input == "0")
+		return 2;
+	else if (input.at(0) == ' ')
+		return 0;
 
-		switch (property)
-		{
-		case 's':
-			for (size_t i = 0; i < input.length(); i++)
-			{
-				if ((input.at(i) != ' ' || input.at(i) != '-') && !isalpha(input.at(i)))
-					return 0;
-			}
-			break;
-		case 'd':
-			for (size_t i = 0; i < input.length(); i++)
-			{
-				if ((input.at(i) != '.' || input.at(i) != '-') && !isdigit(input.at(i)))
-					return 0;
-			}
-			break;
-		case 'b':
-			if(input != "false" && input != "true")
+	switch (property) {
+	case 's':
+		for (size_t i = 0; i < input.length(); i++) {
+			if (input.at(i) != ' ' && input.at(i) != '-' && !isalpha(input.at(i)))
 				return 0;
-			break;
-		case 'i':
-			for (size_t i = 0; i < input.length(); i++)
-			{
-				if (!isdigit(input.at(i)))
+		}
+		break;
+	case 'c':
+		for (size_t i = 0; i < input.length(); i++) {
+			if (input.at(i) == '-') {
+				if(i != 0)
+					return 0;
+				else
+					continue;
+			}
+			else if (input.at(i) == '.') {
+				if (!dot) {
+					if (i != 0 && input.at(i-1) == '-')
+						return 0;
+					else
+						dot = true;
+				}
+				else
 					return 0;
 			}
-			break;
+			else if (!isdigit(input.at(i)))
+				return 0;
 		}
+		break;
+	case 'd':
+		for(size_t i = 0; i < input.length(); i++) {
+			if (input.at(i) == '.') {
+				if (!dot)
+					dot = true;
+				else
+					return 0;
+			}
+			else if (!isdigit(input.at(i)))
+				return 0;
+		}
+		break;
+	case 'b':
+		if (input != "false" && input != "true")
+			return 0;
+		break;
+	case 'i':
+		for (size_t i = 0; i < input.length(); i++) {
+			if (!isdigit(input.at(i)))
+				return 0;
+		}
+		break;
+	}
 
-		return 1;
+	return 1;
 }
 
 int sendEvent(char c) {

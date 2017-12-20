@@ -55,7 +55,7 @@ void Database::addPraia(Praia* p) {
 }
 
 void Database::removePraia(Praia* p) {
-	iter it = searchPraia(p);
+	iter_pair it = searchPraia(p);
 
 	if (it.second == -1)
 		throw PraiaNotFound(p->getNome());
@@ -88,7 +88,7 @@ void Database::showPraias() {
 	}
 }
 
-iter Database::searchPraia(Praia* p) {
+iter_pair Database::searchPraia(Praia* p) {
 
 	auto it = praias.find(p->getConcelho());
 
@@ -106,7 +106,7 @@ iter Database::searchPraia(Praia* p) {
 		return std::make_pair(it, -1);
 }
 
-iter Database::searchPraia(std::string n, std::string c) {
+iter_pair Database::searchPraia(std::string n, std::string c) {
 
 	auto it = praias.find(c);
 
@@ -143,13 +143,13 @@ Praia* Database::searchPraia(int i) {
 		}
 	}
 
-	//Might not need (when calling this function, it is guaranteed there is a object there
+	//Might not need (when calling this function, it is guaranteed there is a object there)
 	return nullptr;
 }
 
 bool Database::existPraia(Praia* p) {
 
-	iter it = searchPraia(p);
+	iter_pair it = searchPraia(p);
 
 	if(it.second == -1)
 		return false;
@@ -159,7 +159,7 @@ bool Database::existPraia(Praia* p) {
 
 bool Database::existPraia(std::string n, std::string c) {
 
-	iter it = searchPraia(n, c);
+	iter_pair it = searchPraia(n, c);
 
 	if(it.second == -1)
 		return false;
@@ -212,12 +212,12 @@ void Database::sortPraiasNome() {
 
 void Database::processLine(std::string l) {
 
-	std::istringstream ss1(l);
+	std::istringstream iss(l);
 	std::vector<std::string> properties;
 	std::string token;
 
 	//Parse line
-	while (getline(ss1, token, ';')) {
+	while (getline(iss, token, ';')) {
 		properties.push_back(token);
 	}
 
@@ -231,39 +231,39 @@ void Database::processLine(std::string l) {
 	std::string concelho = properties[2];
 
 	//Servicos
-	std::string tmp1 = properties[3];
-	std::istringstream ss2(tmp1);
+	std::string str_servicos = properties[3];
+	std::istringstream iss_servicos(str_servicos);
 	std::vector<std::string> servicos;
 
-	if(tmp1 != "null_servicos") {
-		while(getline(ss2, token, ',')) {
+	if(str_servicos != "null_servicos") {
+		while(getline(iss_servicos, token, ',')) {
 			servicos.push_back(token);
 		}
 	}
 
 	//Lotacao
 	int lotacao;
-	std::string tmp2 = properties[4];
-	std::istringstream ss3(tmp2);
+	std::string str_lotacao = properties[4];
+	std::istringstream iss_lotacao(str_lotacao);
 	std::string s_lotacao;
-	ss3 >> s_lotacao;
+	iss_lotacao >> s_lotacao;
 	lotacao = std::stoi(s_lotacao);
 
 	//Bandeira
 	bool bandeira;
-	std::string tmp3 = properties[5];
+	std::string str_bandeira = properties[5];
 
-	if(tmp3 == "1")
+	if(str_bandeira == "1")
 		bandeira = true;
 	else
-			bandeira = false;
+		bandeira = false;
 
 	//Gps
 	double lat, lon;
-	std::string tmp4 = properties[6];
-	std::istringstream ss4(tmp4);
+	std::string str_gps = properties[6];
+	std::istringstream iss_gps(str_gps);
 	std::string s_lat, s_lon;
-	ss3 >> s_lat >> s_lon;
+	iss_gps >> s_lat >> s_lon;
 	lat = std::stod(s_lat);
 	lon = std::stod(s_lon);
 
@@ -273,26 +273,26 @@ void Database::processLine(std::string l) {
 
 		//Largura
 		double largura;
-		std::string tmp5 = properties[7];
-		std::istringstream ss5(tmp5);
+		std::string str_largura = properties[7];
+		std::istringstream iss_largura(str_largura);
 		std::string s_largura;
-		ss5 >> s_largura;
+		iss_largura >> s_largura;
 		largura = std::stod(s_largura);
 
 		//Caudal
 		double caudal;
-		std::string tmp6 = properties[8];
-		std::istringstream ss6(tmp6);
+		std::string str_caudal = properties[8];
+		std::istringstream iss_caudal(str_caudal);
 		std::string s_caudal;
-		ss6 >> s_caudal;
+		iss_caudal >> s_caudal;
 		caudal = std::stod(s_caudal);
 
 		//Profundidade
 		double profundidade;
-		std::string tmp7 = properties[9];
-		std::istringstream ss7(tmp7);
+		std::string str_profundidade = properties[9];
+		std::istringstream iss_profundidade(str_profundidade);
 		std::string s_profundidade;
-		ss7 >> s_profundidade;
+		iss_profundidade >> s_profundidade;
 		profundidade = std::stod(s_profundidade);
 
 		PRio* p = new PRio(nome, concelho, servicos, lotacao, bandeira, gps, largura, caudal, profundidade);
@@ -303,10 +303,10 @@ void Database::processLine(std::string l) {
 
 		//Area
 		double area;
-		std::string tmp5 = properties[7];
-		std::istringstream ss5(tmp5);
+		std::string str_area = properties[7];
+		std::istringstream iss_area(str_area);
 		std::string s_area;
-		ss5 >> s_area;
+		iss_area >> s_area;
 		area = std::stod(s_area);
 
 		PAlbufeira* p = new PAlbufeira(nome, concelho, servicos, lotacao, bandeira, gps, area);
@@ -426,22 +426,12 @@ std::map<double,Praia*> Database::orderRange(std::vector<Praia *> ps, std::vecto
 	return ord;
 }
 
-bool compararCaseInsensitive(std::string strFirst, std::string strSecond)
-{
-	// Convert both strings to upper case by transfrom() before compare.
-	std::transform(strFirst.begin(), strFirst.end(), strFirst.begin(), toupper);
-	std::transform(strSecond.begin(), strSecond.end(), strSecond.begin(), toupper);
-
-	if (strFirst == strSecond)
-		return true;
-	else
-		return false;
-}
-
 std::string decapitalize(std::string s) {
 
 	std::string str = s;
 	std::transform(str.begin(), str.end(), str.begin(), tolower);
+
+	str[0] = toupper(str[0]);
 
 	return str;
 }

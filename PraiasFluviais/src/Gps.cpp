@@ -47,7 +47,7 @@ std::string Gps::displayGps() const {
 
 	//Latitude calculations
 	double tlat = fabs(lat);
-	oss << trunc(tlat) << "º ";
+	oss << trunc(tlat) << " deg ";
 	tlat -= trunc(tlat);
 	tlat *= 60;
 
@@ -65,7 +65,7 @@ std::string Gps::displayGps() const {
 
 	//Longitude calculations
 	double tlon = fabs(lon);
-	oss << trunc(tlon) << "º ";
+	oss << trunc(tlon) << " deg ";
 	tlon -= trunc(tlon);
 	tlon *= 60;
 

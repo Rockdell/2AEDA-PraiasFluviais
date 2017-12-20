@@ -42,19 +42,21 @@ std::string PRio::savePraia() {
 
 	praia += getNome() + ";" + getConcelho() + ";";
 
-	if(getServicos().empty())
-		praia += "null_servicos;";
-	else {
-		for(size_t i = 0; i < getServicos().size(); i++) {
-
-			if(i == getServicos().size() - 1)
-				praia += getServicos()[i] + ";";
-			else
-				praia += getServicos()[i] + ",";
+	if (!getServicos().empty()) {
+		for (size_t i = 0; i < getServicos().size(); i++) {
+			if (i == getServicos().size() - 1)
+				praia += getServicos()[i];
+			else {
+				praia += getServicos()[i] + ", ";
+			}
 		}
 	}
+	else
+		praia += "null_servicos";
 
-	praia += getLotacao() + ";";
+	praia += ";";
+
+	praia += std::to_string(getLotacao()) + ";";
 
 	if(getBandeira())
 		praia += "1;";
@@ -72,7 +74,7 @@ std::string PRio::savePraia() {
 std::string PRio::fullInfoPraia() {
 	std::string result = "\n";
 
-	result += " Nome: " + getNome() + "\n" + " Concelho: " + getConcelho() + "\n" + " Serviços: ";
+	result += " Nome: " + getNome() + "\n" + " Concelho: " + getConcelho() + "\n" + " Servicos: ";
 
 	if (!getServicos().empty()) {
 		for (size_t i = 0; i < getServicos().size(); i++) {
@@ -90,7 +92,7 @@ std::string PRio::fullInfoPraia() {
 
 	result += " Lotacao: " + std::to_string(getLotacao()) + "\n";
 
-	std::string bandeira = getBandeira() ? "sim" : "não";
+	std::string bandeira = getBandeira() ? "sim" : "nao";
 
 	result += " Bandeira Azul: " + bandeira + "\n" +  " Coordenadas: " + getGps().displayGps() + "\n";
 	result += " Largura: " + std::to_string(largura) + "\n" + " Caudal: " + std::to_string(caudal) + "\n" +
