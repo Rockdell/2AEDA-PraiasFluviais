@@ -17,6 +17,8 @@ public:
 		message = m;
 	}
 
+	virtual ~Exception() {}
+
 	/**
 	 * @brief Gets the message data member
 	 * @return Returns string with the message data member

@@ -179,6 +179,7 @@ unsigned int Database::getSize() {
 	return cont;
 }
 
+//TODO sort praias bandeira
 void Database::sortPraiasNome() {
 
 	//Check if there are any Praias to sort
@@ -269,7 +270,7 @@ void Database::processLine(std::string l) {
 
 	Gps gps(lat,lon);
 
-	if(type == "R") {
+	if (type == "R") {
 
 		//Largura
 		double largura;
@@ -299,7 +300,7 @@ void Database::processLine(std::string l) {
 
 		addPraia(p);
 	}
-	else {
+	else if (type == "A"){
 
 		//Area
 		double area;
@@ -313,6 +314,8 @@ void Database::processLine(std::string l) {
 
 		addPraia(p);
 	}
+	else
+		throw ReadingLineError(l);
 }
 
 std::map<double,Praia*> Database::withInRangePraia(Praia * p, double r) {
