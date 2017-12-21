@@ -6,6 +6,8 @@
 #define clearScreen() system("clear");
 #endif
 
+extern Database db;
+
 int printMenu() {
 
 	clearScreen();
@@ -72,10 +74,10 @@ void AddMenu() {
 		case '1': {
 
 			//Input variables
-			std::string i_nome, i_concelho, i_servico, i_lotacao, i_bandeira, i_lat, i_lon, i_largura, i_caudal, i_profundidade;
+			std::string i_nome, i_concelho, i_tipoS, i_nomeS, i_dataS, i_lotacao, i_bandeira, i_lat, i_lon, i_largura, i_caudal, i_profundidade;
 
 			//Object's variables
-			std::vector<std::string> servicos;
+			std::vector<Servico> servicos;
 			int lotacao;
 			bool bandeira;
 			double lat, lon, largura, caudal, profundidade;
@@ -123,13 +125,19 @@ void AddMenu() {
 
 			i_concelho = decapitalize(i_concelho);
 
+			//TODO search servico already exists
 			//Servicos
 			std::cout << " Lista de servicos (CTRL-Z para terminar): " << std::endl;
 			unsigned int cont_s = 0;
 
 			redo_servico1:
-			std::cout << " Servico numero " << cont_s + 1 << ": ";
-			std::getline(std::cin, i_servico);
+			Servico new_serv;
+			servico_t tipo;
+
+			std::cout << " Servico numero " << cont_s + 1 << ": \n";
+
+			std::cout << " Tipo (Restauracao, alojamento): ";
+			std::getline(std::cin, i_tipoS);
 
 			if (std::cin.eof())
 			{
@@ -137,7 +145,7 @@ void AddMenu() {
 				goto endservico1;
 			}
 
-			switch (inputHandling(i_servico, 's')) {
+			switch (inputHandling(i_tipoS, 's')) {
 				case 0:
 					std::cerr << " # Input invalido.";
 					goto redo_servico1;
@@ -149,8 +157,33 @@ void AddMenu() {
 					return;
 			}
 
+			tipo = to_enum(i_tipoS);
+
+			if(tipo == Null) {
+				std::cerr << " # Input invalido.";
+				goto redo_servico1;
+			}
+
+			std::cout << " Nome do servico: ";
+			std::getline(std::cin, i_nomeS);
+
+			switch (inputHandling(i_nomeS, 's')) {
+				case 0:
+					std::cerr << " # Input invalido.";
+					goto redo_servico1;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			new_serv.setTipo(tipo);
+			new_serv.setNome(i_nomeS);
+
 			cont_s++;
-			servicos.push_back(i_servico);
+			servicos.push_back(new_serv);
 			goto redo_servico1;
 
 			endservico1:
@@ -315,6 +348,11 @@ void AddMenu() {
 			Gps g = Gps(lat, lon);
 			Praia* p = new PRio(i_nome, i_concelho, servicos, lotacao, bandeira, g, largura, caudal, profundidade);
 
+			//Set Praia nos servicos
+			for (size_t i = 0; i < servicos.size(); i++) {
+				servicos[i].setPraia(p);
+			}
+
 			//Add praia
 			db.addPraia(p);
 
@@ -325,10 +363,10 @@ void AddMenu() {
 		case '2': {
 
 			//Input variables
-			std::string i_nome, i_concelho, i_servico, i_lotacao, i_bandeira, i_lat, i_lon, i_area;
+			std::string i_nome, i_concelho, i_tipoS, i_nomeS, i_dataS, i_lotacao, i_bandeira, i_lat, i_lon, i_area;
 
 			//Object's variables
-			std::vector<std::string> servicos;
+			std::vector<Servico> servicos;
 			int lotacao;
 			bool bandeira;
 			double lat, lon, area;
@@ -376,13 +414,19 @@ void AddMenu() {
 
 			i_concelho = decapitalize(i_concelho);
 
+			//TODO search servico already exists
 			//Servicos
 			std::cout << " Lista de servicos (CTRL-Z para terminar): " << std::endl;
 			unsigned int cont_s = 0;
 
 			redo_servico2:
-			std::cout << " Servico numero " << cont_s + 1 << ": ";
-			std::getline(std::cin, i_servico);
+			Servico new_serv;
+			servico_t tipo;
+
+			std::cout << " Servico numero " << cont_s + 1 << ": \n";
+
+			std::cout << " Tipo (Restauracao, alojamento): ";
+			std::getline(std::cin, i_tipoS);
 
 			if (std::cin.eof())
 			{
@@ -390,7 +434,7 @@ void AddMenu() {
 				goto endservico2;
 			}
 
-			switch (inputHandling(i_servico, 's')) {
+			switch (inputHandling(i_tipoS, 's')) {
 				case 0:
 					std::cerr << " # Input invalido.";
 					goto redo_servico2;
@@ -402,8 +446,33 @@ void AddMenu() {
 					return;
 			}
 
+			tipo = to_enum(i_tipoS);
+
+			if(tipo == Null) {
+				std::cerr << " # Input invalido.";
+				goto redo_servico2;
+			}
+
+			std::cout << " Nome do servico: ";
+			std::getline(std::cin, i_nomeS);
+
+			switch (inputHandling(i_nomeS, 's')) {
+				case 0:
+					std::cerr << " # Input invalido.";
+					goto redo_servico2;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			new_serv.setTipo(tipo);
+			new_serv.setNome(i_nomeS);
+
 			cont_s++;
-			servicos.push_back(i_servico);
+			servicos.push_back(new_serv);
 			goto redo_servico2;
 
 			endservico2:
@@ -525,6 +594,11 @@ void AddMenu() {
 
 			Gps g = Gps(lat, lon);
 			Praia* p = new PAlbufeira(i_nome, i_concelho, servicos, lotacao, bandeira, g, area);
+
+			//Set Praia nos servicos
+			for (size_t i = 0; i < servicos.size(); i++) {
+				servicos[i].setPraia(p);
+			}
 
 			//Add praia
 			db.addPraia(p);
@@ -798,93 +872,94 @@ void EditMenu() {
 		}
 		case '3': {
 
-			std::string i_index, i_servico;
-			int index;
-			std::vector<std::string> servicos;
+//			std::string i_index, i_servico;
+//			int index;
+//			std::vector<Servico> servicos;
 
-			//Display praias
-			db.showPraias();
-
-			if (db.getSize() == 0) {
-				std::cerr << " Nao existem praias para editar. ";
-				_getch();
-				return;
-			} else
-				std::cout << "Numero da praia que pretende editar: ";
-
-			redo_index3:
-			std::getline(std::cin, i_index);
-
-			switch (inputHandling(i_index, 'i')) {
-				case 0:
-					std::cerr << " # Input invalido. Introduza novamente: ";
-					goto redo_index3;
-				case 1:
-					break;
-				case 2:
-					std::cerr << " # Operacao cancelada. ";
-					_getch();
-					return;
-			}
-
-			std::istringstream iss_index(i_index);
-			iss_index >> index;
-
-			unsigned int i = index - 1;
-
-			if (i >= 0 && i <= db.getSize()) {
-				//All good
-			}
-			else {
-				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
-				goto redo_index3;
-			}
-
-			std::cout << " Lista de novos servicos (CTRL-Z para terminar): " << std::endl;
-			unsigned int cont_s = 0;
-
-			redo_servico:
-			std::cout << " Serviço Numero " << cont_s + 1 << ": ";
-			std::getline(std::cin, i_servico);
-
-			if (std::cin.eof())
-			{
-				std::cin.clear();
-				goto endservico;
-			}
-
-			switch (inputHandling(i_servico, 's')) {
-				case 0:
-					std::cerr << " # Input invalido.";
-					goto redo_servico;
-				case 1:
-					break;
-				case 2:
-					std::cerr << " # Operacao cancelada. ";
-					_getch();
-					return;
-			}
-
-			cont_s++;
-			servicos.push_back(i_servico);
-			goto redo_servico;
-
-			endservico:
-
-			Praia* p = db.searchPraia(i);
-
-			PRio* p1 = dynamic_cast<PRio*>(p);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
-
-			//Verificar class
-			if (p1 == nullptr)
-				p2->setServicos(servicos);
-			else
-				p1->setServicos(servicos);
-
-			std::cout << " Servicos editados com sucesso. \n";
-
-			_getch();
+			//TODO
+//			//Display praias
+//			db.showPraias();
+//
+//			if (db.getSize() == 0) {
+//				std::cerr << " Nao existem praias para editar. ";
+//				_getch();
+//				return;
+//			} else
+//				std::cout << "Numero da praia que pretende editar: ";
+//
+//			redo_index3:
+//			std::getline(std::cin, i_index);
+//
+//			switch (inputHandling(i_index, 'i')) {
+//				case 0:
+//					std::cerr << " # Input invalido. Introduza novamente: ";
+//					goto redo_index3;
+//				case 1:
+//					break;
+//				case 2:
+//					std::cerr << " # Operacao cancelada. ";
+//					_getch();
+//					return;
+//			}
+//
+//			std::istringstream iss_index(i_index);
+//			iss_index >> index;
+//
+//			unsigned int i = index - 1;
+//
+//			if (i >= 0 && i <= db.getSize()) {
+//				//All good
+//			}
+//			else {
+//				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
+//				goto redo_index3;
+//			}
+//
+//			std::cout << " Lista de novos servicos (CTRL-Z para terminar): " << std::endl;
+//			unsigned int cont_s = 0;
+//
+//			redo_servico:
+//			std::cout << " Serviço Numero " << cont_s + 1 << ": ";
+//			std::getline(std::cin, i_servico);
+//
+//			if (std::cin.eof())
+//			{
+//				std::cin.clear();
+//				goto endservico;
+//			}
+//
+//			switch (inputHandling(i_servico, 's')) {
+//				case 0:
+//					std::cerr << " # Input invalido.";
+//					goto redo_servico;
+//				case 1:
+//					break;
+//				case 2:
+//					std::cerr << " # Operacao cancelada. ";
+//					_getch();
+//					return;
+//			}
+//
+//			cont_s++;
+//			servicos.push_back(i_servico);
+//			goto redo_servico;
+//
+//			endservico:
+//
+//			Praia* p = db.searchPraia(i);
+//
+//			PRio* p1 = dynamic_cast<PRio*>(p);
+//			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
+//
+//			//Verificar class
+//			if (p1 == nullptr)
+//				p2->setServicos(servicos);
+//			else
+//				p1->setServicos(servicos);
+//
+//			std::cout << " Servicos editados com sucesso. \n";
+//
+//			_getch();
 
 			break;
 		}
@@ -1850,7 +1925,11 @@ int inputHandling(std::string input, char property) {
 	}
 	else if (input.length() == 1 && input == "0")
 		return 2;
-	else if (input.at(0) == ' ')
+	else if (input.at(0) == ' ' || input.at(0) == '.')
+		return 0;
+	else if(input.length() == 1 && input.at(0) == '-')
+		return 0;
+	else if(input.length() > 1 && input.at(0) == '-' && input.at(1) == '.')
 		return 0;
 
 	switch (property) {

@@ -179,7 +179,7 @@ unsigned int Database::getSize() {
 	return cont;
 }
 
-//TODO sort praias bandeira
+//TODO DONE
 void Database::sortPraiasNome() {
 
 	//Check if there are any Praias to sort
@@ -198,7 +198,13 @@ void Database::sortPraiasNome() {
 
 				for(size_t i = 0; i < j; i++) {
 
-					if(it->second[i+1]->getNome() < it->second[i]->getNome()) {
+					if(it->second[i+1]->getBandeira() == it->second[i]->getBandeira()) {
+						if (it->second[i + 1]->getNome() < it->second[i]->getNome()) {
+							std::swap(it->second[i + 1], it->second[i]);
+							troca = true;
+						}
+					}
+					else {
 						std::swap(it->second[i+1],it->second[i]);
 						troca = true;
 					}
@@ -222,6 +228,9 @@ void Database::processLine(std::string l) {
 		properties.push_back(token);
 	}
 
+	if(properties.empty())
+		return;
+
 	//Type
 	std::string type = properties[0];
 
@@ -234,11 +243,21 @@ void Database::processLine(std::string l) {
 	//Servicos
 	std::string str_servicos = properties[3];
 	std::istringstream iss_servicos(str_servicos);
-	std::vector<std::string> servicos;
+	std::vector<Servico> servicos;
 
 	if(str_servicos != "null_servicos") {
 		while(getline(iss_servicos, token, ',')) {
-			servicos.push_back(token);
+			std::string t, n;
+			unsigned int d, m, a, s;
+
+			std::istringstream iss_serv(token);
+			iss_serv >> t >> n >> d >> m >> a >> s;
+
+			servico_t type = to_enum(t);
+
+			Servico tmp(type, n, d, m, a, nullptr, s);
+
+			servicos.push_back(tmp);
 		}
 	}
 
@@ -298,6 +317,11 @@ void Database::processLine(std::string l) {
 
 		PRio* p = new PRio(nome, concelho, servicos, lotacao, bandeira, gps, largura, caudal, profundidade);
 
+		//Set Praia nos servicos
+		for (size_t i = 0; i < servicos.size(); i++) {
+			servicos[i].setPraia(p);
+		}
+
 		addPraia(p);
 	}
 	else if (type == "A"){
@@ -311,6 +335,11 @@ void Database::processLine(std::string l) {
 		area = std::stod(s_area);
 
 		PAlbufeira* p = new PAlbufeira(nome, concelho, servicos, lotacao, bandeira, gps, area);
+
+		//Set Praia nos servicos
+		for (size_t i = 0; i < servicos.size(); i++) {
+			servicos[i].setPraia(p);
+		}
 
 		addPraia(p);
 	}

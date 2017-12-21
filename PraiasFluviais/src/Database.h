@@ -8,12 +8,12 @@
 #include <algorithm>
 #include <map>
 #include <utility>
+#include <memory>
+
 #include "Praia.h"
 #include "PAlbufeira.h"
 #include "PRio.h"
 #include "Exceptions.h"
-#include "Gps.h"
-#include <memory>
 
 #ifndef DATABASE_H_
 #define DATABASE_H_

@@ -2,28 +2,33 @@
 #include "Servico.h"
 
 Servico::Servico() {
-	tipo = null;
+	tipo = Null;
+	nome = "";
 	praia = nullptr;
-	ult_inspecao.dia = 0;
-	ult_inspecao.mes = 0;
-	ult_inspecao.ano = 0;;
-	status.closed = 0;
+	closed = 0;
 }
 
-Servico::Servico(servico_type t, std::string n, unsigned int d, unsigned int m, unsigned int a, Praia* p, unsigned int s) {
+Servico::Servico(servico_t t, std::string n, Praia* p, unsigned int s) {
+	tipo = t;
+	nome = n;
+	praia = p;
+	closed = s;
+}
+
+Servico::Servico(servico_t t, std::string n, unsigned int d, unsigned int m, unsigned int a, Praia* p, unsigned int s) {
 	tipo = t;
 	nome = n;
 	ult_inspecao.dia = d;
 	ult_inspecao.mes = m;
 	ult_inspecao.ano = a;
 	praia = p;
-	status.closed = s;
+	closed = s;
 }
 
 Servico::~Servico() {
 }
 
-servico_type Servico::getTipo() const {
+servico_t Servico::getTipo() const {
 	return tipo;
 }
 std::string Servico::getNome() const {
@@ -35,11 +40,11 @@ Praia* Servico::getPraia() const {
 Servico::Data Servico::getData() const {
 	return ult_inspecao;
 }
-Servico::Status Servico::getStatus() const {
-	return status;
+unsigned int Servico::getStatus() const {
+	return closed;
 }
 
-void Servico::setTipo(servico_type t) {
+void Servico::setTipo(servico_t t) {
 	tipo = t;
 }
 void Servico::setNome(std::string n) {
@@ -54,5 +59,28 @@ void Servico::setData(unsigned int d, unsigned int m, unsigned int a) {
 	ult_inspecao.ano = a;
 }
 void Servico::setStatus(unsigned int s) {
-	status.closed = s;
+	closed = s;
+}
+
+bool Servico::operator ==(const Servico &s) const {
+	return (tipo == s.tipo && nome == s.nome && praia == s.praia);
+}
+
+servico_t to_enum(std::string str) {
+
+	if (str == "Restauracao")
+		return Restauracao;
+	else if (str == "Alojamento")
+		return Alojamento;
+	else
+		return Null;
+}
+
+std::string from_enum(servico_t s) {
+	if (s == Restauracao)
+		return "Restauracao";
+	else if (s == Alojamento)
+		return "Alojamento";
+	else
+		return "Null";
 }

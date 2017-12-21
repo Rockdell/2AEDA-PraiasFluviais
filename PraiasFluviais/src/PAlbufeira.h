@@ -7,7 +7,7 @@ class PAlbufeira : public Praia {
 	double area;
 public:
 	PAlbufeira();
-	PAlbufeira(std::string n, std::string c, std::vector<std::string> s, int lot, bool bA,  Gps cd, double a);
+	PAlbufeira(std::string n, std::string c, std::vector<Servico> s, int lot, bool bA,  Gps cd, double a);
 	~PAlbufeira();
 
 	double getArea() const;

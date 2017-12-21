@@ -11,7 +11,7 @@ Praia::Praia() {
 Praia::Praia(std::string n, std::string c, int lot, bool bA, Gps cd) : nome(n), concelho(c), lotacao(lot), bandeiraAzul(bA), coord(cd) {
 }
 
-Praia::Praia(std::string n, std::string c, std::vector<std::string> s, int lot, bool bA, Gps cd) : nome(n), concelho(c), servicos(s), lotacao(lot), bandeiraAzul(bA), coord(cd) {
+Praia::Praia(std::string n, std::string c, std::vector<Servico> s, int lot, bool bA, Gps cd) : nome(n), concelho(c), servicos(s), lotacao(lot), bandeiraAzul(bA), coord(cd) {
 }
 
 //Get methods
@@ -21,7 +21,7 @@ std::string Praia::getNome() const {
 std::string Praia::getConcelho() const {
 	return concelho;
 }
-std::vector<std::string> Praia::getServicos() const {
+std::vector<Servico> Praia::getServicos() const {
 	return servicos;
 }
 int Praia::getLotacao() const {
@@ -41,7 +41,7 @@ void Praia::setNome(std::string n) {
 void Praia::setConcelho(std::string c) {
 	concelho = c;
 }
-void Praia::setServicos(std::vector<std::string> s) {
+void Praia::setServicos(std::vector<Servico> s) {
 	servicos = s;
 }
 void Praia::setLotacao(int lot) {
@@ -55,11 +55,11 @@ void Praia::setGps(Gps cd) {
 }
 
 //Other methods
-void Praia::addServico(std::string s) {
+void Praia::addServico(Servico s) {
 	servicos.push_back(s);
 }
 
-void Praia::removeServico(std::string s) {
+void Praia::removeServico(Servico s) {
 	int i = searchServico(s);
 
 	if(i == -1)
@@ -68,7 +68,7 @@ void Praia::removeServico(std::string s) {
 		servicos.erase(servicos.begin() + i);
 }
 
-int Praia::searchServico(std::string s) {
+int Praia::searchServico(Servico s) {
 	for(size_t i = 0; i < servicos.size(); i++)
 	{
 		if (s == servicos[i])
@@ -79,10 +79,7 @@ int Praia::searchServico(std::string s) {
 }
 
 bool Praia::operator ==(const Praia* p1) const {
-	if(nome == p1->nome && concelho == p1->concelho)
-		return true;
-	else
-		return false;
+	return (nome == p1->nome && concelho == p1->concelho);
 }
 
 std::string Praia::reducedInfoPraia() {

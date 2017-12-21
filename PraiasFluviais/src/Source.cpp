@@ -1,10 +1,9 @@
 #include <sstream>
-#include "Menu.h"
-#include "Gps.h"
-#include "Globals.h"
 #include <map>
 #include <utility>
-#include "Praia.h"
+
+#include "Menu.h"
+#include "Globals.h"
 
 //Global database variable
 Database db;
@@ -16,6 +15,7 @@ int main() {
 	//std::locale::global(std::locale(""));
 	//std::cout.imbue(std::locale());
 	std::string path = "C:\\Users\\Miguel Teixeira\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt";
+
 	std::string filename_praias;
 
 	std::cout << " Ficheiro de praias: ";

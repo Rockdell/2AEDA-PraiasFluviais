@@ -5,7 +5,7 @@
 PAlbufeira::PAlbufeira() {
 	area = 0;
 }
-PAlbufeira::PAlbufeira(std::string n, std::string c, std::vector<std::string> s, int lot, bool bA,  Gps cd, double a) : Praia(n,c,s,lot,bA,cd) {
+PAlbufeira::PAlbufeira(std::string n, std::string c, std::vector<Servico> s, int lot, bool bA,  Gps cd, double a) : Praia(n,c,s,lot,bA,cd) {
 	area = a;
 }
 PAlbufeira::~PAlbufeira(){
@@ -29,10 +29,13 @@ std::string PAlbufeira::savePraia() {
 
 	if (!getServicos().empty()) {
 		for (size_t i = 0; i < getServicos().size(); i++) {
+
+			Servico tmp = getServicos()[i];
+
 			if (i == getServicos().size() - 1)
-				praia += getServicos()[i];
+				praia += from_enum(tmp.getTipo()) + " " + tmp.getNome() + " " + tmp.getData().display() + " " + std::to_string(tmp.getStatus());
 			else {
-				praia += getServicos()[i] + ", ";
+				praia += from_enum(tmp.getTipo()) + " " + tmp.getNome() + " " + tmp.getData().display() + " " + std::to_string(tmp.getStatus()) + ", ";
 			}
 		}
 	}
@@ -63,9 +66,9 @@ std::string PAlbufeira::fullInfoPraia() {
 	if (!getServicos().empty()) {
 		for (size_t i = 0; i < getServicos().size(); i++) {
 			if (i == getServicos().size() - 1)
-				result += getServicos()[i];
+				result += getServicos()[i].getNome();
 			else {
-				result += getServicos()[i] + ", ";
+				result += getServicos()[i].getNome() + ", ";
 			}
 		}
 	}

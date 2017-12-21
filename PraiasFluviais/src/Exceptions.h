@@ -82,7 +82,7 @@ public:
 	/**
 	 * @brief ServicoNotFound Class constructor
 	 */
-	ServicoNotFound(std::string n) : Exception(n) {
+	ServicoNotFound(Servico n) : Exception(n.getNome()) {
 	}
 
 	/**
