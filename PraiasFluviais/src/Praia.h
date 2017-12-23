@@ -39,6 +39,7 @@ public:
 	void addServico(Servico s);
 	void removeServico(Servico s);
 	int searchServico(Servico s);
+	void showServicos();
 
 	//Change and add some more
 	bool operator==(const Praia* p1) const;

@@ -179,7 +179,6 @@ unsigned int Database::getSize() {
 	return cont;
 }
 
-//TODO DONE
 void Database::sortPraiasNome() {
 
 	//Check if there are any Praias to sort
@@ -467,3 +466,5 @@ std::string decapitalize(std::string s) {
 
 	return str;
 }
+
+//TODO quando um nome tem mais que uma palavra, mudar o modo como é guardado. Adicionar o compararCaseInsensitive para enum type

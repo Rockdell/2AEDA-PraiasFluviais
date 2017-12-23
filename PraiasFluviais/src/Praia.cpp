@@ -57,15 +57,20 @@ void Praia::setGps(Gps cd) {
 //Other methods
 void Praia::addServico(Servico s) {
 	servicos.push_back(s);
+	s.setPraia(this);
 }
 
 void Praia::removeServico(Servico s) {
 	int i = searchServico(s);
 
+	//TODO rever exceptions
+
 	if(i == -1)
 		throw ServicoNotFound(s);
-	else
+	else {
+		//servicos[i].setPraia(nullptr); Como vamos eliminar e perder o servico, nao é preciso preocuparmo-nos com o PraiaPtr
 		servicos.erase(servicos.begin() + i);
+	}
 }
 
 int Praia::searchServico(Servico s) {
@@ -76,6 +81,14 @@ int Praia::searchServico(Servico s) {
 	}
 
 	return -1;
+}
+
+//TODO
+void Praia::showServicos() {
+
+	for(size_t i = 0; i < servicos.size(); i++) {
+
+	}
 }
 
 bool Praia::operator ==(const Praia* p1) const {
