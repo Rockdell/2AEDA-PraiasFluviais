@@ -1,11 +1,13 @@
+
+#ifndef GPS_H_
+#define GPS_H_
+
+
 #include <string>
 #include <iostream>
 #include <sstream>
 #include <math.h>
 #include <iomanip>
-
-#ifndef GPS_H_
-#define GPS_H_
 
 /**
  * @brief Gps coordinates used as data-member in class Praia

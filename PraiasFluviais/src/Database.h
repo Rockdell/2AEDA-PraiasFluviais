@@ -1,3 +1,8 @@
+
+#ifndef DATABASE_H_
+#define DATABASE_H_
+
+
 #include <vector>
 #include <fstream>
 #include <sstream>
@@ -14,9 +19,6 @@
 #include "PAlbufeira.h"
 #include "PRio.h"
 #include "Exceptions.h"
-
-#ifndef DATABASE_H_
-#define DATABASE_H_
 
 typedef std::string Concelho;
 typedef std::map<Concelho, std::vector<Praia*>>::iterator iter_map;
@@ -114,9 +116,9 @@ public:
 	unsigned int getSize();
 
 	/**
-	 * @brief Orders the vector inside the map "praias" by name
+	 * @brief Orders the vector inside the map "praias"
 	 */
-	void sortPraiasNome();
+	void sortPraias();
 
 	/**
 	 * @brief Processes line from file

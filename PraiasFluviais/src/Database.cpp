@@ -1,5 +1,7 @@
 #include "Database.h"
 
+#include <algorithm>
+
 typedef std::string Concelho;
 
 Database::Database() {
@@ -51,14 +53,14 @@ void Database::addPraia(Praia* p) {
 		praias.insert(std::make_pair(p->getConcelho(), praiasConcelho));
 	}
 
-	sortPraiasNome();
+	sortPraias();
 }
 
 void Database::removePraia(Praia* p) {
 	iter_pair it = searchPraia(p);
 
 	if (it.second == -1)
-		throw PraiaNotFound(p->getNome());
+		throw PraiaNotFound(p->getName());
 	else {
 
 		//More than 1 element in vector or only 1 element?
@@ -96,7 +98,7 @@ iter_pair Database::searchPraia(Praia* p) {
 
 		for(size_t i = 0; i < it->second.size(); i++) {
 
-			if(p->getNome() == it->second[i]->getNome())
+			if(p->getName() == it->second[i]->getName())
 				return std::make_pair(it, i);
 		}
 
@@ -114,7 +116,7 @@ iter_pair Database::searchPraia(std::string n, std::string c) {
 
 		for(size_t i = 0; i < it->second.size(); i++) {
 
-			if(n == it->second[i]->getNome())
+			if(n == it->second[i]->getName())
 				return std::make_pair(it, i);
 		}
 
@@ -179,7 +181,14 @@ unsigned int Database::getSize() {
 	return cont;
 }
 
-void Database::sortPraiasNome() {
+bool sort(Praia* p1, Praia* p2) {
+	if (p1->getBandeira() == p2->getBandeira())
+		return (p1->getName() < p2->getName());
+	else
+		return (p1->getBandeira() < p2->getBandeira());
+}
+
+void Database::sortPraias() {
 
 	//Check if there are any Praias to sort
 	if(praias.empty())
@@ -189,161 +198,140 @@ void Database::sortPraiasNome() {
 
 		if(it->second.empty())
 			continue;
-		else {
-
-			for(size_t j = it->second.size() - 1; j > 0; j--) {
-
-				bool troca = false;
-
-				for(size_t i = 0; i < j; i++) {
-
-					if(it->second[i+1]->getBandeira() == it->second[i]->getBandeira()) {
-						if (it->second[i + 1]->getNome() < it->second[i]->getNome()) {
-							std::swap(it->second[i + 1], it->second[i]);
-							troca = true;
-						}
-					}
-					else {
-						std::swap(it->second[i+1],it->second[i]);
-						troca = true;
-					}
-				}
-
-				if(!troca)
-					return;
-			}
-		}
+		else
+			std::sort(it->second.begin(), it->second.end(), sort);
 	}
 }
 
+//TODO WORK BOIIIII
 void Database::processLine(std::string l) {
 
-	std::istringstream iss(l);
-	std::vector<std::string> properties;
-	std::string token;
-
-	//Parse line
-	while (getline(iss, token, ';')) {
-		properties.push_back(token);
-	}
-
-	if(properties.empty())
-		return;
-
-	//Type
-	std::string type = properties[0];
-
-	//Nome
-	std::string nome = properties[1];
-
-	//Concelho
-	std::string concelho = properties[2];
-
-	//Servicos
-	std::string str_servicos = properties[3];
-	std::istringstream iss_servicos(str_servicos);
-	std::vector<Servico> servicos;
-
-	if(str_servicos != "null_servicos") {
-		while(getline(iss_servicos, token, ',')) {
-			std::string t, n;
-			unsigned int d, m, a, s;
-
-			std::istringstream iss_serv(token);
-			iss_serv >> t >> n >> d >> m >> a >> s;
-
-			servico_t type = to_enum(t);
-
-			Servico tmp(type, n, d, m, a, nullptr, s);
-
-			servicos.push_back(tmp);
-		}
-	}
-
-	//Lotacao
-	int lotacao;
-	std::string str_lotacao = properties[4];
-	std::istringstream iss_lotacao(str_lotacao);
-	std::string s_lotacao;
-	iss_lotacao >> s_lotacao;
-	lotacao = std::stoi(s_lotacao);
-
-	//Bandeira
-	bool bandeira;
-	std::string str_bandeira = properties[5];
-
-	if(str_bandeira == "1")
-		bandeira = true;
-	else
-		bandeira = false;
-
-	//Gps
-	double lat, lon;
-	std::string str_gps = properties[6];
-	std::istringstream iss_gps(str_gps);
-	std::string s_lat, s_lon;
-	iss_gps >> s_lat >> s_lon;
-	lat = std::stod(s_lat);
-	lon = std::stod(s_lon);
-
-	Gps gps(lat,lon);
-
-	if (type == "R") {
-
-		//Largura
-		double largura;
-		std::string str_largura = properties[7];
-		std::istringstream iss_largura(str_largura);
-		std::string s_largura;
-		iss_largura >> s_largura;
-		largura = std::stod(s_largura);
-
-		//Caudal
-		double caudal;
-		std::string str_caudal = properties[8];
-		std::istringstream iss_caudal(str_caudal);
-		std::string s_caudal;
-		iss_caudal >> s_caudal;
-		caudal = std::stod(s_caudal);
-
-		//Profundidade
-		double profundidade;
-		std::string str_profundidade = properties[9];
-		std::istringstream iss_profundidade(str_profundidade);
-		std::string s_profundidade;
-		iss_profundidade >> s_profundidade;
-		profundidade = std::stod(s_profundidade);
-
-		PRio* p = new PRio(nome, concelho, servicos, lotacao, bandeira, gps, largura, caudal, profundidade);
-
-		//Set Praia nos servicos
-		for (size_t i = 0; i < servicos.size(); i++) {
-			servicos[i].setPraia(p);
-		}
-
-		addPraia(p);
-	}
-	else if (type == "A"){
-
-		//Area
-		double area;
-		std::string str_area = properties[7];
-		std::istringstream iss_area(str_area);
-		std::string s_area;
-		iss_area >> s_area;
-		area = std::stod(s_area);
-
-		PAlbufeira* p = new PAlbufeira(nome, concelho, servicos, lotacao, bandeira, gps, area);
-
-		//Set Praia nos servicos
-		for (size_t i = 0; i < servicos.size(); i++) {
-			servicos[i].setPraia(p);
-		}
-
-		addPraia(p);
-	}
-	else
-		throw ReadingLineError(l);
+//	std::istringstream iss(l);
+//	std::vector<std::string> properties;
+//	std::string token;
+//
+//	//Parse line
+//	while (getline(iss, token, ';')) {
+//		properties.push_back(token);
+//	}
+//
+//	if(properties.empty())
+//		return;
+//
+//	//Type
+//	std::string type = properties[0];
+//
+//	//Nome
+//	std::string nome = properties[1];
+//
+//	//Concelho
+//	std::string concelho = properties[2];
+//
+//	//Servicos
+//	std::string str_servicos = properties[3];
+//	std::istringstream iss_servicos(str_servicos);
+//	std::vector<Servico> servicos;
+//
+//	if(str_servicos != "null_servicos") {
+//		while(getline(iss_servicos, token, ',')) {
+//			std::string t, n;
+//			unsigned int d, m, a, s;
+//
+//			std::istringstream iss_serv(token);
+//			iss_serv >> t >> n >> d >> m >> a >> s;
+//
+//			servico_t type = to_enum(t);
+//
+//			Servico tmp(type, n, d, m, a, nullptr, s);
+//
+//			servicos.push_back(tmp);
+//		}
+//	}
+//
+//	//Lotacao
+//	int lotacao;
+//	std::string str_lotacao = properties[4];
+//	std::istringstream iss_lotacao(str_lotacao);
+//	std::string s_lotacao;
+//	iss_lotacao >> s_lotacao;
+//	lotacao = std::stoi(s_lotacao);
+//
+//	//Bandeira
+//	bool bandeira;
+//	std::string str_bandeira = properties[5];
+//
+//	if(str_bandeira == "1")
+//		bandeira = true;
+//	else
+//		bandeira = false;
+//
+//	//Gps
+//	double lat, lon;
+//	std::string str_gps = properties[6];
+//	std::istringstream iss_gps(str_gps);
+//	std::string s_lat, s_lon;
+//	iss_gps >> s_lat >> s_lon;
+//	lat = std::stod(s_lat);
+//	lon = std::stod(s_lon);
+//
+//	Gps gps(lat,lon);
+//
+//	if (type == "R") {
+//
+//		//Largura
+//		double largura;
+//		std::string str_largura = properties[7];
+//		std::istringstream iss_largura(str_largura);
+//		std::string s_largura;
+//		iss_largura >> s_largura;
+//		largura = std::stod(s_largura);
+//
+//		//Caudal
+//		double caudal;
+//		std::string str_caudal = properties[8];
+//		std::istringstream iss_caudal(str_caudal);
+//		std::string s_caudal;
+//		iss_caudal >> s_caudal;
+//		caudal = std::stod(s_caudal);
+//
+//		//Profundidade
+//		double profundidade;
+//		std::string str_profundidade = properties[9];
+//		std::istringstream iss_profundidade(str_profundidade);
+//		std::string s_profundidade;
+//		iss_profundidade >> s_profundidade;
+//		profundidade = std::stod(s_profundidade);
+//
+//		PRio* p = new PRio(nome, concelho, servicos, lotacao, bandeira, gps, largura, caudal, profundidade);
+//
+//		//Set Praia nos servicos
+//		for (size_t i = 0; i < servicos.size(); i++) {
+//			servicos[i].setPraia(p);
+//		}
+//
+//		addPraia(p);
+//	}
+//	else if (type == "A"){
+//
+//		//Area
+//		double area;
+//		std::string str_area = properties[7];
+//		std::istringstream iss_area(str_area);
+//		std::string s_area;
+//		iss_area >> s_area;
+//		area = std::stod(s_area);
+//
+//		PAlbufeira* p = new PAlbufeira(nome, concelho, servicos, lotacao, bandeira, gps, area);
+//
+//		//Set Praia nos servicos
+//		for (size_t i = 0; i < servicos.size(); i++) {
+//			servicos[i].setPraia(p);
+//		}
+//
+//		addPraia(p);
+//	}
+//	else
+//		throw ReadingLineError(l);
 }
 
 std::map<double,Praia*> Database::withInRangePraia(Praia * p, double r) {
@@ -380,7 +368,7 @@ std::map<double,Praia*> Database::withInRangePraia(Praia * p, double r) {
 		PRio* trash = new PRio();
 		ret.insert(std::make_pair(-1,trash));
 		return ret;
-	} 
+	}
 	else {
 		//Clears ranges vector
 		ranges.clear();
@@ -467,4 +455,4 @@ std::string decapitalize(std::string s) {
 	return str;
 }
 
-//TODO quando um nome tem mais que uma palavra, mudar o modo como é guardado. Adicionar o compararCaseInsensitive para enum type
+//TODO quando um nome tem mais que uma palavra, mudar o modo como é guardado.

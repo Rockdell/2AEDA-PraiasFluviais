@@ -1,21 +1,25 @@
-#include "Praia.h"
 
 #ifndef PRIO_H_
 #define PRIO_H_
 
+#include "Praia.h"
+
 class PRio : public Praia {
-	double largura, caudal, profundidade;
+	double width;
+	double flow;
+	double depth;
 public:
 	PRio();
-	PRio(std::string n, std::string c, std::vector<Servico> s, int lot, bool bA, Gps cd, double l, double cl, double p);
+	PRio(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA, Gps cd, double w, double f, double d);
 	~PRio();
 
-	double getLargura() const;
-	double getCaudal() const;
-	double getProfundidade() const;
-	void setLargura(double l);
-	void setCaudal(double c);
-	void setProfundidade(double p);
+	double getWidth() const;
+	double getFlow() const;
+	double getDepth() const;
+
+	void setWidth(double w);
+	void setFlow(double f);
+	void setDepth(double d);
 
 	std::string savePraia();
 	std::string fullInfoPraia();

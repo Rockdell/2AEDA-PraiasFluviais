@@ -1,31 +1,46 @@
 #include "Praia.h"
 
-//Constructors/Destructors
+//Constructors
 Praia::Praia() {
-	nome = "";
+	name = "";
 	concelho = "";
-	lotacao = 0;
+	capacity = 0;
 	bandeiraAzul = false;
 	coord = Gps();
 }
-Praia::Praia(std::string n, std::string c, int lot, bool bA, Gps cd) : nome(n), concelho(c), lotacao(lot), bandeiraAzul(bA), coord(cd) {
+Praia::Praia(std::string n, std::string c, unsigned int cap, bool bA, Gps cd) : name(n), concelho(c), capacity(cap), bandeiraAzul(bA), coord(cd) {
 }
 
-Praia::Praia(std::string n, std::string c, std::vector<Servico> s, int lot, bool bA, Gps cd) : nome(n), concelho(c), servicos(s), lotacao(lot), bandeiraAzul(bA), coord(cd) {
+Praia::Praia(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA, Gps cd) : name(n), concelho(c), services(s), capacity(cap), bandeiraAzul(bA), coord(cd) {
 }
 
 //Get methods
-std::string Praia::getNome() const {
-	return nome;
+std::string Praia::getName() const {
+	return name;
 }
 std::string Praia::getConcelho() const {
 	return concelho;
 }
-std::vector<Servico> Praia::getServicos() const {
-	return servicos;
+std::priority_queue<Service> Praia::getServices() const {
+	return services;
 }
-int Praia::getLotacao() const {
-	return lotacao;
+std::priority_queue<Service> Praia::getServices(service_t t) const {
+
+	std::priority_queue<Service> result;
+	std::priority_queue<Service> tmp = services;
+
+	while(!tmp.empty()) {
+
+		if(tmp.top().getType() == t)
+			result.push(tmp.top());
+
+		tmp.pop();
+	}
+
+	return result;
+}
+unsigned int Praia::getCapacity() const {
+	return capacity;
 }
 bool Praia::getBandeira() const {
 	return bandeiraAzul;
@@ -35,17 +50,17 @@ Gps Praia::getGps() const {
 }
 
 //Set methods
-void Praia::setNome(std::string n) {
-	nome = n;
+void Praia::setName(std::string n) {
+	name = n;
 }
 void Praia::setConcelho(std::string c) {
 	concelho = c;
 }
-void Praia::setServicos(std::vector<Servico> s) {
-	servicos = s;
+void Praia::setServices(std::priority_queue<Service> s) {
+	services = s;
 }
-void Praia::setLotacao(int lot) {
-	lotacao = lot;
+void Praia::setCapacity(unsigned int lot) {
+	capacity = lot;
 }
 void Praia::setBandeira(bool bA) {
 	bandeiraAzul = bA;
@@ -54,51 +69,82 @@ void Praia::setGps(Gps cd) {
 	coord = cd;
 }
 
-//Other methods
-void Praia::addServico(Servico s) {
-	servicos.push_back(s);
-	s.setPraia(this);
+//Service-related methods
+void Praia::addService(Service s) {
+	services.push(s);
 }
 
-void Praia::removeServico(Servico s) {
-	int i = searchServico(s);
+void Praia::addService(std::priority_queue<Service> s) {
+
+	while(!s.empty()) {
+
+		addService(s.top());
+		s.pop();
+	}
+}
+
+void Praia::removeService(Service s) {
+
+	if(!existService(s))
+		throw ServicoNotFound(s.getName());
+
+	std::priority_queue<Service> new_services;
+
+	while(!services.empty()) {
+
+		if(s == services.top()) {
+			services.pop();
+			continue;
+		}
+
+		new_services.push(services.top());
+		services.pop();
+	}
+
+	services = new_services;
 
 	//TODO rever exceptions
-
-	if(i == -1)
-		throw ServicoNotFound(s);
-	else {
-		//servicos[i].setPraia(nullptr); Como vamos eliminar e perder o servico, nao é preciso preocuparmo-nos com o PraiaPtr
-		servicos.erase(servicos.begin() + i);
-	}
 }
 
-int Praia::searchServico(Servico s) {
-	for(size_t i = 0; i < servicos.size(); i++)
-	{
-		if (s == servicos[i])
-			return i;
+bool Praia::existService(Service s) {
+
+	std::priority_queue<Service> search = services;
+
+	while(!search.empty()) {
+
+		if(s == search.top())
+			return true;
+
+		search.pop();
 	}
 
-	return -1;
+	return false;
 }
 
-//TODO
-void Praia::showServicos() {
+void Praia::showServices() {
 
-	for(size_t i = 0; i < servicos.size(); i++) {
+	std::priority_queue<Service> tmp = services;
+	unsigned int cont = 1;
 
+
+	while(!tmp.empty()) {
+		std::cout << " Service #" << cont << ": " << tmp.top().getName() << " (" << from_enum(tmp.top().getType()) << ")\n";
+		tmp.pop();
 	}
+
+	std::cout << std::endl;
 }
 
+//Operator overloading
 bool Praia::operator ==(const Praia* p1) const {
-	return (nome == p1->nome && concelho == p1->concelho);
+	return (name == p1->name && concelho == p1->concelho);
 }
 
+//Other methods
 std::string Praia::reducedInfoPraia() {
 	std::string result = "";
 
-	result += " Nome: " + nome + " (" +  concelho + ")";
+	result += " Nome: " + name + " (" +  concelho + ")";
 
 	return result;
 }

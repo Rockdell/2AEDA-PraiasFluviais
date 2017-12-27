@@ -1,8 +1,9 @@
-#include <string>
-#include <iostream>
 
 #ifndef EXCEPTIONS_H_
 #define EXCEPTIONS_H_
+
+#include <string>
+#include <iostream>
 
 /**
  * @brief Exceptions's base class
@@ -82,7 +83,7 @@ public:
 	/**
 	 * @brief ServicoNotFound Class constructor
 	 */
-	ServicoNotFound(Servico n) : Exception(n.getNome()) {
+	ServicoNotFound(std::string n) : Exception(n) {
 	}
 
 	/**
