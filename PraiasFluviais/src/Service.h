@@ -4,6 +4,7 @@
 
 #include <string>
 #include <ctime>
+#include <sstream>
 
 typedef enum {Restauracao, Alojamento, Aluguer, Null} service_t;
 
@@ -81,6 +82,8 @@ public:
 
 	bool operator ==(const Service &s) const;
 	bool operator <(const Service &s) const;
+
+	std::string displayService() const;
 
 };
 

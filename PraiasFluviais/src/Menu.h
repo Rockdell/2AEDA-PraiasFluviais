@@ -8,6 +8,9 @@
 #include "MenuFlow.h"
 #include "Globals.h"
 
+#include "Praia.h"
+#include "Service.h"
+
 int printMenu();
 
 void MainMenu();

@@ -206,132 +206,134 @@ void Database::sortPraias() {
 //TODO WORK BOIIIII
 void Database::processLine(std::string l) {
 
-//	std::istringstream iss(l);
-//	std::vector<std::string> properties;
-//	std::string token;
-//
-//	//Parse line
-//	while (getline(iss, token, ';')) {
-//		properties.push_back(token);
-//	}
-//
-//	if(properties.empty())
-//		return;
-//
-//	//Type
-//	std::string type = properties[0];
-//
-//	//Nome
-//	std::string nome = properties[1];
-//
-//	//Concelho
-//	std::string concelho = properties[2];
-//
-//	//Servicos
-//	std::string str_servicos = properties[3];
-//	std::istringstream iss_servicos(str_servicos);
-//	std::vector<Servico> servicos;
-//
-//	if(str_servicos != "null_servicos") {
-//		while(getline(iss_servicos, token, ',')) {
-//			std::string t, n;
-//			unsigned int d, m, a, s;
-//
-//			std::istringstream iss_serv(token);
-//			iss_serv >> t >> n >> d >> m >> a >> s;
-//
-//			servico_t type = to_enum(t);
-//
-//			Servico tmp(type, n, d, m, a, nullptr, s);
-//
-//			servicos.push_back(tmp);
-//		}
-//	}
-//
-//	//Lotacao
-//	int lotacao;
-//	std::string str_lotacao = properties[4];
-//	std::istringstream iss_lotacao(str_lotacao);
-//	std::string s_lotacao;
-//	iss_lotacao >> s_lotacao;
-//	lotacao = std::stoi(s_lotacao);
-//
-//	//Bandeira
-//	bool bandeira;
-//	std::string str_bandeira = properties[5];
-//
-//	if(str_bandeira == "1")
-//		bandeira = true;
-//	else
-//		bandeira = false;
-//
-//	//Gps
-//	double lat, lon;
-//	std::string str_gps = properties[6];
-//	std::istringstream iss_gps(str_gps);
-//	std::string s_lat, s_lon;
-//	iss_gps >> s_lat >> s_lon;
-//	lat = std::stod(s_lat);
-//	lon = std::stod(s_lon);
-//
-//	Gps gps(lat,lon);
-//
-//	if (type == "R") {
-//
-//		//Largura
-//		double largura;
-//		std::string str_largura = properties[7];
-//		std::istringstream iss_largura(str_largura);
-//		std::string s_largura;
-//		iss_largura >> s_largura;
-//		largura = std::stod(s_largura);
-//
-//		//Caudal
-//		double caudal;
-//		std::string str_caudal = properties[8];
-//		std::istringstream iss_caudal(str_caudal);
-//		std::string s_caudal;
-//		iss_caudal >> s_caudal;
-//		caudal = std::stod(s_caudal);
-//
-//		//Profundidade
-//		double profundidade;
-//		std::string str_profundidade = properties[9];
-//		std::istringstream iss_profundidade(str_profundidade);
-//		std::string s_profundidade;
-//		iss_profundidade >> s_profundidade;
-//		profundidade = std::stod(s_profundidade);
-//
-//		PRio* p = new PRio(nome, concelho, servicos, lotacao, bandeira, gps, largura, caudal, profundidade);
-//
+	std::istringstream iss(l);
+	std::vector<std::string> properties;
+	std::string token;
+
+	//Parse line
+	while (getline(iss, token, ';')) {
+		properties.push_back(token);
+	}
+
+	if(properties.empty())
+		return;
+
+	//Type
+	std::string type = properties[0];
+
+	//Nome
+	std::string nome = properties[1];
+
+	//Concelho
+	std::string concelho = properties[2];
+
+	//Servicos
+	std::string str_servicos = properties[3];
+	std::istringstream iss_servicos(str_servicos);
+	std::priority_queue<Service> pq_s;
+
+	if(str_servicos != "null_servicos") {
+		while(getline(iss_servicos, token, ',')) {
+			std::string t, n;
+			unsigned int d, m, a, s;
+
+			std::istringstream iss_serv(token);
+			iss_serv >> t >> n >> d >> m >> a >> s;
+
+			service_t type = to_enum(t);
+
+			Service tmp(type, n, s, d, m, a);
+
+			pq_s.push(tmp);
+		}
+	}
+
+	//Lotacao
+	int lotacao;
+	std::string str_lotacao = properties[4];
+	std::istringstream iss_lotacao(str_lotacao);
+	std::string s_lotacao;
+	iss_lotacao >> s_lotacao;
+	lotacao = std::stoi(s_lotacao);
+
+	//Bandeira
+	bool bandeira;
+	std::string str_bandeira = properties[5];
+
+	if(str_bandeira == "1")
+		bandeira = true;
+	else
+		bandeira = false;
+
+	//Gps
+	double lat, lon;
+	std::string str_gps = properties[6];
+	std::istringstream iss_gps(str_gps);
+	std::string s_lat, s_lon;
+	iss_gps >> s_lat >> s_lon;
+	lat = std::stod(s_lat);
+	lon = std::stod(s_lon);
+
+	Gps gps(lat,lon);
+
+	if (type == "R") {
+
+		//Largura
+		double largura;
+		std::string str_largura = properties[7];
+		std::istringstream iss_largura(str_largura);
+		std::string s_largura;
+		iss_largura >> s_largura;
+		largura = std::stod(s_largura);
+
+		//Caudal
+		double caudal;
+		std::string str_caudal = properties[8];
+		std::istringstream iss_caudal(str_caudal);
+		std::string s_caudal;
+		iss_caudal >> s_caudal;
+		caudal = std::stod(s_caudal);
+
+		//Profundidade
+		double profundidade;
+		std::string str_profundidade = properties[9];
+		std::istringstream iss_profundidade(str_profundidade);
+		std::string s_profundidade;
+		iss_profundidade >> s_profundidade;
+		profundidade = std::stod(s_profundidade);
+
+		PRio* p = new PRio(nome, concelho, pq_s, lotacao, bandeira, gps, largura, caudal, profundidade);
+
+		//TODO ????
 //		//Set Praia nos servicos
 //		for (size_t i = 0; i < servicos.size(); i++) {
 //			servicos[i].setPraia(p);
 //		}
-//
-//		addPraia(p);
-//	}
-//	else if (type == "A"){
-//
-//		//Area
-//		double area;
-//		std::string str_area = properties[7];
-//		std::istringstream iss_area(str_area);
-//		std::string s_area;
-//		iss_area >> s_area;
-//		area = std::stod(s_area);
-//
-//		PAlbufeira* p = new PAlbufeira(nome, concelho, servicos, lotacao, bandeira, gps, area);
-//
+
+		addPraia(p);
+	}
+	else if (type == "A"){
+
+		//Area
+		double area;
+		std::string str_area = properties[7];
+		std::istringstream iss_area(str_area);
+		std::string s_area;
+		iss_area >> s_area;
+		area = std::stod(s_area);
+
+		PAlbufeira* p = new PAlbufeira(nome, concelho, pq_s, lotacao, bandeira, gps, area);
+
+		//TODO ????
 //		//Set Praia nos servicos
 //		for (size_t i = 0; i < servicos.size(); i++) {
 //			servicos[i].setPraia(p);
 //		}
-//
-//		addPraia(p);
-//	}
-//	else
-//		throw ReadingLineError(l);
+
+		addPraia(p);
+	}
+	else
+		throw ReadingLineError(l);
 }
 
 std::map<double,Praia*> Database::withInRangePraia(Praia * p, double r) {

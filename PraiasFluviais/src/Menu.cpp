@@ -79,6 +79,7 @@ void AddMenu() {
 
 			//Object's variables
 			std::priority_queue<Service> services;
+			std::priority_queue<Service> tmp_pq;
 			unsigned int capacity;
 			bool bandeira;
 			double lat, lon, width, flow, depth;
@@ -128,74 +129,81 @@ void AddMenu() {
 
 			//TODO
 			//Servicos
-//			std::cout << " List of servicos (CTRL-Z para terminar): " << std::endl;
-//			unsigned int cont_s = 0;
-//
-//			redo_servico1:
-//			Service new_service;
-//			service_t type;
-//
-//			std::cout << " Servico numero " << cont_s + 1 << ": \n";
-//
-//			std::cout << " Tipo (Restauracao, alojamento): ";
-//			std::getline(std::cin, i_typeS);
-//
-//			if (std::cin.eof())
-//			{
-//				std::cin.clear();
-//				goto endservico1;
-//			}
-//
-//			switch (inputHandling(i_typeS, 's')) {
-//				case 0:
-//					std::cerr << " # Input invalido.";
-//					goto redo_servico1;
-//				case 1:
-//					break;
-//				case 2:
-//					std::cerr << " # Operacao cancelada. ";
-//					_getch();
-//					return;
-//			}
-//
-//			type = to_enum(i_typeS);
-//
-//			if(tipo == Null) {
-//				std::cerr << " # Input invalido.";
-//				goto redo_servico1;
-//			}
-//
-//			std::cout << " Nome do servico: ";
-//			std::getline(std::cin, i_nomeS);
-//
-//			switch (inputHandling(i_nomeS, 's')) {
-//				case 0:
-//					std::cerr << " # Input invalido.";
-//					goto redo_servico1;
-//				case 1:
-//					break;
-//				case 2:
-//					std::cerr << " # Operacao cancelada. ";
-//					_getch();
-//					return;
-//			}
-//
-//			new_serv.setTipo(tipo);
-//			new_serv.setNome(i_nomeS);
-//
-//			//Check for duplicates in services
-//			for (size_t i = 0; i < servicos.size(); i++) {
-//				if(servicos[i] == new_serv) {
-//					std::cerr << " # Servico já existe.";
-//					goto redo_servico1;
-//				}
-//			}
-//
-//			cont_s++;
-//			servicos.push_back(new_serv);
-//			goto redo_servico1;
-//
-//			endservico1:
+			std::cout << " List of servicos (CTRL-Z para terminar): " << std::endl;
+			unsigned int cont_s = 0;
+
+			redo_servico1:
+			Service new_service;
+			service_t type;
+
+			std::cout << " Servico numero " << cont_s + 1 << ": \n";
+
+			std::cout << " Tipo (Restauracao, alojamento): ";
+			std::getline(std::cin, i_typeS);
+
+			if (std::cin.eof())
+			{
+				std::cin.clear();
+				goto endservico1;
+			}
+
+			switch (inputHandling(i_typeS, 's')) {
+				case 0:
+					std::cerr << " # Input invalido.";
+					goto redo_servico1;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			type = to_enum(i_typeS);
+
+			if(type == Null) {
+				std::cerr << " # Input invalido.";
+				goto redo_servico1;
+			}
+
+			std::cout << " Nome do servico: ";
+			std::getline(std::cin, i_nameS);
+
+			switch (inputHandling(i_nameS, 's')) {
+				case 0:
+					std::cerr << " # Input invalido.";
+					goto redo_servico1;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			new_service.setType(type);
+			new_service.setName(i_nameS);
+
+			//Check for duplicates in services
+			tmp_pq = services;
+
+			while(!tmp_pq.empty())
+			{
+				Service tmp_s = tmp_pq.top();
+				if(new_service == tmp_s)
+				{
+					std::cerr << " # Servico já existe.";
+					goto redo_servico1;
+				}
+				tmp_pq.pop();
+			}
+
+			cont_s++;
+			services.push(new_service);
+			goto redo_servico1;
+
+			endservico1:
+			//FIM -------------------------------------------------------
 
 			//Capacity:
 			std::cout << " Capacity of praia: ";
@@ -384,6 +392,7 @@ void AddMenu() {
 
 			//Object's variables
 			std::priority_queue<Service> services;
+			std::priority_queue<Service> tmp_pq;
 			unsigned int capacity;
 			bool bandeira;
 			double lat, lon, area;
@@ -432,74 +441,81 @@ void AddMenu() {
 			i_concelho = decapitalize(i_concelho);
 
 			//Servicos
-//			std::cout << " Lista de servicos (CTRL-Z para terminar): " << std::endl;
-//			unsigned int cont_s = 0;
-//
-//			redo_servico2:
-//			Servico new_serv;
-//			servico_t tipo;
-//
-//			std::cout << " Servico numero " << cont_s + 1 << ": \n";
-//
-//			std::cout << " Tipo (Restauracao, alojamento): ";
-//			std::getline(std::cin, i_tipoS);
-//
-//			if (std::cin.eof())
-//			{
-//				std::cin.clear();
-//				goto endservico2;
-//			}
-//
-//			switch (inputHandling(i_tipoS, 's')) {
-//				case 0:
-//					std::cerr << " # Input invalido.";
-//					goto redo_servico2;
-//				case 1:
-//					break;
-//				case 2:
-//					std::cerr << " # Operacao cancelada. ";
-//					_getch();
-//					return;
-//			}
-//
-//			tipo = to_enum(i_tipoS);
-//
-//			if(tipo == Null) {
-//				std::cerr << " # Input invalido.";
-//				goto redo_servico2;
-//			}
-//
-//			std::cout << " Nome do servico: ";
-//			std::getline(std::cin, i_nomeS);
-//
-//			switch (inputHandling(i_nomeS, 's')) {
-//				case 0:
-//					std::cerr << " # Input invalido.";
-//					goto redo_servico2;
-//				case 1:
-//					break;
-//				case 2:
-//					std::cerr << " # Operacao cancelada. ";
-//					_getch();
-//					return;
-//			}
-//
-//			new_serv.setTipo(tipo);
-//			new_serv.setNome(i_nomeS);
-//
-//			//Check for duplicates in services
-//			for (size_t i = 0; i < servicos.size(); i++) {
-//				if(servicos[i] == new_serv) {
-//					std::cerr << " # Servico já existe.";
-//					goto redo_servico2;
-//				}
-//			}
-//
-//			cont_s++;
-//			servicos.push_back(new_serv);
-//			goto redo_servico2;
-//
-//			endservico2:
+			std::cout << " Lista de servicos (CTRL-Z para terminar): " << std::endl;
+			unsigned int cont_s = 0;
+
+			redo_servico2:
+			Service new_serv;
+			service_t type;
+
+			std::cout << " Servico numero " << cont_s + 1 << ": \n";
+
+			std::cout << " Tipo (Restauracao, alojamento): ";
+			std::getline(std::cin, i_typeS);
+
+			if (std::cin.eof())
+			{
+				std::cin.clear();
+				goto endservico2;
+			}
+
+			switch (inputHandling(i_typeS, 's')) {
+				case 0:
+					std::cerr << " # Input invalido.";
+					goto redo_servico2;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			type = to_enum(i_typeS);
+
+			if(type == Null) {
+				std::cerr << " # Input invalido.";
+				goto redo_servico2;
+			}
+
+			std::cout << " Nome do servico: ";
+			std::getline(std::cin, i_nameS);
+
+			switch (inputHandling(i_nameS, 's')) {
+				case 0:
+					std::cerr << " # Input invalido.";
+					goto redo_servico2;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			new_serv.setType(type);
+			new_serv.setName(i_nameS);
+
+			//Check for duplicates in services
+			tmp_pq = services;
+
+			while(!tmp_pq.empty())
+			{
+				Service tmp_s = tmp_pq.top();
+				if(new_serv == tmp_s)
+				{
+					std::cerr << " # Servico já existe.";
+					goto redo_servico2;
+				}
+				tmp_pq.pop();
+			}
+
+			cont_s++;
+			services.push(new_serv);
+			goto redo_servico2;
+
+			endservico2:
+			//FIM --------------------------------------------------------
 
 			//Capacity:
 			std::cout << " Capacity of praia: ";
@@ -1016,62 +1032,80 @@ void EditMenu() {
 		case '4': {
 
 			//Remove service
-			std::string i_index, i_typeS, i_nameS;
-			int index;
-			service_t type;
+			std::string i_index, i_indexService;
+			int index, indexService;
 			Service new_service;
 
 			//TODO you thought i was done? jew it
 
-//			//Display praias
-//			db.showPraias();
-//
-//			if (db.getSize() == 0) {
-//				std::cerr << " Nao existem praias para editar. ";
-//				_getch();
-//				return;
-//			} else
-//				std::cout << "Numero da praia que pretende editar: ";
-//
-//			redo_index4:
-//			std::getline(std::cin, i_index);
-//
-//			switch (inputHandling(i_index, 'i')) {
-//				case 0:
-//					std::cerr << " # Input invalido. Introduza novamente: ";
-//					goto redo_index4;
-//				case 1:
-//					break;
-//				case 2:
-//					std::cerr << " # Operacao cancelada. ";
-//					_getch();
-//					return;
-//			}
-//
-//			std::istringstream iss_index(i_index);
-//			iss_index >> index;
-//
-//			unsigned int i = index - 1;
-//
-//			if (i >= 0 && i <= db.getSize()) {
-//				//All good
-//			}
-//			else {
-//				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
-//				goto redo_index4;
-//			}
-//			Praia* tmp = db.searchPraia(i);
-//
-//			//Show services
-//			tmp->showServicos();
-//
-//			if (tmp->getServicos().size() == 0) {
-//				std::cerr << " Nao existem servicos para remover. ";
-//				_getch();
-//				return;
-//			}
-//
-//			redo_removeserv_t:
+			//Display praias
+			db.showPraias();
+
+			if (db.getSize() == 0) {
+				std::cerr << " Nao existem praias para editar. ";
+				_getch();
+				return;
+			} else
+				std::cout << "Numero da praia que pretende editar: ";
+
+			redo_index4:
+			std::getline(std::cin, i_index);
+
+			switch (inputHandling(i_index, 'i')) {
+				case 0:
+					std::cerr << " # Input invalido. Introduza novamente: ";
+					goto redo_index4;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			std::istringstream iss_index(i_index);
+			iss_index >> index;
+
+			unsigned int i = index - 1;
+
+			if (i >= 0 && i <= db.getSize()) {
+				//All good
+			}
+			else {
+				std::cerr << " # Nao existe uma praia com esse index. Introduza novamente: ";
+				goto redo_index4;
+			}
+			Praia* tmp = db.searchPraia(i);
+
+			//Show services
+			tmp->showServices();
+
+			if (tmp->getServices().size() == 0) {
+				std::cerr << " Nao existem servicos para remover. ";
+				_getch();
+				return;
+			}
+
+			redo_removeserv_t:
+			std::getline(std::cin, i_indexService);
+
+			switch (inputHandling(i_indexService, 'i')) {
+				case 0:
+					std::cerr << " # Input invalido. Introduza novamente: ";
+					goto redo_removeserv_t;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operacao cancelada. ";
+					_getch();
+					return;
+			}
+
+			std::istringstream iss_indexService(i_indexService);
+			iss_indexService >> indexService;
+
+			unsigned int iService = indexService - 1;
+
 //			std::cout << " Tipo (Restauracao, alojamento): ";
 //			std::getline(std::cin, i_tipoS);
 //
@@ -1112,23 +1146,33 @@ void EditMenu() {
 //
 //			new_serv.setTipo(tipo);
 //			new_serv.setNome(i_nomeS);
-//
-//			Praia* p = db.searchPraia(i);
-//
+
+			if (iService >= 0 && iService <= tmp->getServices().size()) {
+				//All good
+			}
+			else {
+				std::cerr << " # Nao existe um servico com esse index. Introduza novamente: ";
+				goto redo_removeserv_t;
+			}
+
+			Service s_tmp = tmp->accessService(iService);
+
 //			//Check if there's a service like that in the object
 //			if (p->searchServico(new_serv) == -1) {
 //				std::cerr << " # Servico nao existe.";
 //				goto redo_removeserv_t;
 //			}
-//
-//			PRio* p1 = dynamic_cast<PRio*>(p);
-//			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
-//
-//			//Verificar class
-//			if (p1 == nullptr)
-//				p2->removeServico(new_serv);
-//			else
-//				p1->removeServico(new_serv);
+
+			PRio* p1 = dynamic_cast<PRio*>(tmp);
+			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(tmp);
+
+			//Verificar class
+			if (p1 == nullptr)
+				p2->removeService(s_tmp);
+			else
+				p1->removeService(s_tmp);
+
+			//FIM --------------------------------------------------------------
 
 			std::cout << " Servicos editados com sucesso. \n";
 

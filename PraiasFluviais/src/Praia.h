@@ -64,6 +64,7 @@ public:
 	void addService(Service s);
 	void addService(std::priority_queue<Service> s);
 	void removeService(Service s);
+	Service accessService(unsigned int index) const;
 	bool existService(Service s);
 	void showServices();
 

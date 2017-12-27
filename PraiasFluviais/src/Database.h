@@ -19,6 +19,7 @@
 #include "PAlbufeira.h"
 #include "PRio.h"
 #include "Exceptions.h"
+#include "Service.h"
 
 typedef std::string Concelho;
 typedef std::map<Concelho, std::vector<Praia*>>::iterator iter_map;

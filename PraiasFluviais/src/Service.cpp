@@ -161,6 +161,30 @@ bool Service::operator <(const Service &s) const {
 	return (last_inspection < s.last_inspection);
 }
 
+//Display Service
+std::string Service::displayService() const {
+
+	std::ostringstream oss;
+
+	oss << name << " (" << from_enum(type) << ")" << "\n" << "Status : ";
+
+	switch(status.getClosed()) {
+	case 0:
+		oss << "Open" << "\n";
+		break;
+	case 1:
+		oss << "Closed temporarily" << " : Closed since " << status.getClosingDate().display() << "\n";
+		break;
+	case 2:
+		oss << "Closed permanently" << " : Closed since " << status.getClosingDate().display() << "\n";
+		break;
+	}
+
+	oss << "Last inspection on " << getDate().display() << "\n";
+
+	return oss.str();
+}
+
 //Other methods
 service_t to_enum(std::string str) {
 
@@ -184,6 +208,8 @@ std::string from_enum(service_t s) {
 		return "Restauracao";
 	else if (s == Alojamento)
 		return "Alojamento";
+//	else if (s == Aluguer)
+//		return "Aluguer";
 	else
 		return "Null";
 }

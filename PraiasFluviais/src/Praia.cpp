@@ -106,6 +106,21 @@ void Praia::removeService(Service s) {
 	//TODO rever exceptions
 }
 
+//Access a Service in the priority queue with a specific index
+Service Praia::accessService(unsigned int index) const {
+
+	index--;
+	std::priority_queue<Service> pq_tmp;
+
+	while(index != 0)
+	{
+		pq_tmp.pop();
+		index--;
+	}
+
+	return pq_tmp.top();
+}
+
 bool Praia::existService(Service s) {
 
 	std::priority_queue<Service> search = services;
@@ -126,13 +141,12 @@ void Praia::showServices() {
 	std::priority_queue<Service> tmp = services;
 	unsigned int cont = 1;
 
-
 	while(!tmp.empty()) {
-		std::cout << " Service #" << cont << ": " << tmp.top().getName() << " (" << from_enum(tmp.top().getType()) << ")\n";
+		Service ts = tmp.top();
+		std::cout << " Service #" << cont << ":\n" << ts.displayService() << "\n";
 		tmp.pop();
+		cont++;
 	}
-
-	std::cout << std::endl;
 }
 
 //Operator overloading
