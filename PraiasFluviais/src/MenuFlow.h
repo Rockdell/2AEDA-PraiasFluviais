@@ -2,8 +2,8 @@
 #ifndef MENUFLOW_H_
 #define MENUFLOW_H_
 
-typedef enum {INITIAL, ADD, REMOVE, EDIT, WATCH, DONE} state_t;
-typedef enum {GO_BACK, GO_ADD, GO_REMOVE, GO_EDIT, GO_WATCH} ev_type_t;
+typedef enum {INITIAL, ADD, REMOVE, EDIT, WATCH, SERVICES, DONE} state_t;
+typedef enum {GO_BACK, GO_ADD, GO_REMOVE, GO_EDIT, GO_WATCH, GO_SERVICES} ev_type_t;
 
 typedef struct {
 	ev_type_t type;

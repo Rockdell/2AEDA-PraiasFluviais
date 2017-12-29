@@ -14,7 +14,7 @@ int main() {
 	//setlocale(LC_ALL, "");
 	//std::locale::global(std::locale(""));
 	//std::cout.imbue(std::locale());
-	std::string path = "C:\\Users\\Miguel Teixeira\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt";
+	std::string path = "C:\\Users\\Xavi\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt";
 
 	std::string filename_praias;
 

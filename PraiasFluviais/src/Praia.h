@@ -43,13 +43,14 @@ class Praia {
 public:
 	Praia();
 	Praia(std::string n, std::string c, unsigned int cap, bool bA, Gps cd);
-	Praia(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA, Gps cdd);
+	Praia(std::string n, std::string c, std::priority_queue<Service> s, HashTabService hs, unsigned int cap, bool bA, Gps cd); //TODO Added the hash table to the arguments
 	virtual ~Praia() {};
 
 	std::string getName() const;
 	std::string getConcelho() const;
 	std::priority_queue<Service> getServices() const;
 	std::priority_queue<Service> getServices(service_t t) const;
+	HashTabService getServicesClosed() const; //TODO added
 	unsigned int getCapacity() const;
 	bool getBandeira() const;
 	Gps getGps() const;
@@ -63,10 +64,13 @@ public:
 
 	void addService(Service s);
 	void addService(std::priority_queue<Service> s);
-	void removeService(Service s);
+	void removeService(Service s); //TODO alterado para procurar na hash table tb
+	std::string inspectionService(Service s); //TODO Acrescentado para o menu dos Serviços
+	std::string closeService(Service s, int closed_type); //TODO Acrescentado para o menu dos Serviços
+	std::string openService(Service s); //TODO Acrescentado para o menu dos Serviços
 	Service accessService(unsigned int index) const;
-	bool existService(Service s);
-	void showServices();
+	bool existService(Service s); //TODO alterado para procurar na hash table tb
+	void showServices(); //TODO alterado para procurar na hash table tb
 
 	//Change and add some more
 	bool operator==(const Praia* p1) const;

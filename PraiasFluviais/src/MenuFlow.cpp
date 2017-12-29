@@ -19,6 +19,8 @@ int menuHandler(event_t *evt) {
 				currentState = WATCH;
 			else if(evt->type == GO_BACK)
 				currentState = DONE;
+			else if(evt->type == GO_SERVICES)
+				currentState = SERVICES;
 			else
 				return 0;
 
@@ -49,6 +51,14 @@ int menuHandler(event_t *evt) {
 			break;
 		}
 		case WATCH: {
+			if(evt->type == GO_BACK)
+				currentState = INITIAL;
+			else
+				return 0;
+
+			break;
+		}
+		case SERVICES: {
 			if(evt->type == GO_BACK)
 				currentState = INITIAL;
 			else

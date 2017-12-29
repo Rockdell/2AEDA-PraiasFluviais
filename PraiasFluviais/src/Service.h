@@ -66,7 +66,7 @@ class Service {
 public:
 
 	Service();
-	Service(service_t t, std::string n, unsigned int c, unsigned int s_d, unsigned int s_m, unsigned int s_a);
+	Service(service_t t, std::string n, unsigned int s_d, unsigned int s_m, unsigned int s_a); //TODO alterado para guardar so servicos abertos com a data da ultima inspecao e o status a 0
 	Service(service_t t, std::string n, unsigned int d, unsigned int m, unsigned int a, unsigned int c, unsigned int s_d, unsigned int s_m, unsigned int s_a);
 	~Service();
 

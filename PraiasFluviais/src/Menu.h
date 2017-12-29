@@ -18,6 +18,7 @@ void AddMenu();
 void RemoveMenu();
 void EditMenu();
 void WatchMenu();
+void ServicesMenu();
 
 int inputHandling(std::string input, char property);
 int sendEvent(char c);

@@ -8,7 +8,7 @@ class PAlbufeira : public Praia {
 	double area;
 public:
 	PAlbufeira();
-	PAlbufeira(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA,  Gps cd, double a);
+	PAlbufeira(std::string n, std::string c, std::priority_queue<Service> s, HashTabService hs, unsigned int cap, bool bA,  Gps cd, double a);
 	~PAlbufeira();
 
 	double getArea() const;

@@ -6,7 +6,7 @@ PRio::PRio() : Praia() {
 	flow = 0;
 	depth = 0;
 }
-PRio::PRio(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA, Gps cd, double w, double f, double d) : Praia(n,c,s,cap,bA,cd) {
+PRio::PRio(std::string n, std::string c, std::priority_queue<Service> s, HashTabService hs, unsigned int cap, bool bA, Gps cd, double w, double f, double d) : Praia(n, c, s, hs, cap, bA, cd) {
 	width = w;
 	flow = f;
 	depth = d;
@@ -43,23 +43,40 @@ std::string PRio::savePraia() {
 
 	praia += getName() + ";" + getConcelho() + ";";
 
-	if (!getServices().empty()) {
-		std::priority_queue<Service> s_tmp = getServices();
-		while(!s_tmp.empty()) {
+	if (getServices().empty() && getServicesClosed().empty())
+	{
+		praia += "null_servicos";
+	}
+	else {
+		if (!getServices().empty()) {
+			std::priority_queue<Service> s_tmp = getServices();
+			while (!s_tmp.empty()) {
 
-			Service tmp = s_tmp.top();
+				Service tmp = s_tmp.top();
 
-			if (s_tmp.size() == 1)
-				praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed());
-			else {
+				if (s_tmp.size() == 1 && getServicesClosed().empty())
+					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed());
+				else {
+					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + ", ";
+				}
+
+				s_tmp.pop();
+			}
+		}
+
+		if (!getServicesClosed().empty()) {
+			HashTabService ht_tmp = getServicesClosed();
+			for (auto it = ht_tmp.begin(); it != ht_tmp.end(); it++)
+			{
+				Service tmp = *it;
+
 				praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + ", ";
 			}
-
-			s_tmp.pop();
+			//Livra-se do espaço e da virgula a mais
+			praia.pop_back();
+			praia.pop_back();
 		}
 	}
-	else
-		praia += "null_servicos";
 
 	praia += ";";
 

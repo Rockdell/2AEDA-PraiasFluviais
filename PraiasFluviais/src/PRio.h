@@ -10,7 +10,7 @@ class PRio : public Praia {
 	double depth;
 public:
 	PRio();
-	PRio(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA, Gps cd, double w, double f, double d);
+	PRio(std::string n, std::string c, std::priority_queue<Service> s, HashTabService hs, unsigned int cap, bool bA, Gps cd, double w, double f, double d);
 	~PRio();
 
 	double getWidth() const;

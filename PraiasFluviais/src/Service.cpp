@@ -6,15 +6,15 @@
 //DATE
 //Constructor
 Service::Date::Date() {
-
 	//Current day, month and year
-	time_t now = time(0);
-	tm *ltm = localtime(&now);
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
 
-	day = ltm->tm_mday;
-	month = ltm->tm_mon;
-	year = ltm->tm_yday;
+	day = now->tm_year + 1900;
+	month = now->tm_mon + 1;
+	year = now->tm_mday;
 }
+
 
 Service::Date::Date(unsigned int d, unsigned int m, unsigned int y): day(d), month(m), year(y) {
 }
@@ -108,10 +108,11 @@ Service::Service() {
 	name = "";
 }
 
-Service::Service(service_t t, std::string n, unsigned int c, unsigned int s_d, unsigned int s_m, unsigned int s_a) {
+Service::Service(service_t t, std::string n, unsigned int s_d, unsigned int s_m, unsigned int s_a) {
 	type = t;
 	name = n;
-	status = Status(c, s_d, s_m, s_a);
+	last_inspection = Date(s_d, s_m, s_a);
+	status = Status(); //Poe o status a 0 -> ou seja so cria servicos abertos
 }
 
 Service::Service(service_t t, std::string n, unsigned int d, unsigned int m, unsigned int a,unsigned int c, unsigned int s_d, unsigned int s_m, unsigned int s_a) {
@@ -173,10 +174,10 @@ std::string Service::displayService() const {
 		oss << "Open" << "\n";
 		break;
 	case 1:
-		oss << "Closed temporarily" << " : Closed since " << status.getClosingDate().display() << "\n";
+		oss << "Closed temporarily since " << status.getClosingDate().display() << "\n";
 		break;
 	case 2:
-		oss << "Closed permanently" << " : Closed since " << status.getClosingDate().display() << "\n";
+		oss << "Closed permanently since " << status.getClosingDate().display() << "\n";
 		break;
 	}
 
@@ -208,8 +209,8 @@ std::string from_enum(service_t s) {
 		return "Restauracao";
 	else if (s == Alojamento)
 		return "Alojamento";
-//	else if (s == Aluguer)
-//		return "Aluguer";
+	else if (s == Aluguer)
+		return "Aluguer";
 	else
 		return "Null";
 }

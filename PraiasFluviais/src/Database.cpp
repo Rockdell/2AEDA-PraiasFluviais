@@ -231,6 +231,7 @@ void Database::processLine(std::string l) {
 	std::string str_servicos = properties[3];
 	std::istringstream iss_servicos(str_servicos);
 	std::priority_queue<Service> pq_s;
+	HashTabService hashServices;
 
 	if(str_servicos != "null_servicos") {
 		while(getline(iss_servicos, token, ',')) {
@@ -242,9 +243,18 @@ void Database::processLine(std::string l) {
 
 			service_t type = to_enum(t);
 
-			Service tmp(type, n, s, d, m, a);
-
-			pq_s.push(tmp);
+			//TODO alterei que se estiver fechado (temporariamente ou permanentemente) a data da ultima inspecao fica a data em que fechou, e no ficheiro guarda se a data da ultima inspecao so (o que se estiver fechado é a data em que fechou)
+			//porque noa faz sentido ter uma data de inspeção enquanto ele esta fechado!
+			if (s == 0)
+			{
+				Service tmp(type, n, d, m, a);
+				pq_s.push(tmp);
+			}
+			else
+			{
+				Service tmp(type, n, d, m, a, s, d, m, a);
+				hashServices.insert(tmp);
+			}
 		}
 	}
 
@@ -302,7 +312,7 @@ void Database::processLine(std::string l) {
 		iss_profundidade >> s_profundidade;
 		profundidade = std::stod(s_profundidade);
 
-		PRio* p = new PRio(nome, concelho, pq_s, lotacao, bandeira, gps, largura, caudal, profundidade);
+		PRio* p = new PRio(nome, concelho, pq_s, hashServices, lotacao, bandeira, gps, largura, caudal, profundidade);
 
 		//TODO ????
 //		//Set Praia nos servicos
@@ -322,7 +332,7 @@ void Database::processLine(std::string l) {
 		iss_area >> s_area;
 		area = std::stod(s_area);
 
-		PAlbufeira* p = new PAlbufeira(nome, concelho, pq_s, lotacao, bandeira, gps, area);
+		PAlbufeira* p = new PAlbufeira(nome, concelho, pq_s, hashServices, lotacao, bandeira, gps, area);
 
 		//TODO ????
 //		//Set Praia nos servicos
