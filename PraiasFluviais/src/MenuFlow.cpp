@@ -15,12 +15,12 @@ int menuHandler(event_t *evt) {
 				currentState = REMOVE;
 			else if(evt->type == GO_EDIT)
 				currentState = EDIT;
-			else if(evt->type == GO_WATCH)
-				currentState = WATCH;
-			else if(evt->type == GO_BACK)
-				currentState = DONE;
 			else if(evt->type == GO_SERVICES)
 				currentState = SERVICES;
+			else if(evt->type == GO_SEARCH)
+				currentState = SEARCH;
+			else if(evt->type == GO_BACK)
+				currentState = DONE;
 			else
 				return 0;
 
@@ -50,7 +50,7 @@ int menuHandler(event_t *evt) {
 
 			break;
 		}
-		case WATCH: {
+		case SERVICES: {
 			if(evt->type == GO_BACK)
 				currentState = INITIAL;
 			else
@@ -58,7 +58,7 @@ int menuHandler(event_t *evt) {
 
 			break;
 		}
-		case SERVICES: {
+		case SEARCH: {
 			if(evt->type == GO_BACK)
 				currentState = INITIAL;
 			else

@@ -10,11 +10,25 @@ Database db;
 
 int main() {
 
-	//Allow to output portuguese characters like 'ç' or 'ã'
-	//setlocale(LC_ALL, "");
-	//std::locale::global(std::locale(""));
-	//std::cout.imbue(std::locale());
-	std::string path = "C:\\Users\\Xavi\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt";
+	/**
+	 *  @mainpage Praias Fluviais Index Page
+	 *
+	 *  @section intro_sec Introduction
+	 *
+	 *  This is the documentation for a project developed in the classes of AEDA.
+	 *
+	 *  @section usage_sec Usage
+	 *
+	 *  Follow the instructions on the screen and press the number corresponding to what you want to do.
+	 *  At any moment, you can write '0' to cancel any operation.
+	 *
+	 *  Have fun!
+	 *
+	 *  @section done_sec Work done by:
+	 *
+	 *  Pedro Tavares and Miguel Teixeira
+	 */
+	std::string path = "C:\\Users\\Miguel Teixeira\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt";
 
 	std::string filename_praias;
 
@@ -27,7 +41,8 @@ int main() {
 		db.load(path);
 	}
 	catch(Exception& e) {
-		std::cout << " Erro com o ficheiro: " << e.getMessage() << std::endl;
+		std::cout << "\n Erro com o ficheiro: " << e.getMessage() << std::endl;
+		_getch();
 		goto get_filename;
 	}
 
@@ -51,8 +66,8 @@ int main() {
 	}
 	catch (Exception& e) {
 		e.display();
+		_getch();
 	}
 
 	return 0;
-
 }

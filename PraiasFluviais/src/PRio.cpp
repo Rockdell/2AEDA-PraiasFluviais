@@ -6,7 +6,7 @@ PRio::PRio() : Praia() {
 	flow = 0;
 	depth = 0;
 }
-PRio::PRio(std::string n, std::string c, std::priority_queue<Service> s, HashTabService hs, unsigned int cap, bool bA, Gps cd, double w, double f, double d) : Praia(n, c, s, hs, cap, bA, cd) {
+PRio::PRio(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA, Gps cd, double w, double f, double d) : Praia(n, c, s, cap, bA, cd) {
 	width = w;
 	flow = f;
 	depth = d;
@@ -36,28 +36,28 @@ void PRio::setDepth(double d) {
 	depth = d;
 }
 
-//Other methods //TODO change later
+//Other methods
 std::string PRio::savePraia() {
 
 	std::string praia = "R;";
 
 	praia += getName() + ";" + getConcelho() + ";";
 
-	if (getServices().empty() && getServicesClosed().empty())
-	{
+	if (getServices().empty() && getServicesClosed().empty()) {
 		praia += "null_servicos";
 	}
 	else {
 		if (!getServices().empty()) {
 			std::priority_queue<Service> s_tmp = getServices();
+
 			while (!s_tmp.empty()) {
 
 				Service tmp = s_tmp.top();
 
 				if (s_tmp.size() == 1 && getServicesClosed().empty())
-					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed());
+					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display();
 				else {
-					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + ", ";
+					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display() + ", ";
 				}
 
 				s_tmp.pop();
@@ -66,12 +66,13 @@ std::string PRio::savePraia() {
 
 		if (!getServicesClosed().empty()) {
 			HashTabService ht_tmp = getServicesClosed();
-			for (auto it = ht_tmp.begin(); it != ht_tmp.end(); it++)
-			{
+
+			for (auto it = ht_tmp.begin(); it != ht_tmp.end(); it++) {
 				Service tmp = *it;
 
-				praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + ", ";
+				praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display() + ", ";
 			}
+
 			//Livra-se do espaço e da virgula a mais
 			praia.pop_back();
 			praia.pop_back();
@@ -92,10 +93,9 @@ std::string PRio::savePraia() {
 	praia += std::to_string(width) + ";" + std::to_string(flow) + ";" + std::to_string(depth);
 
 	return praia;
-
 }
 
-std::string PRio::fullInfoPraia() { //TODO might not need to change
+std::string PRio::fullInfoPraia() {
 	std::string result = "\n";
 
 	result += " Nome: " + getName() + "\n" + " Concelho: " + getConcelho() + "\n" + " Servicos: ";

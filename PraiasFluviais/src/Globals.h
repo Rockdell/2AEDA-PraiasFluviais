@@ -5,7 +5,12 @@
 #include "Database.h"
 
 /**
- * @brief Initial Global Variable created to store data
+ *  @file Globals.h
+ */
+
+/**
+ *  @var extern Database db
+ *  @brief Global variable Database used to store data.
  */
 extern Database db;
 

@@ -6,128 +6,150 @@
 #include <iostream>
 
 /**
+ *  @file Exceptions.h
+ */
+
+/**
  * @brief Exceptions's base class
  */
 class Exception {
-	std::string message;
-public:
+
 	/**
-	 * @brief Exception Class constructor
+	 * @brief Exception's error message.
+	 */
+	std::string message;
+
+public:
+
+	/**
+	 * @brief Exception class constructor.
+	 * @param m Error message.
 	 */
 	Exception(std::string m) {
 		message = m;
 	}
 
+	/**
+	 * @brief Abstract Exception class destructor.
+	 */
 	virtual ~Exception() {}
 
 	/**
-	 * @brief Gets the message data member
-	 * @return Returns string with the message data member
+	 * @brief Gets the error message.
+	 * @return Returns error message.
+	 * @see message
 	 */
 	std::string getMessage() const {
 		return message;
 	}
 
 	/**
-	 * @brief Virtual function for the other classes
+	 * @brief Pure virtual function that displays the error message.
+	 * @see message
 	 */
 	virtual void display() const = 0;
 
 };
 
 /**
- * @brief FileNotFound is derived from class Exception
+ * @brief FileNotFound class is publicly derived from class Exception.
  */
 class FileNotFound : public Exception {
 public:
+
 	/**
-	 * @brief FileNotFound Class constructor
+	 * @brief FileNotFound class constructor.
+	 * @param f Path of .txt file.
 	 */
 	FileNotFound(std::string f) : Exception(f) {
 	}
 
 	/**
-	 * @brief Displays the message data member
+	 * @brief Implementation of the virtual function.
 	 */
 	void display() const {
-		std::string msg = " Ficheiro não encontrado: " + getMessage();
+		std::string msg = " File not found: " + getMessage();
 		std::cout << msg << std::endl;
 	}
 };
 
 /**
- * @brief PraiaNotFound is derived from class Exception
+ * @brief PraiaNotFound class is publicly derived from class Exception.
  */
 class PraiaNotFound : public Exception {
 public:
+
 	/**
-	 * @brief PraiaNotFound Class constructor
+	 * @brief PraiaNotFound class constructor.
 	 */
 	PraiaNotFound(std::string n) : Exception(n) {
 	}
 
 	/**
-	 * @brief Displays the message data member
+	 * @brief Implementation of the virtual function.
 	 */
 	void display() const {
-		std::string msg = " Praia não encontrada: " + getMessage();
+		std::string msg = " Praia not found: " + getMessage();
 		std::cout << msg << std::endl;
 	}
 };
 
 /**
- * @brief ServicoNotFound is derived from class Exception
+ * @brief ServicoNotFound class is publicly derived from class Exception.
  */
 class ServicoNotFound : public Exception {
 public:
+
 	/**
-	 * @brief ServicoNotFound Class constructor
+	 * @brief ServicoNotFound class constructor.
 	 */
 	ServicoNotFound(std::string n) : Exception(n) {
 	}
 
 	/**
-	 * @brief Displays the message data member
+	 * @brief Implementation of the virtual function.
 	 */
 	void display() const {
-		std::string msg = " Serviço não encontrado: " + getMessage();
+		std::string msg = " Service not found: " + getMessage();
 		std::cout << msg << std::endl;
 	}
 };
 
 /**
- * @brief ReadingLineError is derived from class Exception
+ * @brief ReadingLineError class is publicly derived from class Exception.
  */
 class ReadingLineError : public Exception {
 public:
+
 	/**
-	 * @brief ReadingLineError Class constructor
+	 * @brief ReadingLineError class constructor.
 	 */
 	ReadingLineError(std::string l) : Exception(l) {
 	}
 
 	/**
-	 * @brief Displays the message data member
+	 * @brief Implementation of the virtual function.
 	 */
 	void display() const {
-		std::string msg = " Erro ao ler a linha: " + getMessage();
+		std::string msg = " Error while reading line: " + getMessage();
 		std::cout << msg << std::endl;
 	}
 };
 
 /**
- * @brief PraiaAlreadyExists is derived from class Exception
+ * @brief PraiaAlreadyExists class is publicly derived from class Exception.
  */
 class PraiaAlreadyExists : public Exception {
 public:
+
 	/**
-	 * @brief PraiaAlreadyExists Class constructor
+	 * @brief PraiaAlreadyExists class constructor.
 	 */
 	PraiaAlreadyExists(std::string n) : Exception(n) {
 	}
 
 	/**
-	 * @brief Displays the message data member
+	 * @brief Implementation of the virtual function.
 	 */
 	void display() const {
 		std::string msg = " Praia já existe: " + getMessage();

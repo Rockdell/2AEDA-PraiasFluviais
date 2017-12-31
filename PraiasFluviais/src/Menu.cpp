@@ -18,18 +18,17 @@ int printMenu() {
 		case INITIAL:
 			MainMenu();
 			break;
-		case ADD: {
+		case ADD:
 			AddMenu();
 			break;
-		}
 		case REMOVE:
 			RemoveMenu();
 			break;
 		case EDIT:
 			EditMenu();
 			break;
-		case WATCH:
-			WatchMenu();
+		case SEARCH:
+			SearchMenu();
 			break;
 		case SERVICES:
 			ServicesMenu();
@@ -43,13 +42,13 @@ int printMenu() {
 
 void MainMenu() {
 
-	std::cout << " - Main Menu - " << std::endl << std::endl;
-	std::cout << " [1] Create praia " << std::endl;
-	std::cout << " [2] Remove praia" << std::endl;
-	std::cout << " [3] Edit praia" << std::endl;
-	std::cout << " [4] Watch menu - change name plox" << std::endl;
-	std::cout << " [5] Services menu" << std::endl;
-	std::cout << " [0] Exit " << std::endl << std::endl;
+	std::cout << " - Main Menu -" << std::endl << std::endl;
+	std::cout << " [1] Create menu" << std::endl;
+	std::cout << " [2] Remove menu" << std::endl;
+	std::cout << " [3] Edit menu" << std::endl;
+	std::cout << " [4] Search menu" << std::endl;
+	std::cout << " [5] Service menu" << std::endl;
+	std::cout << " [0] Exit" << std::endl << std::endl;
 
 	int valid;
 
@@ -63,7 +62,7 @@ void MainMenu() {
 
 void AddMenu() {
 
-	std::cout << " - Creator Menu - " << std::endl << std::endl;
+	std::cout << " - Create Menu - " << std::endl << std::endl;
 	std::cout << " [1] Create praia - rio " << std::endl;
 	std::cout << " [2] Create praia - albufeira " << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
@@ -84,7 +83,6 @@ void AddMenu() {
 			//Object's variables
 			std::priority_queue<Service> services;
 			std::priority_queue<Service> tmp_pq;
-			HashTabService hs;
 			unsigned int capacity;
 			bool bandeira;
 			double lat, lon, width, flow, depth;
@@ -132,18 +130,17 @@ void AddMenu() {
 
 			i_concelho = decapitalize(i_concelho);
 
-			//TODO
-			//Servicos
-			std::cout << " List of servicos (CTRL-Z para terminar): " << std::endl;
+			//Services
+			std::cout << " List of services (CTRL-Z to end): " << std::endl;
 			unsigned int cont_s = 0;
 
 			redo_servico1:
 			Service new_service;
 			service_t type;
 
-			std::cout << " Servico numero " << cont_s + 1 << ": \n";
+			std::cout << " Service number " << cont_s + 1 << ": \n";
 
-			std::cout << " Tipo (Restauracao, alojamento): ";
+			std::cout << " Type (restauracao, alojamento): ";
 			std::getline(std::cin, i_typeS);
 
 			if (std::cin.eof())
@@ -154,12 +151,12 @@ void AddMenu() {
 
 			switch (inputHandling(i_typeS, 's')) {
 				case 0:
-					std::cerr << " # Input invalido.";
+					std::cerr << " # Invalid input.";
 					goto redo_servico1;
 				case 1:
 					break;
 				case 2:
-					std::cerr << " # Operacao cancelada. ";
+					std::cerr << " # Operation cancelled. ";
 					_getch();
 					return;
 			}
@@ -167,21 +164,21 @@ void AddMenu() {
 			type = to_enum(i_typeS);
 
 			if(type == Null) {
-				std::cerr << " # Input invalido.";
+				std::cerr << " # Invalid input.";
 				goto redo_servico1;
 			}
 
-			std::cout << " Nome do servico: ";
+			std::cout << " Name of service: ";
 			std::getline(std::cin, i_nameS);
 
 			switch (inputHandling(i_nameS, 's')) {
 				case 0:
-					std::cerr << " # Input invalido.";
+					std::cerr << " # Invalid input.";
 					goto redo_servico1;
 				case 1:
 					break;
 				case 2:
-					std::cerr << " # Operacao cancelada. ";
+					std::cerr << " # Operation cancelled. ";
 					_getch();
 					return;
 			}
@@ -192,14 +189,15 @@ void AddMenu() {
 			//Check for duplicates in services
 			tmp_pq = services;
 
-			while(!tmp_pq.empty())
-			{
+			while(!tmp_pq.empty()) {
+
 				Service tmp_s = tmp_pq.top();
-				if(new_service == tmp_s)
-				{
-					std::cerr << " # Servico já existe.";
+
+				if(new_service == tmp_s) {
+					std::cerr << " # Service already exists.";
 					goto redo_servico1;
 				}
+
 				tmp_pq.pop();
 			}
 
@@ -208,7 +206,6 @@ void AddMenu() {
 			goto redo_servico1;
 
 			endservico1:
-			//FIM -------------------------------------------------------
 
 			//Capacity:
 			std::cout << " Capacity of praia: ";
@@ -374,14 +371,7 @@ void AddMenu() {
 
 			Gps gps = Gps(lat, lon);
 
-			Praia* p = new PRio(i_name, i_concelho, services, hs, capacity, bandeira, gps, width, flow, depth);
-
-
-			//TODO
-			//Set Praia nos servicos
-//			for (size_t i = 0; i < services.size(); i++) {
-//				servicos[i].setPraia(p);
-//			}
+			Praia* p = new PRio(i_name, i_concelho, services, capacity, bandeira, gps, width, flow, depth);
 
 			//Add praia
 			db.addPraia(p);
@@ -398,7 +388,6 @@ void AddMenu() {
 			//Object's variables
 			std::priority_queue<Service> services;
 			std::priority_queue<Service> tmp_pq;
-			HashTabService hs;
 			unsigned int capacity;
 			bool bandeira;
 			double lat, lon, area;
@@ -446,17 +435,17 @@ void AddMenu() {
 
 			i_concelho = decapitalize(i_concelho);
 
-			//Servicos
-			std::cout << " Lista de servicos (CTRL-Z para terminar): " << std::endl;
+			//Services
+			std::cout << " List of services (CTRL-Z to end): " << std::endl;
 			unsigned int cont_s = 0;
 
 			redo_servico2:
 			Service new_serv;
 			service_t type;
 
-			std::cout << " Servico numero " << cont_s + 1 << ": \n";
+			std::cout << " Service number " << cont_s + 1 << ": \n";
 
-			std::cout << " Tipo (Restauracao, alojamento): ";
+			std::cout << " Type (restauracao, alojamento): ";
 			std::getline(std::cin, i_typeS);
 
 			if (std::cin.eof())
@@ -467,12 +456,12 @@ void AddMenu() {
 
 			switch (inputHandling(i_typeS, 's')) {
 				case 0:
-					std::cerr << " # Input invalido.";
+					std::cerr << " # Invalid input.";
 					goto redo_servico2;
 				case 1:
 					break;
 				case 2:
-					std::cerr << " # Operacao cancelada. ";
+					std::cerr << " # Operation cancelled. ";
 					_getch();
 					return;
 			}
@@ -480,21 +469,21 @@ void AddMenu() {
 			type = to_enum(i_typeS);
 
 			if(type == Null) {
-				std::cerr << " # Input invalido.";
+				std::cerr << " # Invalid input.";
 				goto redo_servico2;
 			}
 
-			std::cout << " Nome do servico: ";
+			std::cout << " Name of service: ";
 			std::getline(std::cin, i_nameS);
 
 			switch (inputHandling(i_nameS, 's')) {
 				case 0:
-					std::cerr << " # Input invalido.";
+					std::cerr << " # Invalid input.";
 					goto redo_servico2;
 				case 1:
 					break;
 				case 2:
-					std::cerr << " # Operacao cancelada. ";
+					std::cerr << " # Operation cancelled. ";
 					_getch();
 					return;
 			}
@@ -510,7 +499,7 @@ void AddMenu() {
 				Service tmp_s = tmp_pq.top();
 				if(new_serv == tmp_s)
 				{
-					std::cerr << " # Servico já existe.";
+					std::cerr << " # Service already exists.";
 					goto redo_servico2;
 				}
 				tmp_pq.pop();
@@ -521,7 +510,6 @@ void AddMenu() {
 			goto redo_servico2;
 
 			endservico2:
-			//FIM --------------------------------------------------------
 
 			//Capacity:
 			std::cout << " Capacity of praia: ";
@@ -645,12 +633,7 @@ void AddMenu() {
 
 			Gps gps = Gps(lat, lon);
 
-			Praia* p = new PAlbufeira(i_name, i_concelho, services, hs, capacity, bandeira, gps, area);
-
-//			//Set Praia nos servicos
-//			for (size_t i = 0; i < servicos.size(); i++) {
-//				servicos[i].setPraia(p);
-//			}
+			Praia* p = new PAlbufeira(i_name, i_concelho, services, capacity, bandeira, gps, area);
 
 			//Add praia
 			db.addPraia(p);
@@ -663,7 +646,6 @@ void AddMenu() {
 			std::cout << " Choose one of the options! " << std::endl;
 			goto again;
 		}
-
 	}
 }
 
@@ -724,7 +706,7 @@ void RemoveMenu() {
 				_getch();
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
+				std::cerr << " # Choose a valid praia. Re-enter: ";
 				goto redo_index;
 			}
 
@@ -800,7 +782,7 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
+				std::cerr << " # Choose a valid praia. Re-enter: ";
 				goto redo_index1;
 			}
 
@@ -880,7 +862,7 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
+				std::cerr << " # Choose a valid praia. Re-enter: ";
 				goto redo_index2;
 			}
 
@@ -920,121 +902,6 @@ void EditMenu() {
 
 			break;
 		}
-				  /*
-		case '3': {
-
-			//TODO create a menu for services maybe
-
-			//Add service
-			std::string i_index, i_typeS, i_nameS, i_dateS;
-			int index;
-			service_t type;
-			Service new_service;
-
-			//Display praias
-			db.showPraias();
-
-			if (db.getSize() == 0) {
-				std::cerr << " There are no praias to edit. ";
-				_getch();
-				return;
-			} else
-				std::cout << " Number of praia you want to edit: ";
-
-			redo_index3:
-			std::getline(std::cin, i_index);
-
-			switch (inputHandling(i_index, 'i')) {
-				case 0:
-					std::cerr << " # Invalid input. Re-enter: ";
-					goto redo_index3;
-				case 1:
-					break;
-				case 2:
-					std::cerr << " # Operation cancelled. ";
-					_getch();
-					return;
-			}
-
-			std::istringstream iss_index(i_index);
-			iss_index >> index;
-
-			unsigned int i = index - 1;
-
-			if (i >= 0 && i < db.getSize()) {
-				//All good
-			}
-			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
-				goto redo_index3;
-			}
-
-			redo_addserv_t:
-			std::cout << " Type (Restauracao, alojamento): ";
-			std::getline(std::cin, i_typeS);
-
-			switch (inputHandling(i_typeS, 's')) {
-				case 0:
-					std::cerr << " # Invalid input.";
-					goto redo_addserv_t;
-				case 1:
-					break;
-				case 2:
-					std::cerr << " # Operation cancelled. ";
-					_getch();
-					return;
-			}
-
-			type = to_enum(i_typeS);
-
-			if(type == Null) {
-				std::cerr << " # Invalid input.";
-				goto redo_addserv_t;
-			}
-
-			redo_addserv_n:
-			std::cout << " Name of the service: ";
-			std::getline(std::cin, i_nameS);
-
-			switch (inputHandling(i_nameS, 's')) {
-				case 0:
-					std::cerr << " # Invalid input.";
-					goto redo_addserv_n;
-				case 1:
-					break;
-				case 2:
-					std::cerr << " # Operation cancelled. ";
-					_getch();
-					return;
-			}
-
-			new_service.setType(type);
-			new_service.setName(i_nameS);
-
-			Praia* p = db.searchPraia(i);
-
-			//Check if there's a service like that in the object
-			if (p->existService(new_service)) {
-				std::cerr << " # Service already exists.";
-				goto redo_addserv_t;
-			}
-
-			PRio* p1 = dynamic_cast<PRio*>(p);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(p);
-
-			//Verify class
-			if (p1 == nullptr)
-				p2->addService(new_service);
-			else
-				p1->addService(new_service);
-
-			std::cout << " Servicos editados com sucesso. \n";
-
-			_getch();
-
-			break;
-		}
-		*/
 		case '3': {
 
 			//Edit capacity
@@ -1053,13 +920,13 @@ void EditMenu() {
 			else
 				std::cout << " Number of praia you want to edit: ";
 
-			redo_index5:
+			redo_index3:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 			case 0:
 				std::cerr << " # Invalid input. Re-enter: ";
-				goto redo_index5;
+				goto redo_index3;
 			case 1:
 				break;
 			case 2:
@@ -1077,8 +944,8 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
-				goto redo_index5;
+				std::cerr << " # Choose a valid praia. Re-enter: ";
+				goto redo_index3;
 			}
 
 			std::cout << " New capacity: ";
@@ -1136,13 +1003,13 @@ void EditMenu() {
 			else
 				std::cout << " Number of praia you want to edit: ";
 
-			redo_index6:
+			redo_index4:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 				case 0:
 					std::cerr << " # Invalid input. Re-enter: ";
-					goto redo_index6;
+					goto redo_index4;
 				case 1:
 					break;
 				case 2:
@@ -1160,8 +1027,8 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
-				goto redo_index6;
+				std::cerr << " # Choose a valid praia. Re-enter: ";
+				goto redo_index4;
 			}
 
 			std::cout << " New bandeira (yes/no): ";
@@ -1219,13 +1086,13 @@ void EditMenu() {
 			else
 				std::cout << " Number of praia you want to edit: ";
 
-			redo_index7:
+			redo_index5:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 				case 0:
 					std::cerr << " # Invalid input. Re-enter: ";
-					goto redo_index7;
+					goto redo_index5;
 				case 1:
 					break;
 				case 2:
@@ -1243,8 +1110,8 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
-				goto redo_index7;
+				std::cerr << " # Choose a valid praia. Re-enter: ";
+				goto redo_index5;
 			}
 
 			std::cout << " New latitude: ";
@@ -1334,13 +1201,13 @@ void EditMenu() {
 			else
 				std::cout << " Number of praia you want to edit: ";
 
-			redo_index8:
+			redo_index6:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 			case 0:
 				std::cerr << " # Invalid input. Re-enter: ";
-				goto redo_index8;
+				goto redo_index6;
 			case 1:
 				break;
 			case 2:
@@ -1358,8 +1225,8 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
-				goto redo_index8;
+				std::cerr << " # Choose a valid praia. Re-enter: ";
+				goto redo_index6;
 			}
 
 			std::cout << " New area: ";
@@ -1417,13 +1284,13 @@ void EditMenu() {
 			else
 				std::cout << " Number of praia you want to edit: ";
 
-			redo_index9:
+			redo_index7:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 			case 0:
 				std::cerr << " # Invalid input. Re-enter: ";
-				goto redo_index9;
+				goto redo_index7;
 			case 1:
 				break;
 			case 2:
@@ -1441,8 +1308,8 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
-				goto redo_index9;
+				std::cerr << " # Choose a valid praia. Re-enter: ";
+				goto redo_index7;
 			}
 
 			std::cout << " New width: ";
@@ -1500,13 +1367,13 @@ void EditMenu() {
 			else
 				std::cout << " Number of praia you want to edit: ";
 
-			redo_indexA:
+			redo_index8:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 			case 0:
 				std::cerr << " # Invalid input. Re-enter: ";
-				goto redo_indexA;
+				goto redo_index8;
 			case 1:
 				break;
 			case 2:
@@ -1524,8 +1391,8 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
-				goto redo_indexA;
+				std::cerr << " # Choose a valid praia. Re-enter: ";
+				goto redo_index8;
 			}
 
 			std::cout << " New flow: ";
@@ -1583,13 +1450,13 @@ void EditMenu() {
 			else
 				std::cout << " Number of praia you want to edit: ";
 
-			redo_indexB:
+			redo_index9:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 			case 0:
 				std::cerr << " # Invalid input. Re-enter: ";
-				goto redo_indexB;
+				goto redo_index9;
 			case 1:
 				break;
 			case 2:
@@ -1607,8 +1474,8 @@ void EditMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # There are no praias with that name. Re-enter: ";
-				goto redo_indexB;
+				std::cerr << " # Choose a valid praia. Re-enter: ";
+				goto redo_index9;
 			}
 
 			std::cout << " New depth: ";
@@ -1649,19 +1516,19 @@ void EditMenu() {
 
 		}
 		default: {
-			std::cout << " Escolha uma das opcoes! " << std::endl;
+			std::cout << " Choose one of the options! " << std::endl;
 			goto again;
 		}
 	}
 }
 
-void WatchMenu() {
+void SearchMenu() {
 
-	std::cout << " - Watch Menu - " << std::endl << std::endl;
-	std::cout << " [1] Ver praias por nome (ordenadas por concelho)" << std::endl;
-	std::cout << " [2] Pesquisar praia pelo nome e concelho" << std::endl;
-	std::cout << " [3] Pesquisar praia por coordenadas GPS" << std::endl;
-	std::cout << " [4] Pesquisar praias nas proximidades de uma praia existente" << std::endl;
+	std::cout << " - Search Menu - " << std::endl << std::endl;
+	std::cout << " [1] Search praia by name, for more info (sorted by concelho and bandeira)" << std::endl;
+	std::cout << " [2] Search praia by name and concelho" << std::endl;
+	std::cout << " [3] Search praia by coordinates" << std::endl;
+	std::cout << " [4] Search for praias near an existent praia" << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
 	again:
@@ -1681,24 +1548,24 @@ void WatchMenu() {
 			db.showPraias();
 
 			if(db.getSize() == 0) {
-				std::cerr << " Nao existem praias para mostrar. ";
+				std::cerr << " There are no praias to search. ";
 				_getch();
 				return;
 			}
 			else
-				std::cout << " Numero da praia que pretende ver mais informacao: ";
+				std::cout << " Number of praia you want more information: ";
 
 			redo_index1:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 				case 0:
-					std::cerr << " # Input invalido. Introduza novamente: ";
+					std::cerr << " # Invalid input. Re-enter: ";
 					goto redo_index1;
 				case 1:
 					break;
 				case 2:
-					std::cerr << " # Operacao cancelada. ";
+					std::cerr << " # Operation cancelled. ";
 					_getch();
 					return;
 			}
@@ -1715,7 +1582,7 @@ void WatchMenu() {
 				return;
 			}
 			else {
-				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
+				std::cerr << " # Choose a valid praia. Re-enter: ";
 				goto redo_index1;
 			}
 
@@ -1726,43 +1593,43 @@ void WatchMenu() {
 			std::string query_nome, query_concelho;
 
 			if (db.getSize() == 0) {
-				std::cerr << " Nao existem praias para pesquisar. ";
+				std::cerr << " There are no praias to search. ";
 				_getch();
 				return;
 			}
 			else
-				std::cout << " Qual o nome da praia que pretende pesquisar: ";
+				std::cout << " Name of praia you want to search for: ";
 
 			redo_nome:
 			std::getline(std::cin, query_nome);
 
 			switch (inputHandling(query_nome, 's')) {
 			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
+				std::cerr << " # Invalid input. Re-enter: ";
 				goto redo_nome;
 			case 1:
 				break;
 			case 2:
-				std::cerr << " # Operacao cancelada. ";
+				std::cerr << " # Operation cancelled. ";
 				_getch();
 				return;
 			}
 
 			query_nome = decapitalize(query_nome);
 
-			std::cout << " Qual o nome do concelho da praia que pretende pesquisar: ";
+			std::cout << " Concelho of praia you want to search for: ";
 
 			redo_concelho:
 			std::getline(std::cin, query_concelho);
 
 			switch (inputHandling(query_concelho, 's')) {
 			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
+				std::cerr << " # Invalid input. Re-enter: ";
 				goto redo_concelho;
 			case 1:
 				break;
 			case 2:
-				std::cerr << " # Operacao cancelada. ";
+				std::cerr << " # Operation cancelled. ";
 				_getch();
 				return;
 			}
@@ -1793,7 +1660,7 @@ void WatchMenu() {
 			double lat, lon, radius;
 
 			if (db.getSize() <= 0) {
-				std::cerr << " Nao existem praias para pesquisar. ";
+				std::cerr << " There are no praias to search.";
 				_getch();
 				return;
 			}
@@ -1806,12 +1673,12 @@ void WatchMenu() {
 
 			switch (inputHandling(i_lat, 'd')) {
 			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
+				std::cerr << " # Invalid input. Re-enter: ";
 				goto redo_latitude;
 			case 1:
 				break;
 			case 2:
-				std::cerr << " # Operacao cancelada. ";
+				std::cerr << " # Operation cancelled. ";
 				_getch();
 				return;
 			}
@@ -1827,12 +1694,12 @@ void WatchMenu() {
 
 			switch (inputHandling(i_lon, 'd')) {
 			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
+				std::cerr << " # Invalid input. Re-enter: ";
 				goto redo_longitude;
 			case 1:
 				break;
 			case 2:
-				std::cerr << " # Operacao cancelada. ";
+				std::cerr << " # Operation cancelled. ";
 				_getch();
 				return;
 			}
@@ -1848,12 +1715,12 @@ void WatchMenu() {
 
 			switch (inputHandling(i_radius, 'd')) {
 			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
+				std::cerr << " # Invalid input: ";
 				goto redo_radius1;
 			case 1:
 				break;
 			case 2:
-				std::cerr << " # Operacao cancelada. ";
+				std::cerr << " # Operation cancelled. ";
 				_getch();
 				return;
 			}
@@ -1871,8 +1738,8 @@ void WatchMenu() {
 			for (auto it = result.begin(); it != result.end(); it++) {
 
 				if (it == result.begin() && it->first == -1) {
-					std::cout << " Nao existem praias num raio de " << std::to_string(radius) << " das coordenadas.\n";
-					std::cout << " Todas as praias e respetivas distancias as coordenadas: \n";
+					std::cout << " There are no praias in a radius of " << std::to_string(radius) << " from the coordinates.\n";
+					std::cout << " All praias and their distances from the coordinates: \n";
 					continue;
 				}
 
@@ -1895,24 +1762,24 @@ void WatchMenu() {
 			db.showPraias();
 
 			if (db.getSize() <= 1) {
-				std::cerr << " Nao existem praias para pesquisar. ";
+				std::cerr << " There are no praias to search. ";
 				_getch();
 				return;
 			}
 			else
-				std::cout << " Numero da praia a partir da qual pretende pesquisar: ";
+				std::cout << " Number of praia you want to search for: ";
 
 		redo_index2:
 			std::getline(std::cin, i_index);
 
 			switch (inputHandling(i_index, 'i')) {
 			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
+				std::cerr << " # Invalid input. Re-enter: ";
 				goto redo_index2;
 			case 1:
 				break;
 			case 2:
-				std::cerr << " # Operacao cancelada. ";
+				std::cerr << " # Operation cancelled. ";
 				_getch();
 				return;
 			}
@@ -1926,7 +1793,7 @@ void WatchMenu() {
 				//All good
 			}
 			else {
-				std::cerr << " # Nao existe uma praia com esse nome. Introduza novamente: ";
+				std::cerr << " # Choose a valid praia. Re-enter: ";
 				goto redo_index2;
 			}
 
@@ -1941,12 +1808,12 @@ void WatchMenu() {
 
 			switch (inputHandling(i_radius, 'd')) {
 			case 0:
-				std::cerr << " # Input invalido. Introduza novamente: ";
+				std::cerr << " # Invalid input. Re-enter: ";
 				goto redo_radius2;
 			case 1:
 				break;
 			case 2:
-				std::cerr << " # Operacao cancelada. ";
+				std::cerr << " # Operation cancelled. ";
 				_getch();
 				return;
 			}
@@ -1962,8 +1829,8 @@ void WatchMenu() {
 			for (auto it = result.begin(); it != result.end(); it++) {
 
 				if (it == result.begin() && it->first == -1) {
-					std::cout << " Nao existem praias num raio de " << std::to_string(radius) << " das coordenadas.\n";
-					std::cout << " Todas as praias e respetivas distancias as coordenadas: \n";
+					std::cout << " There are no praias in a radius of " << std::to_string(radius) << " from the original praia.\n";
+					std::cout << " All praias and their distances to the original praia: \n";
 					continue;
 				}
 
@@ -1978,7 +1845,7 @@ void WatchMenu() {
 
 		}
 		default: {
-			std::cout << " Escolha uma das opcoes! " << std::endl;
+			std::cout << " Choose one of the options! " << std::endl;
 			goto again;
 		}
 	}
@@ -1987,275 +1854,79 @@ void WatchMenu() {
 void ServicesMenu()
 {
 	std::cout << " - Services Menu - " << std::endl << std::endl;
-	std::cout << " [1] Realizar inspecao" << std::endl;
-	std::cout << " [2] Encerrar Servico" << std::endl;
-	std::cout << " [3] Reabrir Servico" << std::endl;
-	std::cout << " [4] Eliminar Servico" << std::endl;
-	std::cout << " [5] Adicionar Servico" << std::endl;
-	std::cout << " [6] Ver Servicos" << std::endl;
+	std::cout << " [1] See services" << std::endl;
+	std::cout << " [2] Add service" << std::endl;
+	std::cout << " [3] Remove service" << std::endl;
+	std::cout << " [4] Perform an inspection" << std::endl;
+	std::cout << " [5] Re-open service" << std::endl;
+	std::cout << " [6] Close service" << std::endl;
 	std::cout << " [0] Back " << std::endl << std::endl;
 
-	again: char input = _getch();
+	again:
+	char input = _getch();
 
-	//So verifico se é para voltar para tras ou se é para continuar
-	if (input == '0')
-	{
-		sendEvent('0');
-		return;
-	}
-
-	if (input != '1' && input != '2' && input != '3' && input != '4' && input != '5' && input != '6')
-	{
-		std::cerr << " Escolha uma das opcoes! " << std::endl;
-		goto again;
-	}
-
-	//Gota do this for all cases so might as well put in before the switch :)
-	std::string ps_index, ss_index;
-	int p_index, s_index;
-
-	//Display praias
-	db.showPraias();
-
-	if (db.getSize() == 0) {
-		std::cerr << " There are no praias to edit. ";
-		_getch();
-		return;
-	}
-	else
-		std::cout << " Number of praia you want to edit: ";
-
-make_inspection1:
-	std::getline(std::cin, ps_index);
-
-	switch (inputHandling(ps_index, 'i')) {
-	case 0:
-		std::cerr << " # Invalid input. Re-enter: ";
-		goto make_inspection1;
-	case 1:
-		break;
-	case 2:
-		std::cerr << " # Operation cancelled. ";
-		_getch();
-		return;
-	}
-
-	std::istringstream iss_index(ps_index);
-	iss_index >> p_index;
-
-	unsigned int i = p_index - 1;
-
-	if (i >= 0 && i < db.getSize()) {
-		//All good
-	}
-	else {
-		std::cerr << " # There are no praias with that index. Re-enter: ";
-		goto make_inspection1;
-	}
-	Praia* tmp = db.searchPraia(i);
-
-	Service s_tmp;
-
-	if (input != '5')
-	{
-		//Show services
-		tmp->showServices();
-
-		if (input == '6')
-			goto pass;
-
-		if (tmp->getServices().size() == 0 && tmp->getServicesClosed().size() == 0) {
-			std::cerr << " Nao existem servicos para inspecionar. ";
-			_getch();
-			return;
-		}
-
-	make_inspection2:
-		std::getline(std::cin, ss_index);
-
-		switch (inputHandling(ss_index, 'i')) {
-		case 0:
-			std::cerr << " # Input invalido. Introduza novamente: ";
-			goto make_inspection2;
-		case 1:
+	switch(input) {
+		case '0': {
+			sendEvent('0');
 			break;
-		case 2:
-			std::cerr << " # Operacao cancelada. ";
-			_getch();
-			return;
 		}
-
-		std::istringstream iss_indexService(ss_index);
-		iss_indexService >> s_index;
-
-		unsigned int iService = s_index - 1;
-
-		if (s_index >= 0 && s_index <= tmp->getServices().size() + tmp->getServicesClosed().size()) {
-			//All good
-		}
-		else {
-			std::cerr << " # Nao existe um servico com esse index. Introduza novamente: ";
-			goto make_inspection2;
-		}
-
-		s_tmp = tmp->accessService(iService);
-	}
-
-pass:
-	switch (input) {
 		case '1': {
-			//MAKE INSPECTION
-			//Se nao estiver aberto nao pode inspecionar!
-			if (s_tmp.getStatus().getClosed() != 0)
-			{
-				std::cerr << " # Nao pode inspecionar um servico fechado! Introduza novamente: ";
-				goto make_inspection2;
-			}
 
-			PRio* p1 = dynamic_cast<PRio*>(tmp);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(tmp);
+			//Show services
+			Praia* p = selectPraia();
 
-			//Verify class
-			if (p1 == nullptr)
-				std::cout << "Data de inspecao : " << p2->inspectionService(s_tmp) << "\n";
-			else
-				std::cout << "Data de inspecao : " << p1->inspectionService(s_tmp) << "\n";
+			if(p == nullptr)
+				return;
 
-			std::cout << " Servico inspecionado com sucesso. \n";
-
+			p->showServices();
+			
 			_getch();
 
 			break;
 		}
 		case '2': {
-			//CLOSE SERVICE
-			//Se nao estiver aberto nao pode fechar daaaa...
-			if (s_tmp.getStatus().getClosed() != 0)
-			{
-				std::cerr << " # Servico atualmente fechado! Introduza novamente: ";
-				goto make_inspection2;
-			}
 
-			PRio* p1 = dynamic_cast<PRio*>(tmp);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(tmp);
-
-			std::cout << " Fechar :" << std::endl;
-			std::cout << " [1] Temporariamente" << std::endl;
-			std::cout << " [2] Permanentemente" << std::endl;
-
-		closed_type:
-			char cts = _getch();
-	
-			if (cts != '1' && cts != '2')
-			{
-				std::cerr << " Escolha uma das opcoes! " << std::endl;
-				goto closed_type;
-			}
-
-			int cti;
-			if (cts == '1')
-				cti = 1;
-			else
-				cti = 2;
-
-			//Verify class
-			if (p1 == nullptr)
-				std::cout << " Data de inspecao atualizada para : " << p2->closeService(s_tmp,cti) << "\n";
-			else
-				std::cout << " Data de inspecao atualizada para : " << p1->closeService(s_tmp,cti) << "\n";
-
-			std::cout << " Servico fechado com sucesso. \n";
-
-			_getch();
-
-			break;
-		}
-		case '3' : {
-			//OPEN SERVICE
-			//Se nao estiver fechado nao pode abrir daaaa...
-			if(s_tmp.getStatus().getClosed() == 0)
-			{
-				std::cerr << " # Servico atualmente aberto! Introduza novamente: ";
-				goto make_inspection2;
-			}
-
-			if (s_tmp.getStatus().getClosed() == 2)
-			{
-				std::cerr << " # Servico PERMANENTEMENTE fechado! Introduza novamente: ";
-				goto make_inspection2;
-			}
-
-			PRio* p1 = dynamic_cast<PRio*>(tmp);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(tmp);
-
-			//Verify class
-			if (p1 == nullptr)
-				std::cout << " Data de inspecao atualizada para : " << p2->openService(s_tmp) << "\n";
-			else
-				std::cout << " Data de inspecao atualizada para : " << p1->openService(s_tmp) << "\n";
-
-			std::cout << " Servico aberto com sucesso. \n";
-
-			_getch();
-
-			break;
-		}
-		case '4': {
-			Service new_service();
-
-			PRio* p1 = dynamic_cast<PRio*>(tmp);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(tmp);
-
-			//Verify class
-			if (p1 == nullptr)
-				p2->removeService(s_tmp);
-			else
-				p1->removeService(s_tmp);
-
-			std::cout << " Servicos editados com sucesso. \n";
-
-			_getch();
-
-			break;
-		}
-		case '5': {
 			//Add service
+			Praia* p = selectPraia();
+
+			if(p == nullptr)
+				return;
+
 			std::string i_typeS, i_nameS;
-			int index;
 			service_t type;
 			Service new_service;
 
-		addService:
+			redo_addserv_t:
 			std::cout << " Type (Restauracao, alojamento, aluguer): ";
 			std::getline(std::cin, i_typeS);
 
 			switch (inputHandling(i_typeS, 's')) {
-			case 0:
-				std::cerr << " # Invalid input.";
-				goto addService;
-			case 1:
-				break;
-			case 2:
-				std::cerr << " # Operation cancelled. ";
-				_getch();
-				return;
+				case 0:
+					std::cerr << " # Invalid input.";
+					goto redo_addserv_t;
+				case 1:
+					break;
+				case 2:
+					std::cerr << " # Operation cancelled. ";
+					_getch();
+					return;
 			}
 
 			type = to_enum(i_typeS);
 
 			if (type == Null) {
 				std::cerr << " # Invalid input.";
-				goto addService;
+				goto redo_addserv_t;
 			}
 
-		redo_addserv_n:
+			redo_addserv_n:
 			std::cout << " Name of the service: ";
 			std::getline(std::cin, i_nameS);
 
 			switch (inputHandling(i_nameS, 's')) {
 			case 0:
 				std::cerr << " # Invalid input.";
-				goto addService;
+				goto redo_addserv_n;
 			case 1:
 				break;
 			case 2:
@@ -2268,21 +1939,99 @@ pass:
 			new_service.setName(i_nameS);
 
 			//Check if there's a service like that in the object
-			if (tmp->existService(new_service)) {
+			if (p->existService(new_service)) {
 				std::cerr << " # Service already exists.";
-				goto addService;
+				goto redo_addserv_t;
+			}
+			else
+				p->addService(new_service);
+
+			std::cout << " Service added successfully. ";
+
+			_getch();
+
+			break;
+		}
+		case '3': {
+
+			//Remove service
+			Praia* p = selectPraia();
+
+			if(p == nullptr)
+				return;
+
+			p->showServices();
+
+			Service s = selectService(p);
+
+			if(s.getType() == Null)
+				return;
+
+			p->removeService(s);
+
+			std::cout << " Service removed successfully. ";
+
+			_getch();
+
+			break;
+		}
+		case '4': {
+
+			//Perform inspection
+			Praia* p = selectPraia();
+
+			if(p == nullptr)
+				return;
+
+			p->showServices();
+
+			redo_service1:
+			Service s = selectService(p);
+
+			if(s.getType() == Null)
+				return;
+
+			if (s.getStatus().getClosed() != 0) {
+
+				std::cerr << " # Can't perform an inspection if service is closed. Re-enter: ";
+				goto redo_service1;
 			}
 
-			PRio* p1 = dynamic_cast<PRio*>(tmp);
-			PAlbufeira* p2 = dynamic_cast<PAlbufeira*>(tmp);
+			std::cout << " Service successfully inspected. ";
 
-			//Verify class
-			if (p1 == nullptr)
-				p2->addService(new_service);
-			else
-				p1->addService(new_service);
+			_getch();
 
-			std::cout << " Servicos editados com sucesso. \n";
+			break;
+		}
+		case '5': {
+
+			//Re-open service
+			Praia* p = selectPraia();
+
+			if(p == nullptr)
+				return;
+
+			p->showServices();
+
+			redo_service2:
+			Service s = selectService(p);
+
+			if(s.getType() == Null)
+				return;
+
+			if (s.getStatus().getClosed() == 0) {
+
+				std::cerr << " # Service is currently open. Re-enter: ";
+				goto redo_service2;
+			}
+			else if (s.getStatus().getClosed() == 2) {
+				std::cerr << " # Service is permanently closed. Re-enter: ";
+				goto redo_service2;
+			}
+
+			p->openService(s);
+
+			std::cout << " Service re-opened successfully. ";
 
 			_getch();
 
@@ -2290,9 +2039,69 @@ pass:
 		}
 		case '6': {
 
+			//Close service
+			Praia* p = selectPraia();
+
+			if(p == nullptr)
+				return;
+
+			p->showServices();
+
+			redo_service3:
+			Service s = selectService(p);
+
+			if(s.getType() == Null)
+				return;
+
+			if (s.getStatus().getClosed() != 0) {
+				std::cerr << " # Service is currently closed. Re-enter: ";
+				goto redo_service3;
+			}
+
+			std::cout << " Close :" << std::endl;
+			std::cout << " [1] Temporarily" << std::endl;
+			std::cout << " [2] Permanently" << std::endl;
+			std::cout << " [0] Cancel" << std::endl;
+
+			closed_type:
+			char cts = _getch();
+
+			unsigned int cti;
+
+			switch(cts) {
+				case '0': {
+					return;
+				}
+				case '1': {
+					cti = 1;
+					break;
+				}
+				case '2': {
+					cti = 2;
+					break;
+				}
+				default: {
+					std::cerr << " Choose one of the options! " << std::endl;
+					goto closed_type;
+				}
+			}
+
+			if (cts != '1' && cts != '2')		{
+				std::cerr << " Escolha uma das opcoes! " << std::endl;
+				goto closed_type;
+			}
+
+			p->closeService(s, cti);
+
+			std::cout << " Service closed successfully. ";
+
 			_getch();
 
 			break;
+		}
+		default: {
+			std::cout << " Choose one of the options! " << std::endl;
+			goto again;
 		}
 	}
 }
@@ -2303,7 +2112,7 @@ int inputHandling(std::string input, char property) {
 	 PROPRIEDADES:
 	 's' : nome, concelho, servico (string)
 	 'c':  latitude, longitude (double)
-	 'd' : area, largura, caudal, profundidade (double)
+	 'd' : area, largura, caudal, profundidade, raio (double)
 	 'b' : bandeira (bool)
 	 'i' : indices (int)
 	 RETURN:
@@ -2336,7 +2145,7 @@ int inputHandling(std::string input, char property) {
 	switch (property) {
 	case 's':
 		for (size_t i = 0; i < input.length(); i++) {
-			if (input.at(i) != ' ' && input.at(i) != '-' && !isalpha(input.at(i)))
+			if (input.at(i) != '-' && !isalpha(input.at(i)))
 				return 0;
 		}
 		break;
@@ -2413,7 +2222,7 @@ int sendEvent(char c) {
 			break;
 		}
 		case '4': {
-			event_t event{GO_WATCH};
+			event_t event{GO_SEARCH};
 			menuHandler(&event);
 			break;
 		}
@@ -2423,9 +2232,115 @@ int sendEvent(char c) {
 			break;
 		}
 		default:
-			std::cout << " Escolha uma das opcoes! " << std::endl;
+			std::cout << " Choose one of the options! " << std::endl;
 			return 0;
 	}
 
 	return 1;
+}
+
+Praia* selectPraia() {
+
+	std::string i_index;
+	int p_index;
+
+	//Display praias
+	db.showPraias();
+
+	if (db.getSize() == 0) {
+		std::cerr << " There are no praias to edit. ";
+		_getch();
+		return nullptr;
+	}
+	else
+		std::cout << " Number of praia you want to select: ";
+
+	redo_index:
+	std::getline(std::cin, i_index);
+
+	switch (inputHandling(i_index, 'i')) {
+		case 0:
+			std::cerr << " # Invalid input. Re-enter: ";
+			goto redo_index;
+		case 1:
+			break;
+		case 2:
+			std::cerr << " # Operation cancelled. ";
+			_getch();
+			return nullptr;
+	}
+
+	std::istringstream iss_p_index(i_index);
+	iss_p_index >> p_index;
+
+	unsigned int i = p_index - 1;
+
+	if (i >= 0 && i < db.getSize()) {
+		//All good
+	}
+	else {
+		std::cerr << " # Choose a valid praia. Re-enter: ";
+		goto redo_index;
+	}
+
+	Praia* p = db.searchPraia(i);
+
+	//TODO LATER remove this if using for the rest of menu
+	if (p->getServices().size() == 0) {
+		std::cerr << " There are no services opened in this praia. ";
+		_getch();
+		return nullptr;
+	}
+
+	return p;
+}
+
+Service selectService(Praia* p) {
+
+	p->showServices();
+
+	std::string i_index;
+	unsigned int s_index;
+
+	std::cout << " Number of service you want to select: ";
+
+	redo_index:
+	std::getline(std::cin, i_index);
+
+	switch (inputHandling(i_index, 'i')) {
+	case 0:
+		std::cerr << " # Invalid input. Re-enter: ";
+		goto redo_index;
+	case 1:
+		break;
+	case 2:
+		std::cerr << " # Operation cancelled. ";
+		_getch();
+
+		return Service();
+	}
+
+	std::istringstream iss_indexService(i_index);
+	iss_indexService >> s_index;
+
+	unsigned int iService = s_index - 1;
+
+	if (s_index >= 0 && s_index <= p->getServices().size() + p->getServicesClosed().size()) {
+		//All good
+	}
+	else {
+		std::cerr << " # Choose a valid service. Re-enter: ";
+		goto redo_index;
+	}
+
+	Service s;
+
+	if(s_index <= p->getServices().size())
+		s = p->accessService(iService);
+	else {
+		iService -= p->getServices().size();
+		//TODO s = p->accessServiceClosed(iService);
+	}
+
+	return s;
 }

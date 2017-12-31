@@ -5,7 +5,7 @@
 PAlbufeira::PAlbufeira() {
 	area = 0;
 }
-PAlbufeira::PAlbufeira(std::string n, std::string c, std::priority_queue<Service> s, HashTabService hs, unsigned int cap, bool bA,  Gps cd, double a) : Praia(n,c,s,hs,cap,bA,cd) {
+PAlbufeira::PAlbufeira(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA,  Gps cd, double a) : Praia(n,c,s,cap,bA,cd) {
 	area = a;
 }
 PAlbufeira::~PAlbufeira(){
@@ -21,15 +21,14 @@ void PAlbufeira::setArea(double a) {
 	area = a;
 }
 
-//Other methods //TODO change later
+//Other methods
 std::string PAlbufeira::savePraia() {
 
 	std::string praia = "A;";
 
 	praia += getName() + ";" + getConcelho() + ";";
 
-	if (getServices().empty() && getServicesClosed().empty())
-	{
+	if (getServices().empty() && getServicesClosed().empty()) {
 		praia += "null_servicos";
 	}
 	else {
@@ -40,9 +39,9 @@ std::string PAlbufeira::savePraia() {
 				Service tmp = s_tmp.top();
 
 				if (s_tmp.size() == 1 && getServicesClosed().empty())
-					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed());
+					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display();
 				else {
-					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + ", ";
+					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display() + ", ";
 				}
 
 				s_tmp.pop();
@@ -51,12 +50,13 @@ std::string PAlbufeira::savePraia() {
 
 		if (!getServicesClosed().empty()) {
 			HashTabService ht_tmp = getServicesClosed();
-			for (auto it = ht_tmp.begin(); it != ht_tmp.end(); it++)
-			{
+
+			for (auto it = ht_tmp.begin(); it != ht_tmp.end(); it++) {
 				Service tmp = *it;
 
-				praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + ", ";
+				praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display() + ", ";
 			}
+
 			//Livra-se do espaço e da virgula a mais
 			praia.pop_back();
 			praia.pop_back();
@@ -79,11 +79,10 @@ std::string PAlbufeira::savePraia() {
 	return praia;
 }
 
-//TODO may need to change the way servicos are displayed
 std::string PAlbufeira::fullInfoPraia() {
 	std::string result = "\n";
 
-	result += " Nome: " + getName() + "\n" + " Concelho: " + getConcelho() + "\n" + " Servicos: \n";
+	result += " Nome: " + getName() + "\n" + " Concelho: " + getConcelho() + "\n" + " Servicos: ";
 
 	if(!getServices().empty())
 		showServices();

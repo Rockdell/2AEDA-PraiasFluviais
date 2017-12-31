@@ -145,7 +145,7 @@ Praia* Database::searchPraia(int i) {
 		}
 	}
 
-	//Might not need (when calling this function, it is guaranteed there is a object there)
+	//Might not need (when calling this function, it is guaranteed there is an object there)
 	return nullptr;
 }
 
@@ -203,7 +203,6 @@ void Database::sortPraias() {
 	}
 }
 
-//TODO WORK BOIIIII
 void Database::processLine(std::string l) {
 
 	std::istringstream iss(l);
@@ -236,23 +235,19 @@ void Database::processLine(std::string l) {
 	if(str_servicos != "null_servicos") {
 		while(getline(iss_servicos, token, ',')) {
 			std::string t, n;
-			unsigned int d, m, a, s;
+			unsigned int i_d, i_m, i_y, s, s_d, s_m, s_y;
 
 			std::istringstream iss_serv(token);
-			iss_serv >> t >> n >> d >> m >> a >> s;
+			iss_serv >> t >> n >> i_d >> i_m >> i_y >> s >> s_d >> s_m >> s_y;
 
 			service_t type = to_enum(t);
 
-			//TODO alterei que se estiver fechado (temporariamente ou permanentemente) a data da ultima inspecao fica a data em que fechou, e no ficheiro guarda se a data da ultima inspecao so (o que se estiver fechado é a data em que fechou)
-			//porque noa faz sentido ter uma data de inspeção enquanto ele esta fechado!
-			if (s == 0)
-			{
-				Service tmp(type, n, d, m, a);
+			if (s == 0) {
+				Service tmp(type, n, i_d, i_m, i_y);
 				pq_s.push(tmp);
 			}
-			else
-			{
-				Service tmp(type, n, d, m, a, s, d, m, a);
+			else {
+				Service tmp(type, n, i_d, i_m, i_y, s, s_d, s_m, s_y);
 				hashServices.insert(tmp);
 			}
 		}
@@ -312,13 +307,12 @@ void Database::processLine(std::string l) {
 		iss_profundidade >> s_profundidade;
 		profundidade = std::stod(s_profundidade);
 
-		PRio* p = new PRio(nome, concelho, pq_s, hashServices, lotacao, bandeira, gps, largura, caudal, profundidade);
+		PRio* p = new PRio(nome, concelho, pq_s, lotacao, bandeira, gps, largura, caudal, profundidade);
 
-		//TODO ????
-//		//Set Praia nos servicos
-//		for (size_t i = 0; i < servicos.size(); i++) {
-//			servicos[i].setPraia(p);
-//		}
+		//Add services closed
+		for(auto it = hashServices.begin(); it != hashServices.end(); it++) {
+			p->addServiceClosed((*it));
+		}
 
 		addPraia(p);
 	}
@@ -332,13 +326,12 @@ void Database::processLine(std::string l) {
 		iss_area >> s_area;
 		area = std::stod(s_area);
 
-		PAlbufeira* p = new PAlbufeira(nome, concelho, pq_s, hashServices, lotacao, bandeira, gps, area);
+		PAlbufeira* p = new PAlbufeira(nome, concelho, pq_s, lotacao, bandeira, gps, area);
 
-		//TODO ????
-//		//Set Praia nos servicos
-//		for (size_t i = 0; i < servicos.size(); i++) {
-//			servicos[i].setPraia(p);
-//		}
+		//Add services closed
+		for(auto it = hashServices.begin(); it != hashServices.end(); it++) {
+			p->addServiceClosed((*it));
+		}
 
 		addPraia(p);
 	}
@@ -466,5 +459,3 @@ std::string decapitalize(std::string s) {
 
 	return str;
 }
-
-//TODO quando um nome tem mais que uma palavra, mudar o modo como é guardado.

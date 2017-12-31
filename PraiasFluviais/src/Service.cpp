@@ -1,4 +1,4 @@
-
+#define _CRT_SECURE_NO_WARNINGS
 #include "Service.h"
 
 //Implementation of nested classes:
@@ -8,13 +8,12 @@
 Service::Date::Date() {
 	//Current day, month and year
     time_t t = time(0);   // get time now
-    struct tm * now = localtime( & t );
+    struct tm * now = localtime(&t);
 
-	day = now->tm_year + 1900;
+	day = now->tm_mday;
 	month = now->tm_mon + 1;
-	year = now->tm_mday;
+	year = now->tm_year + 1900;
 }
-
 
 Service::Date::Date(unsigned int d, unsigned int m, unsigned int y): day(d), month(m), year(y) {
 }
@@ -73,6 +72,7 @@ std::string Service::Date::display() {
 //Constructor
 Service::Status::Status() {
 	closed = 0;
+	closing_date = Date(0, 0, 0);
 }
 
 Service::Status::Status(unsigned int c, unsigned int d, unsigned int m, unsigned int y) {
@@ -106,20 +106,22 @@ void Service::Status::setClosingDate(unsigned int d, unsigned int m, unsigned in
 Service::Service() {
 	type = Null;
 	name = "";
+	last_inspection = Date();
+	status = Status();
 }
 
-Service::Service(service_t t, std::string n, unsigned int s_d, unsigned int s_m, unsigned int s_a) {
+Service::Service(service_t t, std::string n, unsigned int inspection_d, unsigned int inspection_m, unsigned int inspection_y) {
 	type = t;
 	name = n;
-	last_inspection = Date(s_d, s_m, s_a);
-	status = Status(); //Poe o status a 0 -> ou seja so cria servicos abertos
+	last_inspection = Date(inspection_d, inspection_m, inspection_y);
+	status = Status();
 }
 
-Service::Service(service_t t, std::string n, unsigned int d, unsigned int m, unsigned int a,unsigned int c, unsigned int s_d, unsigned int s_m, unsigned int s_a) {
+Service::Service(service_t t, std::string n, unsigned int inspection_d, unsigned int inspection_m, unsigned int inspection_y, unsigned int c, unsigned int closed_d, unsigned int closed_m, unsigned int closed_y) {
 	type = t;
 	name = n;
-	last_inspection = Date(d, m, a);
-	status = Status(c, s_d, s_m, s_a);
+	last_inspection = Date(inspection_d, inspection_m, inspection_y);
+	status = Status(c, closed_d, closed_m, closed_y);
 }
 
 Service::~Service() {
@@ -146,11 +148,11 @@ void Service::setType(service_t t) {
 void Service::setName(std::string n) {
 	name = n;
 }
-void Service::setDate(unsigned int d, unsigned int m, unsigned int a) {
-	last_inspection = Date(d, m, a);
+void Service::setDate(unsigned int d, unsigned int m, unsigned int y) {
+	last_inspection = Date(d, m, y);
 }
-void Service::setStatus(unsigned int c, unsigned int d, unsigned int m, unsigned int a) {
-	status = Status(c, d, m, a);
+void Service::setStatus(unsigned int c, unsigned int d, unsigned int m, unsigned int y) {
+	status = Status(c, d, m, y);
 }
 
 //Operator overloading
@@ -167,21 +169,21 @@ std::string Service::displayService() const {
 
 	std::ostringstream oss;
 
-	oss << name << " (" << from_enum(type) << ")" << "\n" << "Status : ";
+	oss << " Name: " << name << " (" << from_enum(type) << ")" << "\n" << " Status: ";
 
 	switch(status.getClosed()) {
 	case 0:
-		oss << "Open" << "\n";
+		oss << "open" << "\n";
 		break;
 	case 1:
-		oss << "Closed temporarily since " << status.getClosingDate().display() << "\n";
+		oss << "closed temporarily since " << status.getClosingDate().display() << "\n";
 		break;
 	case 2:
-		oss << "Closed permanently since " << status.getClosingDate().display() << "\n";
+		oss << "closed permanently since " << status.getClosingDate().display() << "\n";
 		break;
 	}
 
-	oss << "Last inspection on " << getDate().display() << "\n";
+	oss << " Last inspection on " << getDate().display() << "\n";
 
 	return oss.str();
 }

@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Praia.h"
 
 //Constructors
@@ -10,8 +11,7 @@ Praia::Praia() {
 }
 Praia::Praia(std::string n, std::string c, unsigned int cap, bool bA, Gps cd) : name(n), concelho(c), capacity(cap), bandeiraAzul(bA), coord(cd) {
 }
-
-Praia::Praia(std::string n, std::string c, std::priority_queue<Service> s, HashTabService hs, unsigned int cap, bool bA, Gps cd) : name(n), concelho(c), services(s), servicesClosed(hs), capacity(cap), bandeiraAzul(bA), coord(cd) {
+Praia::Praia(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA, Gps cd) : name(n), concelho(c), services(s), capacity(cap), bandeiraAzul(bA), coord(cd) {
 }
 
 //Get methods
@@ -62,8 +62,8 @@ void Praia::setConcelho(std::string c) {
 void Praia::setServices(std::priority_queue<Service> s) {
 	services = s;
 }
-void Praia::setCapacity(unsigned int lot) {
-	capacity = lot;
+void Praia::setCapacity(unsigned int cap) {
+	capacity = cap;
 }
 void Praia::setBandeira(bool bA) {
 	bandeiraAzul = bA;
@@ -76,16 +76,11 @@ void Praia::setGps(Gps cd) {
 void Praia::addService(Service s) {
 	services.push(s);
 }
-
-void Praia::addService(std::priority_queue<Service> s) {
-
-	while(!s.empty()) {
-
-		addService(s.top());
-		s.pop();
-	}
+void Praia::addServiceClosed(Service s) {
+	servicesClosed.insert(s);
 }
 
+//TODO LATER add Service already exists
 void Praia::removeService(Service s) {
 
 	if(!existService(s))
@@ -94,8 +89,8 @@ void Praia::removeService(Service s) {
 	unsigned int service_status = s.getStatus().getClosed();
 
 	//Checks if the service is on the queue or hash table according to its status
-	if (service_status == 0)
-	{
+	if (service_status == 0) {
+
 		std::priority_queue<Service> new_services;
 
 		while (!services.empty()) {
@@ -112,22 +107,21 @@ void Praia::removeService(Service s) {
 		services = new_services;
 	}
 	else {
-		for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++)
-		{
+
+		for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++) {
 			Service tmp = *it;
 
-			if (tmp == s)
-			{
+			if (tmp == s) {
 				servicesClosed.erase(it);
 				break;
 			}
 		}
 	}
-
-//TODO rever exceptions
 }
 
-std::string Praia::inspectionService(Service s) {
+void Praia::inspectionService(Service s) {
+
+	//Servico recebido ja foi verificado se esta aberto ou nao
 
 	//Current day, month and year
 	time_t t = time(0);   // get time now
@@ -137,63 +131,56 @@ std::string Praia::inspectionService(Service s) {
 	int month = now->tm_mon + 1;
 	int year = now->tm_mday;
 
-	unsigned int service_status = s.getStatus().getClosed();
+	std::priority_queue<Service> pq_tmp;
+	Service tmp;
 
-	//Checks if the service is on the queue or hash table according to its status
-	if (service_status == 0)
-	{
-		std::priority_queue<Service> pq_tmp;
-		Service tmp;
+	//Searches for the service
+	while (!services.empty()) {
 
-		//Searches for the service
-		while (!services.empty())
-		{
-			tmp = services.top();
-			services.pop();
+		tmp = services.top();
+		services.pop();
 
-			if (tmp == s)
-				break;
+		if (tmp == s)
+			break;
 
-			pq_tmp.push(tmp);
-		}
-
-		//Puts the other services back on the queue
-		while (!pq_tmp.empty())
-		{
-			Service o = pq_tmp.top();
-			services.push(o);
-			pq_tmp.pop();
-		}
-
-		//Alters the date of the last_inspection of the service
-		tmp.setDate(day, month, year);
-
-		//And finally puts it back on the queue
-		services.push(tmp);
-	}
-	else {
-		for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++)
-		{
-			Service tmp = *it;
-
-			if (tmp == s)
-			{
-				tmp.setDate(day, month, year);
-				servicesClosed.erase(it);
-				servicesClosed.insert(tmp);
-				break;
-			}
-		}
+		pq_tmp.push(tmp);
 	}
 
-	//Returns a string with the date altered
-	std::ostringstream date;
-	date << day << "-" << month << "-" << year;
+	//Puts the other services back on the queue
+	while (!pq_tmp.empty()) {
 
-	return date.str();
+		Service o = pq_tmp.top();
+		services.push(o);
+		pq_tmp.pop();
+	}
+
+	//Alters the date of the last_inspection of the service
+	tmp.setDate(day, month, year);
+
+	//And finally puts it back on the queue
+	services.push(tmp);
 }
 
-std::string Praia::closeService(Service s, int closed_type) {
+void Praia::openService(Service s) {
+
+	//Servico recebido ja foi verificado se esta aberto ou nao!
+
+	for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++) {
+		Service s_tmp = *it;
+
+		if (s == s_tmp) {
+			servicesClosed.erase(it);
+			//s_tmp.setDate(day, month, year);
+			s_tmp.setStatus(0, 0, 0, 0);
+
+			//Puts the service ON THE QUEUE NOW THAT IT'S OPEN!!!
+			services.push(s_tmp);
+			break;
+		}
+	}
+}
+
+void Praia::closeService(Service s, unsigned int closed_type) {
 
 	//Servico recebido ja foi verificado se esta fechado ou nao!
 
@@ -209,8 +196,7 @@ std::string Praia::closeService(Service s, int closed_type) {
 	Service tmp;
 
 	//Searches for the service
-	while (!services.empty())
-	{
+	while (!services.empty()) {
 		tmp = services.top();
 		services.pop();
 
@@ -221,60 +207,17 @@ std::string Praia::closeService(Service s, int closed_type) {
 	}
 
 	//Puts the other services back on the queue
-	while (!pq_tmp.empty())
-	{
+	while (!pq_tmp.empty()) {
 		Service o = pq_tmp.top();
 		services.push(o);
 		pq_tmp.pop();
 	}
 
-	//Alters the date of the last_inspection of the service
-	tmp.setDate(day, month, year);
 	//Alters the service status
-	tmp.setStatus((unsigned int) closed_type, day, month, year);
+	tmp.setStatus(closed_type, day, month, year);
 
 	//And finally puts it ON THE HASH TABLE NOW THAT IT'S CLOSED!!!
 	servicesClosed.insert(tmp);
-
-	//Returns a string with the date altered
-	std::ostringstream date;
-	date << day << "-" << month << "-" << year;
-
-	return date.str();
-}
-
-std::string Praia::openService(Service s) {
-
-	//Servico recebido ja foi verificado se esta aberto ou nao!
-
-	//Current day, month and year
-	time_t t = time(0);   // get time now
-	struct tm * now = localtime(&t);
-
-	int day = now->tm_year + 1900;
-	int month = now->tm_mon + 1;
-	int year = now->tm_mday;
-
-	for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++)
-	{
-		Service s_tmp = *it;
-		if (s_tmp == s)
-		{
-			servicesClosed.erase(it);
-			s_tmp.setDate(day, month, year);
-			s_tmp.setStatus((unsigned int) 0, day, month, year);
-
-			//Puts the service ON THE QUEUE NOW THAT IT'S OPEN!!!
-			services.push(s_tmp);
-			break;
-		}
-	}
-
-	//Returns a string with the date altered
-	std::ostringstream date;
-	date << day << "-" << month << "-" << year;
-
-	return date.str();
 }
 
 //Access a Service in the priority queue with a specific index
@@ -284,26 +227,26 @@ Service Praia::accessService(unsigned int index) const {
 	if (services.size() == 0)
 		goto next;
 
-	if (index <= services.size() - 1)
-	{
+	if (index <= services.size() - 1) {
+
 		std::priority_queue<Service> pq_tmp = services;
 
-		while (index != 0)
-		{
+		while (index != 0) {
+
 			pq_tmp.pop();
 			index--;
 		}
 
 		return pq_tmp.top();
 	}
-	else
-	{
+	else {
+
 		next:
 		index -= services.size();
 		auto it = servicesClosed.begin();
 
-		while (index != 0)
-		{
+		while (index != 0) {
+
 			it++;
 			index--;
 		}
@@ -324,8 +267,7 @@ bool Praia::existService(Service s) {
 		search.pop();
 	}
 
-	for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++)
-	{
+	for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++) {
 		if (s == *it)
 			return true;
 	}
@@ -334,6 +276,9 @@ bool Praia::existService(Service s) {
 }
 
 void Praia::showServices() {
+
+	//Formatting
+	std::cout << "\n";
 
 	//Show the services from the priority queue (currently open)
 	std::priority_queue<Service> tmp = services;
@@ -347,8 +292,7 @@ void Praia::showServices() {
 	}
 
 	//Show the services from the hash table (currently close)
-	for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++)
-	{
+	for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++) {
 		Service ts = *it;
 		std::cout << " Service #" << cont << ":\n" << ts.displayService() << "\n";
 		cont++;

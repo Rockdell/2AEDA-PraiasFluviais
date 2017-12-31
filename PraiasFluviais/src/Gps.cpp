@@ -54,14 +54,14 @@ std::string Gps::displayGps() const {
 	oss << trunc(tlat) << "' ";
 	tlat -= trunc(tlat);
 	tlat *= 60;
-	tlat = roundf(tlat * 10) / 10;
+	tlat = round(tlat * 10) / 10;
 
 	oss << tlat << "'' ";
 
 	if(lat > 0)
-		oss << "N" << " / "; // std::endl;
+		oss << "N" << " / ";
 	else
-		oss << "S" << " / "; //std::endl;
+		oss << "S" << " / ";
 
 	//Longitude calculations
 	double tlon = fabs(lon);
@@ -72,14 +72,14 @@ std::string Gps::displayGps() const {
 	oss << trunc(tlon) << "' ";
 	tlon -= trunc(tlon);
 	tlon *= 60;
-	tlon = roundf(tlon * 10) / 10;
+	tlon = round(tlon * 10) / 10;
 
 	oss << tlon << "'' ";
 
 	if(lon > 0)
-		oss << "E";//<< std::endl;
+		oss << "E";
 	else
-		oss << "W";// << std::endl;
+		oss << "W";
 
 	return oss.str();
 }
