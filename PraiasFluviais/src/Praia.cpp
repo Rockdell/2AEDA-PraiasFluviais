@@ -9,8 +9,10 @@ Praia::Praia() {
 	bandeiraAzul = false;
 	coord = Gps();
 }
+
 Praia::Praia(std::string n, std::string c, unsigned int cap, bool bA, Gps cd) : name(n), concelho(c), capacity(cap), bandeiraAzul(bA), coord(cd) {
 }
+
 Praia::Praia(std::string n, std::string c, std::priority_queue<Service> s, unsigned int cap, bool bA, Gps cd) : name(n), concelho(c), services(s), capacity(cap), bandeiraAzul(bA), coord(cd) {
 }
 
@@ -18,13 +20,16 @@ Praia::Praia(std::string n, std::string c, std::priority_queue<Service> s, unsig
 std::string Praia::getName() const {
 	return name;
 }
+
 std::string Praia::getConcelho() const {
 	return concelho;
 }
-std::priority_queue<Service> Praia::getServices() const {
+
+std::priority_queue<Service> Praia::getServicesOpen() const {
 	return services;
 }
-std::priority_queue<Service> Praia::getServices(service_t t) const {
+
+std::priority_queue<Service> Praia::getServicesOpen(service_t t) const {
 
 	std::priority_queue<Service> result;
 	std::priority_queue<Service> tmp = services;
@@ -39,15 +44,19 @@ std::priority_queue<Service> Praia::getServices(service_t t) const {
 
 	return result;
 }
+
 HashTabService Praia::getServicesClosed() const {
 	return servicesClosed;
 }
+
 unsigned int Praia::getCapacity() const {
 	return capacity;
 }
+
 bool Praia::getBandeira() const {
 	return bandeiraAzul;
 }
+
 Gps Praia::getGps() const {
 	return coord;
 }
@@ -56,31 +65,44 @@ Gps Praia::getGps() const {
 void Praia::setName(std::string n) {
 	name = n;
 }
+
 void Praia::setConcelho(std::string c) {
 	concelho = c;
 }
+
 void Praia::setServices(std::priority_queue<Service> s) {
 	services = s;
 }
+
 void Praia::setCapacity(unsigned int cap) {
 	capacity = cap;
 }
+
 void Praia::setBandeira(bool bA) {
 	bandeiraAzul = bA;
 }
+
 void Praia::setGps(Gps cd) {
 	coord = cd;
 }
 
 //Service-related methods
-void Praia::addService(Service s) {
+void Praia::addServiceOpen(Service s) {
+
+	if(existService(s))
+		throw ServiceAlreadyExists(s.getName());
+
 	services.push(s);
 }
+
 void Praia::addServiceClosed(Service s) {
+
+	if(existService(s))
+		throw ServiceAlreadyExists(s.getName());
+
 	servicesClosed.insert(s);
 }
 
-//TODO LATER add Service already exists
 void Praia::removeService(Service s) {
 
 	if(!existService(s))
@@ -119,9 +141,12 @@ void Praia::removeService(Service s) {
 	}
 }
 
-void Praia::inspectionService(Service s) {
+int Praia::inspectionService(Service s) {
 
-	//Servico recebido ja foi verificado se esta aberto ou nao
+	if (s.getStatus().getClosed() != 0) {
+		std::cerr << " # Can't perform an inspection if service is closed. ";
+		return 1;
+	}
 
 	//Current day, month and year
 	time_t t = time(0);   // get time now
@@ -159,11 +184,21 @@ void Praia::inspectionService(Service s) {
 
 	//And finally puts it back on the queue
 	services.push(tmp);
+
+	return 0;
 }
 
-void Praia::openService(Service s) {
+int Praia::openService(Service s) {
 
 	//Servico recebido ja foi verificado se esta aberto ou nao!
+	if (s.getStatus().getClosed() == 0) {
+		std::cerr << " # Service is currently open. ";
+		return 1;
+	}
+	else if (s.getStatus().getClosed() == 2) {
+		std::cerr << " # Service is permanently closed. ";
+		return 1;
+	}
 
 	for (auto it = servicesClosed.begin(); it != servicesClosed.end(); it++) {
 		Service s_tmp = *it;
@@ -178,11 +213,16 @@ void Praia::openService(Service s) {
 			break;
 		}
 	}
+
+	return 0;
 }
 
-void Praia::closeService(Service s, unsigned int closed_type) {
+int Praia::closeService(Service s, unsigned int closed_type) {
 
-	//Servico recebido ja foi verificado se esta fechado ou nao!
+	if (s.getStatus().getClosed() != 0) {
+		std::cerr << " # Service is currently closed. ";
+		return 1;
+	}
 
 	//Current day, month and year
 	time_t t = time(0);   // get time now
@@ -218,9 +258,10 @@ void Praia::closeService(Service s, unsigned int closed_type) {
 
 	//And finally puts it ON THE HASH TABLE NOW THAT IT'S CLOSED!!!
 	servicesClosed.insert(tmp);
+
+	return 0;
 }
 
-//Access a Service in the priority queue with a specific index
 Service Praia::accessService(unsigned int index) const {
 
 	//Checks if the service is on the queue or on the hash table
@@ -275,10 +316,12 @@ bool Praia::existService(Service s) {
 	return false;
 }
 
-void Praia::showServices() {
+int Praia::showServices() {
 
-	//Formatting
-	std::cout << "\n";
+	if (getServicesOpen().size() == 0 && getServicesClosed().size() == 0) {
+		std::cerr << " There are no services opened in this praia. ";
+		return 1;
+	}
 
 	//Show the services from the priority queue (currently open)
 	std::priority_queue<Service> tmp = services;
@@ -297,6 +340,8 @@ void Praia::showServices() {
 		std::cout << " Service #" << cont << ":\n" << ts.displayService() << "\n";
 		cont++;
 	}
+
+	return 0;
 }
 
 //Operator overloading

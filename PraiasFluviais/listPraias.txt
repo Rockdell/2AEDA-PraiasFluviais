@@ -1,5 +1,1 @@
-A;Quarteira;Algarve;null_servicos;500;1;36.050000 13.025300;60.000000
-A;We;Arew;Restauracao addedService 2017 12 29 0, Restauracao onegaishimasu 2017 12 29 2;12;1;34.000000 43.000000;4.000000
-R;Ola;Ola;Alojamento olaadeus 2017 12 29 1;10;0;23.000000 23.000000;23.000000;3.000000;3.000000
-A;Torreira;SeiLa;Aluguer primeiroAluguerDoZe 2017 12 29 2;500;0;67.050000 10.025300;14.000000
-R;Test;Testouro;Alojamento workpls 2017 12 29 0, Restauracao comida 2017 12 29 2;100;1;34.000000 34.000000;3.000000;3.000000;3.000000
+R;Tondela;Arouca;null_servicos;100;0;12.300000 -132.320000;10.000000;10.000000;10.000000

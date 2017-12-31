@@ -152,7 +152,7 @@ public:
 	 *  @return Returns the width of the object.
 	 *  @see services
 	 */
-	std::priority_queue<Service> getServices() const;
+	std::priority_queue<Service> getServicesOpen() const;
 
 	/**
 	 *  @brief Gets the open services of a certain type of the object PRio.
@@ -160,7 +160,7 @@ public:
 	 *  @return Returns the services of that type of the object.
 	 *  @see services
 	 */
-	std::priority_queue<Service> getServices(service_t t) const;
+	std::priority_queue<Service> getServicesOpen(service_t t) const;
 
 	/**
 	 *  @brief Gets the closed services of the object PRio.
@@ -237,7 +237,7 @@ public:
 	 *  @param s Object Service to add.
 	 *  @see services
 	 */
-	void addService(Service s);
+	void addServiceOpen(Service s);
 
 	/**
 	 *  @brief Add an object Service (closed) to the object.
@@ -247,34 +247,36 @@ public:
 	void addServiceClosed(Service s);
 
 	/**
-	 *  @brief Re-opens an object Service (closed) of the object.
-	 *  @param s Object Service to re-open.
-	 *  @see servicesClosed
-	 */
-	void openService(Service s);
-
-	/**
 	 *  @brief Removs an object Service from the object.
 	 *  @param s Object Service to remove.
 	 *  @see services
 	 *  @see servicesClosed
 	 */
-	void removeService(Service s); //TODO remove from both queue and hash
+	void removeService(Service s);
 
 	/**
 	 *  @brief Performs an inspection to an object Service (open) of the object.
 	 *  @param s Object Service to inspect.
 	 *  @see services
 	 */
-	void inspectionService(Service s);
+	int inspectionService(Service s);
+
+	/**
+	 *  @brief Re-opens an object Service (closed) of the object.
+	 *  @param s Object Service to re-open.
+	 *  @return Returns 0 on success and 1 otherwise.
+	 *  @see servicesClosed
+	 */
+	int openService(Service s);
 
 	/**
 	 *  @brief Closes an object Service (open) of the object.
 	 *  @param s Object Service to close.
 	 *  @param closed_type Type of closing (temporary or permanent).
+	 *  @return Returns 0 on success and 1 otherwise.
 	 *  @see services
 	 */
-	void closeService(Service s, unsigned int closed_type);
+	int closeService(Service s, unsigned int closed_type);
 
 	/**
 	 *  @brief Retrieves an object Service of the object.
@@ -282,8 +284,6 @@ public:
 	 *  @see services
 	 */
 	Service accessService(unsigned int index) const;
-
-	//TODO accessService Hash Table
 
 	/**
 	 *  @brief Check if a certain object Service exist in the object.
@@ -293,8 +293,9 @@ public:
 
 	/**
 	 *  @brief Displays all the objects Service of the object in a friendly way.
+	 *  @return Returns 0 on success and 1 otherwise.
 	 */
-	void showServices();
+	int showServices();
 
 	/**
 	 *  @brief Compares two object Praia.
@@ -317,10 +318,9 @@ public:
 	virtual std::string savePraia() { return "";}
 
 	/**
-	 *  @brief Abstract method that formats the object's data to a std::string, in order to display it.
-	 *  @return Returns a formatted std::string with all the object's data.
+	 *  @brief Abstract method that prints the object's data to the screen
 	 */
-	virtual std::string fullInfoPraia() {return "";}
+	virtual void fullInfoPraia() {}
 };
 
 #endif /* PRAIA_H_ */

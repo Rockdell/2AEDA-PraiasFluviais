@@ -131,12 +131,15 @@ Service::~Service() {
 service_t Service::getType() const {
 	return type;
 }
+
 std::string Service::getName() const {
 	return name;
 }
+
 Service::Date Service::getDate() const {
 	return last_inspection;
 }
+
 Service::Status Service::getStatus() const {
 	return status;
 }
@@ -145,12 +148,15 @@ Service::Status Service::getStatus() const {
 void Service::setType(service_t t) {
 	type = t;
 }
+
 void Service::setName(std::string n) {
 	name = n;
 }
+
 void Service::setDate(unsigned int d, unsigned int m, unsigned int y) {
 	last_inspection = Date(d, m, y);
 }
+
 void Service::setStatus(unsigned int c, unsigned int d, unsigned int m, unsigned int y) {
 	status = Status(c, d, m, y);
 }

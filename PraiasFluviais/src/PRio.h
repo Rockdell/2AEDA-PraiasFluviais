@@ -106,10 +106,9 @@ public:
 	std::string savePraia();
 
 	/**
-	 *  @brief Formats the object PRio's data to a std::string, in order to display it.
-	 *  @return Returns a formatted std::string with all the object's data.
+	 *  @brief Prints the object PRio's data to the screen.
 	 */
-	std::string fullInfoPraia();
+	void fullInfoPraia();
 };
 
 #endif /* PRIO_H_ */

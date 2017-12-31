@@ -28,17 +28,16 @@ int main() {
 	 *
 	 *  Pedro Tavares and Miguel Teixeira
 	 */
-	std::string path = "C:\\Users\\Miguel Teixeira\\git\\2AEDA-PraiasFluviais\\PraiasFluviais\\listPraias.txt";
 
 	std::string filename_praias;
 
-	std::cout << " Ficheiro de praias: ";
-	//getline(std::cin, filename_praias);
+	std::cout << " Path to .txt file: ";
+	getline(std::cin, filename_praias);
 
 	//Catch exception while loading
 	get_filename:
 	try {
-		db.load(path);
+		db.load(filename_praias);
 	}
 	catch(Exception& e) {
 		std::cout << "\n Erro com o ficheiro: " << e.getMessage() << std::endl;
@@ -62,7 +61,7 @@ int main() {
 
 	//Catch exceptions while saving
 	try {
-		db.save(path);
+		db.save(filename_praias);
 	}
 	catch (Exception& e) {
 		e.display();

@@ -43,21 +43,21 @@ std::string PRio::savePraia() {
 
 	praia += getName() + ";" + getConcelho() + ";";
 
-	if (getServices().empty() && getServicesClosed().empty()) {
+	if (getServicesOpen().empty() && getServicesClosed().empty()) {
 		praia += "null_servicos";
 	}
 	else {
-		if (!getServices().empty()) {
-			std::priority_queue<Service> s_tmp = getServices();
+		if (!getServicesOpen().empty()) {
+			std::priority_queue<Service> s_tmp = getServicesOpen();
 
 			while (!s_tmp.empty()) {
 
 				Service tmp = s_tmp.top();
 
 				if (s_tmp.size() == 1 && getServicesClosed().empty())
-					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display();
+					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + " " + tmp.getStatus().getClosingDate().display();
 				else {
-					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display() + ", ";
+					praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + " " + tmp.getStatus().getClosingDate().display() + ", ";
 				}
 
 				s_tmp.pop();
@@ -70,7 +70,7 @@ std::string PRio::savePraia() {
 			for (auto it = ht_tmp.begin(); it != ht_tmp.end(); it++) {
 				Service tmp = *it;
 
-				praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + tmp.getStatus().getClosingDate().display() + ", ";
+				praia += from_enum(tmp.getType()) + " " + tmp.getName() + " " + tmp.getDate().display() + " " + std::to_string(tmp.getStatus().getClosed()) + " " + tmp.getStatus().getClosingDate().display() + ", ";
 			}
 
 			//Livra-se do espaço e da virgula a mais
@@ -95,23 +95,20 @@ std::string PRio::savePraia() {
 	return praia;
 }
 
-std::string PRio::fullInfoPraia() {
-	std::string result = "\n";
+void PRio::fullInfoPraia() {
+	std::cout << std::endl;
 
-	result += " Nome: " + getName() + "\n" + " Concelho: " + getConcelho() + "\n" + " Servicos: ";
+	std::cout << " Nome: " << getName() << "\n" << " Concelho: " << getConcelho() << "\n\n";
 
-	if(!getServices().empty())
-			showServices();
-		else
-			result += "sem servicos\n";
+	if(!getServicesOpen().empty())
+		showServices();
+	else
+		std::cout << "sem servicos\n";
 
-	result += " Lotacao: " + std::to_string(getCapacity()) + "\n";
+	std::cout << " Lotacao: " << getCapacity() << "\n";
 
 	std::string bandeira = getBandeira() ? "sim" : "nao";
 
-	result += " Bandeira Azul: " + bandeira + "\n" +  " Coordenadas: " + getGps().displayGps() + "\n";
-	result += " Largura: " + std::to_string(width) + "\n" + " Caudal: " + std::to_string(flow) + "\n" +	" Profundidade: " + std::to_string(depth) + "\n";
-
-	return result;
-
+	std::cout << " Bandeira Azul: " << bandeira << "\n" <<  " Coordenadas: " << getGps().displayGps() << "\n";
+	std::cout << " Largura: " << width << "\n" << " Caudal: " << flow << "\n" << " Profundidade: " << depth << "\n";
 }

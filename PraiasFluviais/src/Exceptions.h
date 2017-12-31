@@ -157,4 +157,23 @@ public:
 	}
 };
 
+class ServiceAlreadyExists : public Exception {
+public:
+
+	/**
+	 * @brief ServiceAlreadyExists class constructor.
+	 * @param f Path of .txt file.
+	 */
+	ServiceAlreadyExists(std::string f) : Exception(f) {
+	}
+
+	/**
+	 * @brief Implementation of the virtual function.
+	 */
+	void display() const {
+		std::string msg = " Service already exists: " + getMessage();
+		std::cout << msg << std::endl;
+	}
+};
+
 #endif /* EXCEPTIONS_H_ */

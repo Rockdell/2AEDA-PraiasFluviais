@@ -66,10 +66,9 @@ public:
 	std::string savePraia();
 
 	/**
-	 *  @brief Formats the object PAlbufeira's data to a std::string, in order to display it.
-	 *  @return Returns a formatted std::string with all the object's data.
+	 *  @brief Prints the object PAlbufeira's data to the screen.
 	 */
-	std::string fullInfoPraia();
+	void fullInfoPraia();
 };
 
 #endif /* PALBUFEIRA_H_ */
