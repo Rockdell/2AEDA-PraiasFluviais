@@ -98,17 +98,17 @@ std::string PRio::savePraia() {
 void PRio::fullInfoPraia() {
 	std::cout << std::endl;
 
-	std::cout << " Nome: " << getName() << "\n" << " Concelho: " << getConcelho() << "\n\n";
+	std::cout << " Name: " << getName() << "\n" << " Concelho: " << getConcelho() << "\n\n";
 
 	if(!getServicesOpen().empty())
 		showServices();
 	else
-		std::cout << "sem servicos\n";
+		std::cout << "no services\n";
 
-	std::cout << " Lotacao: " << getCapacity() << "\n";
+	std::cout << " Capacity: " << getCapacity() << "\n";
 
-	std::string bandeira = getBandeira() ? "sim" : "nao";
+	std::string bandeira = getBandeira() ? "yes" : "no";
 
-	std::cout << " Bandeira Azul: " << bandeira << "\n" <<  " Coordenadas: " << getGps().displayGps() << "\n";
-	std::cout << " Largura: " << width << "\n" << " Caudal: " << flow << "\n" << " Profundidade: " << depth << "\n";
+	std::cout << " Bandeira Azul: " << bandeira << "\n" <<  " Coordinates: " << getGps().displayGps() << "\n";
+	std::cout << " Width: " << width << "\n" << " Flow: " << flow << "\n" << " Depth: " << depth << "\n";
 }

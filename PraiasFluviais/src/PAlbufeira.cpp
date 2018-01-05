@@ -84,17 +84,17 @@ std::string PAlbufeira::savePraia() {
 void PAlbufeira::fullInfoPraia() {
 	std::cout << std::endl;
 
-	std::cout << " Nome: " << getName() << "\n" << " Concelho: " << getConcelho() << "\n\n";
+	std::cout << " Name: " << getName() << "\n" << " Concelho: " << getConcelho() << "\n\n";
 
 	if(!getServicesOpen().empty())
 		showServices();
 	else
-		std::cout << "sem servicos\n";
+		std::cout << "no services\n";
 
-	std::cout << " Lotacao: " << getCapacity() << "\n";
+	std::cout << " Capacity: " << getCapacity() << "\n";
 
-	std::string bandeira = getBandeira() ? "sim" : "nao";
+	std::string bandeira = getBandeira() ? "yes" : "no";
 
-	std::cout << " Bandeira azul: " << bandeira << "\n" <<  " Coordenadas: " << getGps().displayGps() << "\n";
+	std::cout << " Bandeira azul: " << bandeira << "\n" <<  " Coordinates: " << getGps().displayGps() << "\n";
 	std::cout << " Area: " << area << "\n";
 }

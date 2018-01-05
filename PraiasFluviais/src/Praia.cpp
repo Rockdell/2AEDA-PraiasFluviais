@@ -319,7 +319,7 @@ bool Praia::existService(Service s) {
 int Praia::showServices() {
 
 	if (getServicesOpen().size() == 0 && getServicesClosed().size() == 0) {
-		std::cerr << " There are no services opened in this praia. ";
+		std::cerr << " There are no services open in this praia. ";
 		return 1;
 	}
 

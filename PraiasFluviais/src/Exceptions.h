@@ -152,7 +152,7 @@ public:
 	 * @brief Implementation of the virtual function.
 	 */
 	void display() const {
-		std::string msg = " Praia já existe: " + getMessage();
+		std::string msg = " Praia already exists: " + getMessage();
 		std::cout << msg << std::endl;
 	}
 };

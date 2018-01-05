@@ -959,7 +959,7 @@ void EditMenu() {
 			else
 				p1->setGps(coord);
 
-			std::cout << " Coordi edited successfully. ";
+			std::cout << " Coordinates edited successfully. ";
 
 			_getch();
 
