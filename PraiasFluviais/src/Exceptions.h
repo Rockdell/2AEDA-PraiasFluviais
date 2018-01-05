@@ -157,6 +157,9 @@ public:
 	}
 };
 
+/**
+ * @brief Service AlreadyExists class is publicly derived from class Exception.
+ */
 class ServiceAlreadyExists : public Exception {
 public:
 

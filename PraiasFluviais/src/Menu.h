@@ -91,7 +91,6 @@ void EditMenu();
 void SearchMenu();
 void ServicesMenu();
 
-//TODO LATER create enum for property
 int inputHandling(std::string input, char property);
 int sendEvent(char c);
 
